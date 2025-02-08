@@ -78,7 +78,7 @@ nav ul {
     justify-content: center;
     list-style: none;
     gap: 2rem;
-    max-width: 1200px;
+    max-width: 70%;
     margin: 0 auto;
 }
 
@@ -116,13 +116,15 @@ nav a.active::after {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 2rem;
 }
 
 .section {
     background: white;
+    width: 60%;
+    margin-left: 20%;
     border-radius: 1rem;
     padding: 2.5rem;
     margin-bottom: 2rem;
@@ -163,38 +165,36 @@ nav a.active::after {
     color: var(--text-color);
 }
 
-/* 卡片样式 */
-.card {
-    background: white;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-}
 
 /* 页脚样式 */
 footer {
+    text-size-adjust: 80%;
     background: var(--gradient-primary);
     color: white;
     text-align: center;
-    padding: 2.5rem 1rem;
-    margin-top: 4rem;
+    padding: 5rem 1rem;
+    margin-top: 10rem;
     position: relative;
 }
 
+/* 默认隐藏超链接样式 */
+footer a {
+    color: inherit; /* 继承父元素颜色 */
+    text-decoration: none; /* 去掉下划线 */
+}
+/* Hover 时显示超链接样式 */
+footer a:hover {
+    color: #8dc4ff; /* 蓝色文字 */
+    text-decoration: underline; /* 添加下划线 */
+}
 footer::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
+    height: 5px;
     background: var(--gradient-accent);
 }
 
@@ -216,77 +216,45 @@ footer::before {
     .section {
         padding: 1.5rem;
     }
+
+    .about-container {
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+
+    .about-container h1 {
+        font-size: 1.5rem;
+    }
+
+    .about-container h2 {
+        font-size: 1.2rem;
+    }
+
+    .about-container p {
+        font-size: 1rem;
+    }
+
+    .details-container .detail-item {
+        font-size: 1rem;
+    }
+
+    .about-container .profile-image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .download-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 80%;
+        margin: 0.5rem 0;
+    }
 }
 
-/* 目录结构样式 */
-.mainbody {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: white;
-    border-radius: 1rem;
-    box-shadow: var(--shadow-md);
-}
-
-.subject {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background: white;
-    border-radius: 0.5rem;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-}
-
-.subject:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-}
-
-.subject-title {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    text-decoration: none;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    background: var(--gradient-primary);
-    color: white;
-    transition: var(--transition);
-    margin-bottom: 0.5rem;
-}
-
-.subject-title:hover {
-    background: var(--secondary-color);
-}
-
-.subtopics {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
-}
-
-.subtopics li {
-    margin: 0;
-}
-
-.subtopics a {
-    text-decoration: none;
-    font-size: 1rem;
-    color: var(--text-color);
-    transition: var(--transition);
-    display: block;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-}
-
-.subtopics a:hover {
-    color: var(--primary-color);
-    background: rgba(13, 71, 161, 0.1);
-}
 
 /* About Me 页面主容器样式 */
 .about-container {
@@ -339,3 +307,183 @@ footer::before {
     color: var(--secondary-color);
 }
 
+/* About Me详细信息容器样式 */
+.details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.details-container .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.details-container .detail-item i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.details-container .detail-item span {
+    font-weight: 500;
+}
+
+/*About Me动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.about-container {
+    animation: fadeIn 1s ease-in-out;
+}
+
+.details-container .detail-item {
+    animation: fadeIn 1s ease-in-out;
+    animation-fill-mode: both;
+}
+
+.details-container .detail-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.details-container .detail-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.details-container .detail-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.details-container .detail-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+/*About Me 下载简历按钮样式 */
+.about-container .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: white;
+    background: var(--primary-color);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: var(--transition);
+    margin-top: 1rem;
+}
+
+.about-container .btn:hover {
+    background: var(--secondary-color);
+}
+
+
+/*Blog页面*/
+/* 主容器调整为flex布局 */
+/* 主容器，去掉间隙 */
+.main-container {
+    display: flex;
+    justify-content: flex-start; /* 确保侧边栏和卡片左对齐 */
+    align-items: flex-start; /* 确保垂直对齐 */
+    gap: 0; /* 去掉间隙 */
+    padding: 0; /* 可选，移除左右内边距 */
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    /*left: 20%;*/
+    margin-left: 8%;
+    top: 60px; /* 根据nav和breadcrumb的高度调整 */
+    max-height: calc(100vh - 60px); /* 确保侧边栏不会超出视口 */
+    overflow-y: auto; /* 如果内容过多，允许滚动 */
+}
+
+/* 学科卡片容器，去掉卡片间隙并自适应高度 */
+.subjects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 0; /* 去掉卡片之间的间隙 */
+    margin-top: 2rem;
+    flex-grow: 1; /* 让学科卡片容器自适应填充空间 */
+    padding-bottom: 2rem; /* 确保底部有间隙 */
+}
+
+    /* 学科卡片样式 */
+    .subjects .card {
+        background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); /* 添加渐变背景 */
+        padding: 2rem;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-md);
+        transition: var(--transition);
+        text-align: center;
+        border-radius: 0;
+        flex-grow: 1; /* 使学科卡片自适应高度 */
+        min-height: 0; /* 保证卡片不超过最小高度 */
+        color: white; /* 设置字体颜色为白色 */
+        text-decoration: none; /* 去掉默认的链接样式 */
+    }
+
+        /* 鼠标悬停时，卡片的背景颜色变化 */
+        .subjects .card:hover {
+            background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%); /* 悬停时更换渐变色 */
+        }
+
+
+/* 右侧详细信息区域样式 */
+.subject-detail {
+    position: relative;
+    /* left: 16%; /* 左端对齐主容器的左边 */
+    margin-left: 3%;
+    width: 50%; /* 宽度 */
+    height: 50%;
+    padding: 2rem;
+    background-color: none;
+    box-shadow: none; /*var(--shadow-md);*/
+    transition: all 0.3s ease;
+    display: none;
+}
+
+    .subject-detail.active {
+        display: block;
+    }
+
+    /* 图片自适应 */
+    .subject-detail img {
+        width: 100%; /* 宽度自适应父容器 */
+        max-width: 100%; /* 限制最大宽度为父容器的宽度 */
+        height: auto; /* 高度自动调整，保持比例 */
+        margin-bottom: 1rem;
+    }
+
+.detail {
+    display: none;
+}
+
+.detail.active {
+    display: block;
+}
+
+.nav-breadcrumb-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.breadcrumb {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    background-color: white; /* 可选：设置背景颜色 */
+    z-index: 1000; /* 确保它在其他内容之上 */
+}

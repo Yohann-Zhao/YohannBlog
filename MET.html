@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MET | Yohann飞行笔记</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // 动态加载章节内容（优化版）
+        async function loadChapter(chapterUrl, element) {
+            try {
+                // 显示加载提示
+                document.getElementById("content-area").innerHTML = '<div class="loading">加载中...</div>';
+
+                // 移除所有章节的选中状态
+                document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+
+                // 添加选中状态
+                element.classList.add('active');
+
+                // 使用 Fetch API 加载对应的 HTML 文件
+                const response = await fetch(chapterUrl);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP 错误! 状态码: ${response.status}`);
+                }
+
+                const data = await response.text();
+                document.getElementById("content-area").innerHTML = data;
+
+            } catch (error) {
+                // 显示详细的错误信息（调试用）
+                console.error('加载失败:', error);
+                document.getElementById("content-area").innerHTML = `
+                    <div class="error">
+                        <p>加载失败！原因：${error.message}</p>
+                        <p>请检查：</p>
+                        <ul>
+                            <li>文件路径是否正确</li>
+                            <li>服务器是否启动</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+    </script>
+
+    <style>
+        /* 新增加载提示和错误提示样式 */
+        .loading, .error {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .loading {
+            background: #f8f9fa;
+            color: #666;
+        }
+
+        .error {
+            background: #fff3f3;
+            color: #dc3545;
+            border: 1px solid #ffc9c9;
+        }
+
+            .error ul {
+                text-align: left;
+                margin: 10px 0;
+            }
+    </style>
+
+    <style>
+        .container {
+            position: relative;
+            width: 100%;
+            display: flex; /*布局*/
+            padding: 2rem;
+            gap: 1rem;
+        }
+
+        .sidebar {
+            left: -2%;
+            width: 20%;
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+            .sidebar h3 {
+                color: var(--primary-color);
+                margin-bottom: 1rem;
+            }
+
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            .sidebar li {
+                margin-bottom: 0.75rem;
+            }
+
+            .sidebar a {
+                text-decoration: none;
+                font-size: 1rem;
+                color: var(--text-color);
+                transition: var(--transition);
+                display: block;
+                padding: 0.5rem;
+                border-radius: 0.5rem;
+            }
+
+                .sidebar a:hover,
+                .sidebar a.active {
+                    color: var(--primary-color);
+                    background: rgba(13, 71, 161, 0.1);
+                }
+
+        .content {
+            position: relative;
+            flex-grow: 1; /* 如果需要填充剩余空间 */
+            padding: 2rem; /*让内部的文字与边缘保持距离*/
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        nav a.active {
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* 新增样式：导航路径样式 */
+        .breadcrumb {
+            padding: 1rem;
+            padding-left: 10%;
+            background: var(--background-color);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+            .breadcrumb a {
+                text-decoration: none;
+                color: var(--text-color);
+                font-size: 1rem;
+                transition: var(--transition);
+            }
+
+                .breadcrumb a:hover {
+                    color: var(--primary-color);
+                }
+
+            .breadcrumb span {
+                color: var(--text-color);
+                font-size: 0.9rem;
+                margin: 0 0.5rem;
+            }
+    </style>
+
+    <style>
+        .nav-breadcrumb-container {
+            position: -webkit-sticky; /* Safari */
+            position: sticky;
+            top: 0;
+            background-color:; /* 可选：设置背景颜色 */
+            z-index: 1000; /* 确保它在其他内容之上 */
+        }
+
+    </style>
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Meteorology (CMET)</h1>
+        </div>
+    </header>
+
+    <div class="nav-breadcrumb-container">
+        <nav>
+            <ul>
+                <li><a href="index.html">主页</a></li>
+                <li><a href="theory.html" class="active">理论考试</a></li>
+                <li><a href="about.html">关于我</a></li>
+            </ul>
+        </nav>
+
+        <!-- 修改后的导航路径 -->
+        <div class="breadcrumb">
+            <a href="theory.html">所有学科</a>
+            <span>></span>
+            <a id="subject-name">Meteorology (CMET)</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>章节</h3>
+            <ul>
+                <li><a href="#" onclick="loadChapter('MET/MET_intro.html', this)" class="active">Part Intro</a></li>
+                <li><a href="#" onclick="loadChapter('MET/MET_Part1.html', this)">Part 1</a></li>
+                <li><a href="#" onclick="loadChapter('MET/MET_Part2,3.html', this)">Part 2，3</a></li>
+                <li><a href="#" onclick="loadChapter('MET/MET_Part4.html', this)">Part 4</a></li>
+                <li><a href="#" onclick="loadChapter('MET/MET_Part5.html', this)">Part 5</a></li>
+                <li><a href="#" onclick="loadChapter('MET/MET_Part6.html', this)">Part 6</a></li>
+                <li><a href="#" onclick="loadChapter('MET/MET_Part7.html', this)">Part 7</a></li>
+            </ul>
+        </aside>
+
+        <main class="content" id="content-area">
+            <!-- 默认显示第一章内容 -->
+            <script>
+                loadChapter('MET/MET_intro.html', document.querySelector('.sidebar a'));
+            </script>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+          <p>© 2025 赵裕涵 保留所有权利。</p>
+          <p>
+            本项目基于 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 许可证</a> 开源，
+            仅供非商业用途。引用内容已标注来源，侵权请联系 <a href="yuhan_zhao@nuaa.edu.cn">Email</a>。
+          </p>
+          <p>源码仓库：<a href="https://github.com/Yohann-Zhao/YohannBlog" target="_blank">GitHub</a></p>
+        </div>
+      </footer>
+</body>
+</html>

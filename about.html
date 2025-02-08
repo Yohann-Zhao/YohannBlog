@@ -3,41 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>关于我 | 蓝天飞行笔记</title>
+    <title>关于我 | Yohann</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <div class="header-content">
-            <h1>✈️ 蓝天飞行笔记</h1>
-            <p>连接未来的航空人才</p>
+            <h1>Yohann飞行笔记</h1>
+            <p>连接航空未来</p>
         </div>
+        <!-- 在HTML头部引入Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </header>
 
     <nav>
         <ul>
-            <li><a href="index.html">主站</a></li>
-            <li><a href="blog.html">技术博客</a></li>
+            <li><a href="index.html">主页</a></li>
+            <li><a href="theory.html">理论考试</a></li>
             <li><a href="about.html" class="active">关于我</a></li>
         </ul>
     </nav>
 
     <main class="container">
-    	<div class="about-container">
-       		<img src="images/profile.jpg" alt="Profile Picture" class="profile-image">
-        	<h1>关于我</h1>
-        	<p>你好，我是 [你的名字]，一名热衷于 [你的兴趣或职业] 的人。我喜欢学习新知识，探索世界，并与他人分享我的经验。</p>
-        	<p>我的兴趣包括 [兴趣1]、[兴趣2] 和 [兴趣3]。希望能在这里与你交流，共同进步！</p>
-        
-        	<div class="social-links">
-            		<a href="mailto:yuhan_zhao@nuaa.edu.cn"> Email</a>
-            		<a href="images/wechat-qr.png" target="_blank"> Wechat</a>
-        	</div>
-    	</div>
+
+        <div class="about-container">
+            <img src="images/profile.jpg" alt="Profile Image" class="profile-image">
+            <h1>Yohann Zhao</h1>
+            <h2>大毕改飞行学员</h2>
+            <p>我热衷于航空，有幸从事飞行职业。我学习空中交通运输、计算机与人工智能等课题。</p>
+
+            <div class="details-container">
+                <div class="detail-item">
+                    <i class="fas fa-university"></i>
+                    <span>毕业院校：南京航空航天大学</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fa-solid fa-user"></i>
+                    <span>政治面貌：中共党员</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-language"></i>
+                    <span>英语水平：雅思（A类）8.0；ICAO 6 专家级（CASA认证）</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fa-regular fa-envelope"></i>
+                    <span>电子邮箱：yuhan_zhao@nuaa.edu.cn</span>
+                </div>
+            </div>
+
+            <!-- 社交链接 -->
+            <div class="social-links">
+
+                <a href="mailto:yuhan_zhao@nuaa.edu.cn">
+                    <i class="fa-solid fa-envelope"></i>
+                </a>
+                <a href="images/wechat-qr.png" target="_blank">
+                    <i class="fa-brands fa-weixin"></i>
+                </a>
+            </div>
+
+            <!-- 下载按钮 -->
+            <div class="download-buttons">
+                <a href="assets/files/resume_cn.pdf" download="中文简历.pdf" class="btn">我的中文简历</a>
+                <a href="assets/files/resume_en.pdf" download="CV_EN.pdf" class="btn">Download CV</a>
+            </div>
+        </div>
+	
     </main>
 
     <footer>
-        <p>© 2023 蓝天飞行笔记 - 连接航空未来</p>
-    </footer>
+        <div class="footer-content">
+          <p>© 2025 赵裕涵 保留所有权利。</p>
+          <p>
+            本项目基于 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 许可证</a> 开源，
+            仅供非商业用途。引用内容已标注来源，侵权请联系 <a href="yuhan_zhao@nuaa.edu.cn">Email</a>。
+          </p>
+          <p>源码仓库：<a href="https://github.com/Yohann-Zhao/YohannBlog" target="_blank">GitHub</a></p>
+        </div>
+      </footer>
 </body>
 </html>
