@@ -9,6 +9,26 @@
             max-width: 100%;
             height: auto;
         }
+    /*表格自适应屏幕大小*/
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    @media screen and (max-width: 600px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+            width: 100%;
+        }
+        th, td {
+            box-sizing: border-box;
+            width: 100%;
+        }
+    }
 <!--
  /* Font Definitions */
  @font-face
@@ -132,7 +152,7 @@ ul
 <div align=center>
 
 <table class=MsoTable15Plain1 border=1 cellspacing=0 cellpadding=0 width=903
- style='width:677.1pt;border-collapse:collapse;border:none'>
+ style='width:100%;border-collapse:collapse;border:none'>
  <tr style='height:31.75pt'>
   <td valign=top style='border:solid #BFBFBF 1.0pt;padding:0in 5.4pt 0in 5.4pt;
   height:31.75pt'>
