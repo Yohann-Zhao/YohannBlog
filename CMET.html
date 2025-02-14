@@ -10,7 +10,7 @@
         async function loadChapter(chapterUrl, element) {
             try {
                 // 显示加载提示
-                document.getElementById("content-area").innerHTML = '<div class="loading">加载中...</div>';
+                document.getElementById("content-area").innerHTML = '<div class="loading">Loading 加载中...</div>';
 
                 // 移除所有章节的选中状态
                 document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
