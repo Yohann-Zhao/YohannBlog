@@ -408,6 +408,13 @@ footer::before {
     top: 60px; /* 根据nav和breadcrumb的高度调整 */
     max-height: calc(100vh - 60px); /* 确保侧边栏不会超出视口 */
     overflow-y: auto; /* 如果内容过多，允许滚动 */
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    scrollbar-width: none; /* Firefox */
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }
 
 /* 学科卡片容器，去掉卡片间隙并自适应高度 */
