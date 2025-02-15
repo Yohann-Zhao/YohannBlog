@@ -196,6 +196,7 @@ footer::before {
     background: var(--gradient-accent);
 }
 
+
 /* 响应式设计 */
 @media (max-width: 767px) {
     body {
@@ -203,11 +204,13 @@ footer::before {
         transform-origin: top left;
         width: 200%;
         overflow-x: hidden;
+        max-height: calc(100vh / 0.8);  /* 动态计算最小高度 */
     }
     .container {
         width: 768px;
     }
 }
+
 
     nav ul {
         flex-direction: row;
@@ -303,7 +306,7 @@ footer::before {
     .subject-detail {
         display: none; /* 隐藏右侧描述 */
     }
-}
+
 
 /* About Me 页面主容器样式 */
 .about-container {
