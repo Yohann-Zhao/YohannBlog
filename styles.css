@@ -528,3 +528,12 @@ footer::before {
 table {
     width: 100%;
 }
+/* theory页面消息提醒*/
+.alert {
+    background-color: #ffcc00;
+    color: #333;
+    padding: 10px;
+    text-align: center;
+    margin: 10px 0;
+    border-radius: 5px;
+}
