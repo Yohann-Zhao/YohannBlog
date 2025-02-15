@@ -79,8 +79,9 @@ nav ul {
     justify-content: center;
     list-style: none;
     gap: 2rem;
-    max-width: 70%;
+    max-width: 100%; /* 修改为100%以确保导航栏居中 */
     margin: 0 auto;
+    padding: 0; /* 确保没有额外的内边距 */
 }
 
 nav a {
