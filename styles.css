@@ -197,7 +197,7 @@ footer::before {
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-device-width: 768px) {
     nav ul {
         flex-direction: row;
         justify-content: center; /* 水平布局并均匀分布 */
@@ -292,7 +292,6 @@ footer::before {
     .subject-detail {
         display: none; /* 隐藏右侧描述 */
     }
-
 }
 
 /* About Me 页面主容器样式 */
