@@ -204,7 +204,7 @@ footer::before {
         transform-origin: top left;
         width: 200%;
         overflow-x: hidden;
-        max-height: calc(100vh / 0.8);  /* 动态计算最小高度 */
+        max-height: calc(100vh);  /* 动态计算最小高度 */
     }
     .container {
         width: 768px;
