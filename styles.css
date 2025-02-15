@@ -5,6 +5,7 @@
     --accent-color: #ffca28;   /* 更亮的黄色 */
     --text-color: #2d3748;     /* 更深的灰色 */
     --background-color: #f8fafc; /* 更柔和的背景色 */
+    --background-blue: #e3f2fd; /* 新增的蓝色背景 */
     --gradient-primary: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
     --gradient-accent: linear-gradient(45deg, #ffca28 0%, #ffb300 100%);
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
@@ -116,15 +117,15 @@ nav a.active::after {
 }
 
 .container {
-    max-width: 1600px;
     margin: 0 auto;
     padding: 2rem;
+    background-color: var(--background-blue); /* 设置背景颜色 */
 }
 
 .section {
-    background: white;
-    width: 60%;
-    margin-left: 20%;
+    margin: 3rem auto;
+    background: var(--background-color);
+    max-width: 60%;
     border-radius: 1rem;
     padding: 2.5rem;
     margin-bottom: 2rem;
@@ -165,8 +166,6 @@ nav a.active::after {
     color: var(--text-color);
 }
 
-
-
 /* 页脚样式 */
 footer {
     text-size-adjust: 80%;
@@ -174,7 +173,6 @@ footer {
     color: white;
     text-align: center;
     padding: 5rem 1rem;
-    margin-top: 10rem;
     position: relative;
 }
 
@@ -201,20 +199,46 @@ footer::before {
 /* 响应式设计 */
 @media (max-width: 768px) {
     nav ul {
-        flex-direction: column;
-        gap: 0.5rem;
+        flex-direction: row;
+        justify-content: center; /* 水平布局并均匀分布 */
+        padding: 0;
+        margin: 0;
+        list-style: none;
     }
-    
+
+    nav ul li {
+        margin: 0;
+    }
+
+    nav ul li a {
+        display: block;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        background: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+        background: var(--primary-color);
+        color: #fff;
+    }
+
     .header-content {
         padding: 0 1rem;
     }
-    
+
     .container {
         padding: 1rem;
     }
-    
+
     .section {
         padding: 1.5rem;
+        margin: 1rem auto;
+        max-width: none;
     }
 
     .about-container {
@@ -253,15 +277,30 @@ footer::before {
         width: 80%;
         margin: 0.5rem 0;
     }
-}
 
+    .subjects {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .subjects.card {
+        width: 90%;
+        margin-bottom: 1rem;
+    }
+
+    .subject-detail {
+        display: none; /* 隐藏右侧描述 */
+    }
+
+}
 
 /* About Me 页面主容器样式 */
 .about-container {
     max-width: 900px;
     margin: 3rem auto;
     padding: 2rem;
-    background: white;
+    background: var(--background-color);
     border-radius: 1rem;
     box-shadow: var(--shadow-lg);
     text-align: center;
@@ -387,9 +426,7 @@ footer::before {
     background: var(--secondary-color);
 }
 
-
-/*Blog页面*/
-/* 主容器调整为flex布局 */
+/*Theory页面*/
 /* 主容器，去掉间隙 */
 .main-container {
     display: flex;
@@ -407,14 +444,7 @@ footer::before {
     margin-left: 8%;
     top: 60px; /* 根据nav和breadcrumb的高度调整 */
     max-height: calc(100vh - 60px); /* 确保侧边栏不会超出视口 */
-    overflow-y: auto; /* 如果内容过多，允许滚动 */
-    overflow: -moz-scrollbars-none;
-    -ms-overflow-style: none;
-    scrollbar-width: none; /* Firefox */
-}
-
-.sidebar::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+    overflow: visible; 
 }
 
 /* 学科卡片容器，去掉卡片间隙并自适应高度 */
@@ -427,26 +457,25 @@ footer::before {
     padding-bottom: 2rem; /* 确保底部有间隙 */
 }
 
-    /* 学科卡片样式 */
-    .subjects .card {
-        background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); /* 添加渐变背景 */
-        padding: 2rem;
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        box-shadow: var(--shadow-md);
-        transition: var(--transition);
-        text-align: center;
-        border-radius: 0;
-        flex-grow: 1; /* 使学科卡片自适应高度 */
-        min-height: 0; /* 保证卡片不超过最小高度 */
-        color: white; /* 设置字体颜色为白色 */
-        text-decoration: none; /* 去掉默认的链接样式 */
-    }
+/* 学科卡片样式 */
+.subjects .card {
+    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); /* 添加渐变背景 */
+    padding: 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    text-align: center;
+    border-radius: 0;
+    flex-grow: 1; /* 使学科卡片自适应高度 */
+    min-height: 0; /* 保证卡片不超过最小高度 */
+    color: white; /* 设置字体颜色为白色 */
+    text-decoration: none; /* 去掉默认的链接样式 */
+}
 
-        /* 鼠标悬停时，卡片的背景颜色变化 */
-        .subjects .card:hover {
-            background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%); /* 悬停时更换渐变色 */
-        }
-
+/* 鼠标悬停时，卡片的背景颜色变化 */
+.subjects .card:hover {
+    background: linear-gradient(135deg, #42a5f5 0%, #64b5f6 100%); /* 悬停时更换渐变色 */
+}
 
 /* 右侧详细信息区域样式 */
 .subject-detail {
@@ -462,17 +491,17 @@ footer::before {
     display: none;
 }
 
-    .subject-detail.active {
-        display: block;
-    }
+.subject-detail.active {
+    display: block;
+}
 
-    /* 图片自适应 */
-    .subject-detail img {
-        width: 100%; /* 宽度自适应父容器 */
-        max-width: 100%; /* 限制最大宽度为父容器的宽度 */
-        height: auto; /* 高度自动调整，保持比例 */
-        margin-bottom: 1rem;
-    }
+/* 图片自适应 */
+.subject-detail img {
+    width: 100%; /* 宽度自适应父容器 */
+    max-width: 100%; /* 限制最大宽度为父容器的宽度 */
+    height: auto; /* 高度自动调整，保持比例 */
+    margin-bottom: 1rem;
+}
 
 .detail {
     display: none;
@@ -482,15 +511,6 @@ footer::before {
     display: block;
 }
 
-.nav-breadcrumb-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.breadcrumb {
-    position: -webkit-sticky; /* Safari */
-    position: sticky;
-    top: 0;
-    background-color: white; /* 可选：设置背景颜色 */
-    z-index: 1000; /* 确保它在其他内容之上 */
+table {
+    width: 100%;
 }

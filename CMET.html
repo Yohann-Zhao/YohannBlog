@@ -13,10 +13,13 @@
                 document.getElementById("content-area").innerHTML = '<div class="loading">Loading 加载中...</div>';
 
                 // 移除所有章节的选中状态
-                document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+                document.querySelectorAll('.chapter_sidebar a').forEach(a => a.classList.remove('active'));
 
                 // 添加选中状态
                 element.classList.add('active');
+
+                // 更新下拉菜单的值
+                document.getElementById('chapter-dropdown').value = chapterUrl;
 
                 // 使用 Fetch API 加载对应的 HTML 文件
                 const response = await fetch(chapterUrl);
@@ -71,40 +74,42 @@
     </style>
 
     <style>
+
+        /*需要并排两个组件，所以这里container重新用了style*/
         .container {
             position: relative;
             width: 100%;
-            display: flex; /*布局*/
+            display: flex; /* 布局 */
             padding: 2rem;
             gap: 1rem;
         }
 
-        .sidebar {
+        .chapter_sidebar {
             position: sticky;
-            top: 2rem;
+            top: 8rem; /* 保持在nav-breadcrumb-container下方 */
             width: 20%;
-            min-width: 200px; /* 设置最小宽度 */
-            background: var(--background-color);
+            background-color: var(--background-color);
             padding: 1.5rem;
             border-radius: 1rem;
             box-shadow: var(--shadow-md);
+            max-height: calc(100vh - 4rem); /* 限制最大高度 */
         }
 
-            .sidebar h3 {
+            .chapter_sidebar h2 {
                 color: var(--primary-color);
                 margin-bottom: 1rem;
             }
 
-            .sidebar ul {
+            .chapter_sidebar ul {
                 list-style: none;
                 padding: 0;
             }
 
-            .sidebar li {
+            .chapter_sidebar li {
                 margin-bottom: 0.75rem;
             }
 
-            .sidebar a {
+            .chapter_sidebar a {
                 text-decoration: none;
                 font-size: 1rem;
                 color: var(--text-color);
@@ -114,35 +119,33 @@
                 border-radius: 0.5rem;
             }
 
-                .sidebar a:hover,
-                .sidebar a.active {
+                .chapter_sidebar a:hover,
+                .chapter_sidebar a.active {
                     color: var(--primary-color);
                     background: rgba(13, 71, 161, 0.1);
                 }
 
-        .content {
-            position: relative;
-            flex-grow: 1; /* 如果需要填充剩余空间 */
-            padding: 2rem; /*让内部的文字与边缘保持距离*/
-            background: white;
-            border-radius: 1rem;
-            box-shadow: var(--shadow-md);
-        }
+            .content {
+                position: relative;
+                flex-grow: 1; /* 填充剩余空间 */
+                padding: 2rem; /* 让内部的文字与边缘保持距离 */
+                background: var(--background-color);
+                border-radius: 1rem;
+                box-shadow: var(--shadow-md);
+            }
 
-        nav a.active {
-            color: var(--accent-color);
-            background: rgba(255, 255, 255, 0.05);
-        }
+            nav a.active {
+                color: var(--accent-color);
+                background: rgba(255, 255, 255, 0.05);
+            }
 
-        /* 新增样式：导航路径样式 */
-        .breadcrumb {
-            padding: 1rem;
-            padding-left: 10%;
-            background: var(--background-color);
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            box-shadow: var(--shadow-sm);
-        }
+            /* 新增样式：导航路径样式 */
+            .breadcrumb {
+                padding: 1rem;
+                padding-left: 10%;
+                background: var(--background-color);
+                box-shadow: var(--shadow-sm);
+            }
 
             .breadcrumb a {
                 text-decoration: none;
@@ -172,7 +175,39 @@
         }
 
     </style>
+
+    <style>
+        /* 使用媒体查询检测设备类型 */
+        @media (max-width: 768px) {
+            .chapter_sidebar {
+                display: none; /* 隐藏侧边栏 */
+            }
+            .chapter-dropdown-container {
+                display: inline-block; /* 显示下拉菜单和标签 */
+            }
+            .chapter-dropdown-container select {
+                padding: 0.5rem;
+                border-radius: 0.5rem;
+                border: 1px solid var(--border-color);
+                background: var(--background-color);
+                color: var(--text-color);
+                font-size: 1rem;
+            }
+            .content {
+                width: 100%; /* 占满宽度 */
+            }
+        }
+
+        @media (min-width: 769px) {
+            .chapter-dropdown-container {
+                display: none; /* 隐藏下拉菜单和标签 */
+            }
+            .content {
+                width: 80%; /* 占80%宽度 */
+            }
+        }
     </style>
+
 </head>
 <body>
     <header>
@@ -190,17 +225,30 @@
             </ul>
         </nav>
 
-        <!-- 修改后的导航路径 -->
+        <!-- 导航路径 -->
         <div class="breadcrumb">
             <a href="theory.html">所有学科</a>
             <span>></span>
             <a id="subject-name">Meteorology (CMET)</a>
+            <div class="chapter-dropdown-container">
+                <label for="chapter-dropdown"> > 章节:</label>
+                <select id="chapter-dropdown" onchange="loadChapter(this.value, this)">
+                    <option value="CMET/CMET_intro.html">Part Intro</option>
+                    <option value="CMET/CMET_Part1.html">Part 1</option>
+                    <option value="CMET/CMET_Part2,3.html">Part 2，3</option>
+                    <option value="CMET/CMET_Part4.html">Part 4</option>
+                    <option value="CMET/CMET_Part5.html">Part 5</option>
+                    <option value="CMET/CMET_Part6.html">Part 6</option>
+                    <option value="CMET/CMET_Part7.html">Part 7</option>
+                </select>
+            </div>
         </div>
+        
     </div>
 
     <div class="container">
-        <aside class="sidebar">
-            <h3>章节</h3>
+        <aside class="chapter_sidebar">
+            <h2>章节</h2>
             <ul>
                 <li><a href="#" onclick="loadChapter('CMET/CMET_intro.html', this)" class="active">Part Intro</a></li>
                 <li><a href="#" onclick="loadChapter('CMET/CMET_Part1.html', this)">Part 1</a></li>
@@ -215,7 +263,7 @@
         <main class="content" id="content-area">
             <!-- 默认显示第一章内容 -->
             <script>
-                loadChapter('CMET/CMET_intro.html', document.querySelector('.sidebar a'));
+                loadChapter('CMET/CMET_intro.html', document.querySelector('.chapter_sidebar a'));
             </script>
         </main>
     </div>
