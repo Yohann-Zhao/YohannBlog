@@ -197,7 +197,18 @@ footer::before {
 }
 
 /* 响应式设计 */
-@media (max-width: 768px), (max-device-width: 768px) {
+@media (max-width: 767px) {
+    body {
+        transform: scale(0.5);
+        transform-origin: top left;
+        width: 200%;
+        overflow-x: hidden;
+    }
+    .container {
+        width: 768px;
+    }
+}
+
     nav ul {
         flex-direction: row;
         justify-content: center; /* 水平布局并均匀分布 */
