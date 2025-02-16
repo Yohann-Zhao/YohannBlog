@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CMET | Yohann飞行笔记</title>
     <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* 禁用文本选择 */
+        body {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Edge */
+        }
+    </style>
+    <script>
+        // 禁用右键菜单
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+
+
     <script>
         // 动态加载章节内容（优化版）
         async function loadChapter(chapterUrl, element) {
