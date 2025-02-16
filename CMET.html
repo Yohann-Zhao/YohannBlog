@@ -100,6 +100,104 @@
     </script>
 
     <script>
+        document.addEventListener('mouseup', function(e) {
+            const selectedText = getSelectedText();
+            const translateButton = document.getElementById('translate-button');
+            const translationResult = document.getElementById('translation-result');
+
+            if (selectedText) {
+                const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
+                translateButton.style.top = `${rect.bottom + window.scrollY}px`;
+                translateButton.style.left = `${rect.right + window.scrollX}px`;
+                translateButton.style.display = 'block';
+                translateButton.innerText = 'Translate';
+                translationResult.style.display = 'none';
+            } else {
+                translateButton.style.display = 'none';
+                translationResult.style.display = 'none';
+            }
+        });
+
+        function getSelectedText() {
+            let text = "";
+            if (window.getSelection) {
+                text = window.getSelection().toString();
+            } else if (document.selection && document.selection.type != "Control") {
+                text = document.selection.createRange().text;
+            }
+            return text;
+        }
+
+        async function translateSelectedText() {
+            const selectedText = getSelectedText();
+            const translateButton = document.getElementById('translate-button');
+            const translationResult = document.getElementById('translation-result');
+
+            if (!selectedText) {
+                alert("Please select some text to translate.");
+                return;
+            }
+
+            if (translateButton.innerText === 'Hide Translation') {
+                translationResult.style.display = 'none';
+                translateButton.style.display = 'none';
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=YOUR_API_KEY`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        q: selectedText,
+                        target: 'en' // Change this to the desired target language
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const translatedText = data.data.translations[0].translatedText;
+
+                const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
+                translationResult.style.top = `${rect.top + window.scrollY - translationResult.offsetHeight}px`;
+                translationResult.style.left = `${rect.left + window.scrollX}px`;
+                translationResult.innerText = translatedText;
+                translationResult.style.display = 'block';
+
+                translateButton.innerText = 'Hide Translation';
+            } catch (error) {
+                console.error('Translation failed:', error);
+                alert('Translation failed. Please try again.');
+            }
+        }
+    </script>
+
+    <style>
+        #translate-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #translate-button:hover {
+            background-color: #218838;
+        }
+
+        #translation-result {
+            z-index: 1000;
+        }
+    </style>
+
+    <script>
         // 动态加载章节内容（优化版）
         async function loadChapter(chapterUrl, element) {
             try {
@@ -309,6 +407,9 @@
             <h1>Meteorology (CMET)</h1>
         </div>
     </header>
+    <!-- 翻译功能-->
+    <button id="translate-button" style="display:none; position:absolute;" onclick="translateSelectedText()">Translate</button>
+    <div id="translation-result" style="display:none; position:absolute; background-color: #fff; border: 1px solid #ccc; padding: 10px; border-radius: 4px;"></div>
 
     <div class="nav-breadcrumb-container">
         <nav>
