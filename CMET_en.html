@@ -101,7 +101,7 @@
                         },
                         body: JSON.stringify({
                             q: selectedText,
-                            target: 'zh-CN' // 目标语言设置为简体中文
+                            target: 'en' // 目标语言设置为English
                         })
                     });
 
@@ -122,7 +122,7 @@
                     translationDiv.className = 'translation-container';
                     translationDiv.innerHTML = `
                         <div>${translatedText}</div>
-                        <button id="original-btn">关闭</button>
+                        <button id="original-btn">Close</button>
                     `;
 
                     // 获取选中文本的位置
@@ -141,8 +141,8 @@
                     translationVisible = true;
 
                 } catch (error) {
-                    console.error('翻译失败:', error);
-                    showCustomAlert('翻译错误', `翻译服务暂时不可用，请稍后再试。错误信息: ${error.message}`);
+                    console.error('Translation failed:', error);
+                    showCustomAlert('Translation Error', `The translation service is temporarily unavailable. Please try again later. Error message: ${error.message}`);
                 }
             });
 
@@ -170,7 +170,7 @@
             alertBox.innerHTML = `
                 <h2>${title}</h2>
                 <p>${message}</p>
-                <button onclick="closeCustomAlert(this)">确定</button>
+                <button onclick="closeCustomAlert(this)">OK</button>
             `;
 
             // 添加提示框到页面
@@ -253,7 +253,7 @@
         // 禁用复制操作并显示自定义提示
         document.addEventListener('copy', function(e) {
             e.preventDefault();
-            showCustomAlert('温馨提示', '若您需要引用或参考本项目内容，请通过<a href="index.html">版权声明</a>了解使用权利，为您提供规范的使用指引。</br>感谢您为尊重内容版权及开源精神所做的努力！');
+            showCustomAlert('Reminder', 'If you need to quote or refer to the content of this project, please refer to the <a href="index_en.html">Copyright Statement</a> for usage rights and guidelines. Thank you for respecting content copyright and the spirit of open source!');
         });
 
         // 显示自定义提示框
@@ -264,7 +264,7 @@
             alertBox.innerHTML = `
                 <h2>${title}</h2>
                 <p>${message}</p>
-                <button onclick="closeCustomAlert(this)">确定</button>
+                <button onclick="closeCustomAlert(this)">OK</button>
             `;
 
             // 添加提示框到页面
@@ -502,10 +502,9 @@
         }
     </style>
 
-</head>
 <body>
 
-    <div id="translate-btn">翻译</div>
+    <div id="translate-btn">Translate</div>
 
     <header>
         <div class="language-switcher">
@@ -519,15 +518,15 @@
     <div class="nav-breadcrumb-container">
         <nav>
             <ul>
-                <li><a href="index.html">主页</a></li>
-                <li><a href="theory.html" class="active">理论考试</a></li>
-                <li><a href="about.html">关于我</a></li>
+                <li><a href="index_en.html">Home</a></li>
+                <li><a href="theory_en.html" class="active">Theory Exams</a></li>
+                <li><a href="about_en.html">About Me</a></li>
             </ul>
         </nav>
 
-        <!-- 导航路径 -->
+        <!-- Breadcrumb -->
         <div class="breadcrumb">
-            <a href="theory.html">所有学科</a>
+            <a href="theory_en.html">All Subjects</a>
             <span>></span>
             <a id="subject-name">Meteorology (CMET)</a>
             <div class="chapter-dropdown-container">
@@ -543,12 +542,11 @@
                 </select>
             </div>
         </div>
-        
     </div>
 
     <div class="container">
         <aside class="chapter_sidebar">
-            <h2>章节</h2>
+            <h2>Chapters</h2>
             <ul>
                 <li><a href="#" onclick="loadChapter('CMET/CMET_intro.html', this)" class="active">Part Intro: Meteorology Basics</a></li>
                 <li><a href="#" onclick="loadChapter('CMET/CMET_Part1.html', this)">Part 1: Atmosphere & Global Circulation</a></li>
@@ -562,10 +560,10 @@
 
         <main class="content" id="content-area">
             <script>
-                // 默认显示第一章内容
+                // Default to show the first chapter content
                 loadChapter('CMET/CMET_intro.html', document.querySelector('.chapter_sidebar a'));
             
-                // 初始化翻译按钮隐藏状态
+                // Initialize the translate button hidden state
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('translate-btn').style.display = 'none';
                 });
@@ -575,12 +573,12 @@
 
     <footer>
         <div class="footer-content">
-          <p>© 2025 Yohann飞行笔记 保留所有权利。</p>
+          <p>© 2025 Yohann's Flight Notes. All rights reserved.</p>
           <p>
-            本项目基于 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 许可证</a> 开源，
-            仅供非商业用途。引用内容已标注来源，侵权请联系 <a href="yuhan_zhao@nuaa.edu.cn">Email</a>。
+            This project is open source under the <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 license</a>,
+            for non-commercial use only. Cited content has been marked, infringement please contact <a href="yuhan_zhao@nuaa.edu.cn">Email</a>.
           </p>
         </div>
-      </footer>
+    </footer>
 </body>
 </html>

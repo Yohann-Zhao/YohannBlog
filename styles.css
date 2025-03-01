@@ -29,6 +29,26 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.language-switcher {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 15px;
+}
+
+.language-switcher a {
+    text-decoration: none;
+    color: white;
+    margin: 0 5px;
+    text-decoration: none;
+}
+
+.language-switcher a:hover {
+    text-decoration: underline;
+    color:var(--secondary-color)
+}
+
+
 /* 共用组件样式 */
 header {
     background: var(--gradient-primary);

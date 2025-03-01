@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 | Yohann飞行笔记</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+    /* NOTAM 专用字体样式 */
+    .notam-container {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #ffffcc;
+        border: 3px solid #000000;
+        padding: 20px;
+        max-width: 800px;
+        margin: 2rem auto;
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+        line-height: 1.4;
+        letter-spacing: 0.05em;
+    }
+
+    .notam-title {
+        font-size: 2.5rem;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.2rem;
+        color: #cc0000;
+        text-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    }
+
+    .notam-header {
+        font-weight: bold;
+        margin: 0.8rem 0;
+        white-space: pre;
+    }
+
+    .notam-content {
+        white-space: pre-wrap;
+        margin: 1rem 0;
+    }
+
+    .warning-text {
+        color: #cc0000;
+        font-weight: bold;
+    }
+
+    a.notam-link {
+        color: var(--text-color);
+        text-decoration: underline;
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+        .notam-container {
+            padding: 15px;
+            margin: 1rem;
+        }
+        .notam-title {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<body>
+    <header>
+        <div class="header-content">
+            <h1>404 - 页面未找到</h1>
+            <p>抱歉，您访问的页面不存在。</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">主页</a></li>
+            <li><a href="theory.html">理论考试</a></li>
+            <li><a href="about.html">关于我</a></li>
+        </ul>
+    </nav>
+
+    <div class="notam-container">
+        <h1 class="notam-title">NOTAM</h1>
+        
+        <div class="notam-header">!WEB001 S1234/24</div>
+        <div class="notam-header">Q) YOHN/WEBSITE //000999</div>
+        
+        <pre class="notam-content" id="notam-content">
+A) WWW.AVIATIONNOTE.COM 
+B) FROM: <span id="from-date"></span> 00:00 UTC  
+C) TO: PERM
+D) DAILY 00:00-23:59
+
+E) WEBSITE MAINTENANCE IN PROGRESS. CURRENT PAGE UNDER CONSTRUCTION. 
+   NAVIGATIONAL ELEMENTS MAY BE TEMPORARILY UNAVAILABLE OR RELOCATED. 
+   <span class="warning-text">PROCEED WITH CAUTION</span> WHEN INTERACTING WITH DYNAMIC CONTENT.
+
+F) MAXIMUM ALTITUDE: ALL ACCESS LEVELS
+G) EXPECTED COMPLETION: TIME UNKNOWN. 
+   FOR OPERATIONAL ASSISTANCE CONTACT ATS(AUTOMATED TECHNICAL SUPPORT) 
+   VIA EMAIL: <a href="yuhan_zhao@nuaa.edu.cn" class="notam-link">YUHAN_ZHAO@NUAA.EDU.CN</a>
+
+CREATED: <span id="created-date"></span> 00:00 UTC
+SOURCE: WEBOPS
+        </pre>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+          <p>© 2025 Yohann飞行笔记 保留所有权利。</p>
+          <p>
+            本项目基于 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 许可证</a> 开源，
+            仅供非商业用途。引用内容已标注来源，侵权请联系 <a href="yuhan_zhao@nuaa.edu.cn">Email</a>。
+          </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const utcDate = now.toISOString().split('T')[0].replace(/-/g, '/');
+            document.getElementById('from-date').textContent = utcDate;
+            document.getElementById('created-date').textContent = utcDate;
+        });
+    </script>
+</body>
+</html>

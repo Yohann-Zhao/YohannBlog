@@ -6,21 +6,33 @@
     <title>Yohann飞行笔记 | 澳洲飞行学员的技术博客</title>
     <link rel="stylesheet" href="styles.css">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-G3TQJTQ67B');
-</script>
+      gtag('config', 'G-G3TQJTQ67B');
+    </script>
 
+    <script>
+        // JavaScript to detect user's preferred language and redirect
+        document.addEventListener('DOMContentLoaded', function() {
+        const userLang = navigator.language || navigator.userLanguage;
+        if (userLang.startsWith('en')) {
+            window.location.href = 'index_en.html';
+        }
+        });
+    </script>
+    
 </head>
-
 
 <body>
     <header>
+        <div class="language-switcher">
+            <a href="index.html">中文</a> | <a href="index_en.html">English</a>
+        </div>
         <div class="header-content">
             <h1>Yohann飞行笔记</h1>
             <p>澳洲飞行学员 | 技术理论分享 | 航空知识交流</p>
@@ -81,7 +93,6 @@
 
     </main>
 
-
     <footer>
         <div class="footer-content">
           <p>© 2025 Yohann飞行笔记 保留所有权利。</p>
@@ -90,6 +101,6 @@
             仅供非商业用途。引用内容已标注来源，侵权请联系 <a href="yuhan_zhao@nuaa.edu.cn">Email</a>。
           </p>
         </div>
-      </footer>
+    </footer>
 </body>
 </html>
