@@ -20,10 +20,11 @@
         // JavaScript to detect user's preferred language and redirect
         document.addEventListener('DOMContentLoaded', function() {
         const userLang = navigator.language || navigator.userLanguage;
+        });
+
         if (userLang.startsWith('en')) {
             window.location.href = 'index_en.html';
         }
-        });
     </script>
     
 </head>
