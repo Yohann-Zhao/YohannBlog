@@ -530,16 +530,16 @@
             <div class="chapter-dropdown-container">
                 <label for="chapter-dropdown"> > </label>
                 <select id="chapter-dropdown" onchange="loadChapter(this.value, this)">
-                    <option value="CMET/CMET_intro.html">Part 1 The Human Condition</Thead></option>
-                    <option value="CMET/CMET_Part1.html">Part 2 Medical Drugs & Scuba Diving</option>
-                    <option value="CMET/CMET_Part2,3.html">Part 3 The Human Ear</option>
-                    <option value="CMET/CMET_Part4.html">Part 4 The Human Eye</option>
-                    <option value="CMET/CMET_Part5.html">Part 5 Disorientation</option>
-                    <option value="CMET/CMET_Part6.html">Part 6 G load & Toxic Hazards</option>
-                    <option value="CMET/CMET_Part7.html">Part 7 Circulation, Respiration</option>
-                    <option value="CMET/CMET_Part5.html">Part 8 Decision Making, Personality, Attitudes</option>
-                    <option value="CMET/CMET_Part6.html">Part 9 Error, Behaviour, Stress, Fatigue</option>
-                    <option value="CMET/CMET_Part7.html">Part 10 Cockpit</option>
+                    <option value="CHUF/CHUF_Part1.html">Part 1 The Human Condition</Thead></option>
+                    <option value="CHUF/CHUF_Part2.html">Part 2 Medical Drugs & Scuba Diving</option>
+                    <option value="CHUF/CHUF_Part3.html">Part 3 The Human Ear</option>
+                    <option value="CHUF/CHUF_Part4.html">Part 4 The Human Eye</option>
+                    <option value="CHUF/CHUF_Part5.html">Part 5 Disorientation</option>
+                    <option value="CHUF/CHUF_Part6.html">Part 6 G load & Toxic Hazards</option>
+                    <option value="CHUF/CHUF_Part7.html">Part 7 Circulation, Respiration</option>
+                    <option value="CHUF/CHUF_Part8.html">Part 8 Decision Making, Personality, Attitudes</option>
+                    <option value="CHUF/CHUF_Part9.html">Part 9 Error, Behaviour, Stress, Fatigue</option>
+                    <option value="CHUF/CHUF_Part10.html">Part 10 Cockpit</option>
                 </select>
             </div>
         </div>
@@ -550,23 +550,23 @@
         <aside class="chapter_sidebar">
             <h2>Chapters</h2>
             <ul>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_intro.html', this)" class="active">Part 1 The Human Condition</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part1.html', this)">Part 2 Medical Drugs & Scuba Diving</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part2,3.html', this)">Part 3 The Human Ear</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part4.html', this)">Part 4 The Human Eye</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part5.html', this)">Part 5 Disorientation</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part6.html', this)">Part 6 G load & Toxic Hazards</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part7.html', this)">Part 7 Circulation, Respiration</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part4.html', this)">Part 8 Decision Making, Personality, Attitudes</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part5.html', this)">Part 9 Error, Behaviour, Stress, Fatigue</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part6.html', this)">Part 10 Cockpit</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part1.html', this)" class="active">Part 1 The Human Condition</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part2.html', this)">Part 2 Medical Drugs & Scuba Diving</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part3.html', this)">Part 3 The Human Ear</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part4.html', this)">Part 4 The Human Eye</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part5.html', this)">Part 5 Disorientation</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part6.html', this)">Part 6 G load & Toxic Hazards</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part7.html', this)">Part 7 Circulation, Respiration</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part8.html', this)">Part 8 Decision Making, Personality, Attitudes</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part9.html', this)">Part 9 Error, Behaviour, Stress, Fatigue</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part10.html', this)">Part 10 Cockpit</a></li>
             </ul>
         </aside>
 
         <main class="content" id="content-area">
             <script>
                 // 默认显示第一章内容
-                loadChapter('CMET/CMET_intro.html', document.querySelector('.chapter_sidebar a'));
+                loadChapter('CHUF/CHUF_Part1.html', document.querySelector('.chapter_sidebar a'));
             
                 // 初始化翻译按钮隐藏状态
                 document.addEventListener('DOMContentLoaded', function() {
