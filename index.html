@@ -19,11 +19,17 @@
     <script>
         // JavaScript to detect user's preferred language and redirect
         document.addEventListener('DOMContentLoaded', function() {
-        const userLang = navigator.language || navigator.userLanguage;
+            const savedLang = localStorage.getItem('preferredLanguage');
+            if (!savedLang) {
+                const userLang = navigator.language || navigator.userLanguage;
+                if (userLang.startsWith('en')) {
+                    window.location.href = 'index_en.html';
+                }
+            }
         });
 
-        if (userLang.startsWith('en')) {
-            window.location.href = 'index_en.html';
+        function setLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
         }
     </script>
     
@@ -32,7 +38,7 @@
 <body>
     <header>
         <div class="language-switcher">
-            <a href="index.html">中文</a> | <a href="index_en.html">English</a>
+            <a href="index.html" onclick="setLanguage('zh-CN')">中文</a> | <a href="index_en.html" onclick="setLanguage('en')">English</a>
         </div>
         <div class="header-content">
             <h1>Yohann飞行笔记</h1>

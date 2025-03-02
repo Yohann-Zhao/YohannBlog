@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -124,9 +124,8 @@ SOURCE: WEBOPS
             document.getElementById('created-date').textContent = utcDate;
         });
 
-        const userLang = navigator.language || navigator.userLanguage;
-        if (userLang.startsWith('en')) {
-            window.location.href = '404_en.html';
+        function setLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
         }
     </script>
 </body>

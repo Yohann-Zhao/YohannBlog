@@ -124,10 +124,20 @@ SOURCE: WEBOPS
             document.getElementById('created-date').textContent = utcDate;
 
             const userLang = navigator.language || navigator.userLanguage;
-            if (userLang.startsWith('en')) {
+            const savedLang = localStorage.getItem('preferredLanguage');
+
+            if (savedLang) {
+                if (savedLang === 'en') {
+                    window.location.href = '404_en.html';
+                }
+            } else if (userLang.startsWith('en')) {
                 window.location.href = '404_en.html';
             }
         });
+
+        function setLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+        }
     </script>
 </body>
 </html>
