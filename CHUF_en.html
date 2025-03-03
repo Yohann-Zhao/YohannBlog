@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMET | Yohann's Flight Notes</title>
+    <title>CHUF | Yohann's Flight Notes</title>
     <link rel="stylesheet" href="styles.css">
 
 <!-- Google tag (gtag.js) -->
@@ -101,7 +101,7 @@
                         },
                         body: JSON.stringify({
                             q: selectedText,
-                            target: 'en' // 目标语言设置为English
+                            target: 'en' // 目标语言设置
                         })
                     });
 
@@ -122,7 +122,7 @@
                     translationDiv.className = 'translation-container';
                     translationDiv.innerHTML = `
                         <div>${translatedText}</div>
-                        <button id="original-btn">Close</button>
+                        <button id="original-btn">关闭</button>
                     `;
 
                     // 获取选中文本的位置
@@ -141,8 +141,8 @@
                     translationVisible = true;
 
                 } catch (error) {
-                    console.error('Translation failed:', error);
-                    showCustomAlert('Translation Error', `The translation service is temporarily unavailable. Please try again later. Error message: ${error.message}`);
+                    console.error('翻译失败:', error);
+                    showCustomAlert('翻译错误', `翻译服务暂时不可用，请稍后再试。错误信息: ${error.message}`);
                 }
             });
 
@@ -170,7 +170,7 @@
             alertBox.innerHTML = `
                 <h2>${title}</h2>
                 <p>${message}</p>
-                <button onclick="closeCustomAlert(this)">OK</button>
+                <button onclick="closeCustomAlert(this)">确定</button>
             `;
 
             // 添加提示框到页面
@@ -253,7 +253,7 @@
         // 禁用复制操作并显示自定义提示
         document.addEventListener('copy', function(e) {
             e.preventDefault();
-            showCustomAlert('Reminder', 'If you need to quote or refer to the content of this project, please refer to the <a href="index_en.html">Copyright Statement</a> for usage rights and guidelines. Thank you for respecting content copyright and the spirit of open source!');
+            showCustomAlert('温馨提示', '若您需要引用或参考本项目内容，请通过<a href="index.html">版权声明</a>了解使用权利，为您提供规范的使用指引。</br>感谢您为尊重内容版权及开源精神所做的努力！');
         });
 
         // 显示自定义提示框
@@ -264,7 +264,7 @@
             alertBox.innerHTML = `
                 <h2>${title}</h2>
                 <p>${message}</p>
-                <button onclick="closeCustomAlert(this)">OK</button>
+                <button onclick="closeCustomAlert(this)">确定</button>
             `;
 
             // 添加提示框到页面
@@ -502,16 +502,14 @@
         }
     </style>
 
+</head>
 <body>
 
     <div id="translate-btn">Translate</div>
 
     <header>
-        <div class="language-switcher">
-            <a href="CMET.html">中文</a> | <a href="CMET_en.html">English</a>
-        </div>
         <div class="header-content">
-            <h1>Meteorology (CMET)</h1>
+            <h1>Human Factors (CHUF)</h1>
         </div>
     </header>
 
@@ -524,46 +522,53 @@
             </ul>
         </nav>
 
-        <!-- Breadcrumb -->
+        <!-- 导航路径 -->
         <div class="breadcrumb">
-            <a href="theory_en.html">All Subjects</a>
+            <a href="theory.html">All subjects</a>
             <span>></span>
-            <a id="subject-name">Meteorology (CMET)</a>
+            <a id="subject-name">Human Factors (CHUF)</a>
             <div class="chapter-dropdown-container">
                 <label for="chapter-dropdown"> > </label>
                 <select id="chapter-dropdown" onchange="loadChapter(this.value, this)">
-                    <option value="CMET/CMET_intro.html">Part Intro: Meteorology Basics</option>
-                    <option value="CMET/CMET_Part1.html">Part 1: Atmosphere & Global Circulation</option>
-                    <option value="CMET/CMET_Part2,3.html">Part 2，3: Winds & Stability</option>
-                    <option value="CMET/CMET_Part4.html">Part 4: Cloud Formation</option>
-                    <option value="CMET/CMET_Part5.html">Part 5: Air Masses & Fronts</option>
-                    <option value="CMET/CMET_Part6.html">Part 6: Meteorological Hazards</option>
-                    <option value="CMET/CMET_Part7.html">Part 7: Operational Meteorology</option>
+                    <option value="CHUF/CHUF_Part1.html">Part 1 The Human Condition</Thead></option>
+                    <option value="CHUF/CHUF_Part2.html">Part 2 Medical, Drugs & Altitude</option>
+                    <option value="CHUF/CHUF_Part3.html">Part 3 The Human Ear</option>
+                    <option value="CHUF/CHUF_Part4.html">Part 4 The Human Eye</option>
+                    <option value="CHUF/CHUF_Part5.html">Part 5 Disorientation</option>
+                    <option value="CHUF/CHUF_Part6.html">Part 6 G load & Toxic Hazards</option>
+                    <option value="CHUF/CHUF_Part7.html">Part 7 Circulation, Respiration</option>
+                    <option value="CHUF/CHUF_Part8.html">Part 8 Decision Making, Personality, Attitudes</option>
+                    <option value="CHUF/CHUF_Part9.html">Part 9 Error, Behaviour, Stress, Fatigue</option>
+                    <option value="CHUF/CHUF_Part10.html">Part 10 Cockpit</option>
                 </select>
             </div>
         </div>
+        
     </div>
 
     <div class="container">
         <aside class="chapter_sidebar">
             <h2>Chapters</h2>
             <ul>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_intro.html', this)" class="active">Part Intro: Meteorology Basics</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part1.html', this)">Part 1: Atmosphere & Global Circulation</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part2,3.html', this)">Part 2，3: Winds & Stability</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part4.html', this)">Part 4: Cloud Formation</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part5.html', this)">Part 5: Air Masses & Fronts</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part6.html', this)">Part 6: Meteorological Hazards</a></li>
-                <li><a href="#" onclick="loadChapter('CMET/CMET_Part7.html', this)">Part 7: Operational Meteorology</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part1.html', this)" class="active">Part 1 The Human Condition</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part2.html', this)">Part 2 Medical, Drugs & Altitude</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part3.html', this)">Part 3 The Human Ear</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part4.html', this)">Part 4 The Human Eye</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part5.html', this)">Part 5 Disorientation</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part6.html', this)">Part 6 G load & Toxic Hazards</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part7.html', this)">Part 7 Circulation, Respiration</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part8.html', this)">Part 8 Decision Making, Personality, Attitudes</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part9.html', this)">Part 9 Error, Behaviour, Stress, Fatigue</a></li>
+                <li><a href="#" onclick="loadChapter('CHUF/CHUF_Part10.html', this)">Part 10 Cockpit</a></li>
             </ul>
         </aside>
 
         <main class="content" id="content-area">
             <script>
-                // Default to show the first chapter content
-                loadChapter('CMET/CMET_intro.html', document.querySelector('.chapter_sidebar a'));
+                // 默认显示第一章内容
+                loadChapter('CHUF/CHUF_Part1.html', document.querySelector('.chapter_sidebar a'));
             
-                // Initialize the translate button hidden state
+                // 初始化翻译按钮隐藏状态
                 document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('translate-btn').style.display = 'none';
                 });
@@ -573,12 +578,12 @@
 
     <footer>
         <div class="footer-content">
-          <p>© 2025 Yohann's Flight Notes. All rights reserved.</p>
+          <p>© 2025 Yohann飞行笔记 保留所有权利。</p>
           <p>
-            This project is open source under the <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 license</a>,
-            for non-commercial use only. Cited content has been marked, infringement please contact <a href="yuhan_zhao@nuaa.edu.cn">Email</a>.
+            本项目基于 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 许可证</a> 开源，
+            仅供非商业用途。引用内容已标注来源，侵权请联系 <a href="yuhan_zhao@nuaa.edu.cn">Email</a>。
           </p>
         </div>
-    </footer>
+      </footer>
 </body>
 </html>
