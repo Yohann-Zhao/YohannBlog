@@ -184,37 +184,26 @@
         }
     </script>
 
-    <!--
-    <style>
-        /* 禁用文本选择 */
-        body {
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Edge */
-        }
-    </style>
-    <script>
-        // 禁用右键菜单
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-    </script>
-    -->
-
     <style>
         /* 自定义提示框样式 */
         .custom-alert {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            bottom: 20px;
+            right: 20px;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             text-align: center;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .custom-alert.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .custom-alert h2 {
@@ -245,15 +234,10 @@
     </style>
 
     <script>
-        // 禁用右键菜单
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
         // 禁用复制操作并显示自定义提示
         document.addEventListener('copy', function(e) {
-            e.preventDefault();
-            showCustomAlert('Reminder', 'If you need to quote or refer to the content of this project, please refer to the <a href="index_en.html">Copyright Statement</a> for usage rights and guidelines. Thank you for respecting content copyright and the spirit of open source!');
+            /*e.preventDefault();*/
+            showCustomAlert('Reminder', 'If you need to quote or refer to the content of this project, please refer to the <a href="index_en.html">Copyright Statement</a> for usage rights and guidelines.<br>Thank you for respecting content copyright and the spirit of open source!');
         });
 
         // 显示自定义提示框
@@ -269,12 +253,28 @@
 
             // 添加提示框到页面
             document.body.appendChild(alertBox);
+
+            // 渐变显示提示框
+            setTimeout(() => {
+                alertBox.classList.add('show');
+            }, 10);
+
+            // 5秒后渐变隐藏提示框
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(alertBox);
+                }, 500);
+            }, 5000);
         }
 
         // 关闭自定义提示框
         function closeCustomAlert(button) {
             const alertBox = button.parentElement;
-            document.body.removeChild(alertBox);
+            alertBox.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(alertBox);
+            }, 500);
         }
     </script>
 
