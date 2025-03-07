@@ -472,7 +472,7 @@
 
     <style>
         /* 使用媒体查询检测设备类型 */
-        @media (max-width: 1400px) {
+        @media (max-width: 1000px) {
             .chapter_sidebar {
                 display: none; /* 隐藏侧边栏 */
             }
@@ -489,6 +489,26 @@
             }
             .content {
                 width: 100%; /* 占满宽度 */
+            }
+        }
+
+        @media (min-width: 1001px) and (max-width: 1400px) {
+            .chapter_sidebar {
+                width: 30%;
+            }
+            .chapter-dropdown-container {
+                display: inline-block; /* 显示下拉菜单和标签 */
+            }
+            .chapter-dropdown-container select {
+                padding: 0.5rem;
+                border-radius: 0.5rem;
+                border: 1px solid var(--border-color);
+                background: var(--background-color);
+                color: var(--text-color);
+                font-size: 1rem;
+            }
+            .content {
+                width: 70%; /* 占满宽度 */
             }
         }
 
