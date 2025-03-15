@@ -1,3 +1,167 @@
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --success-color: #27ae60;
+        --danger-color: #e74c3c;
+        --light-gray: #ecf0f1;
+        --dark-gray: #95a5a6;
+    }
+
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .control-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    label {
+        font-weight: 600;
+        color: var(--primary-color);
+        font-size: 0.9rem;
+        text-align: left;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        padding: 0.8rem;
+        border: 2px solid #dfe6e9;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        outline: none;
+    }
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        margin: 2rem 0;
+    }
+
+    button {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    button:not(:disabled):hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    button[onclick^="play"] {
+        background: var(--success-color);
+        color: white;
+    }
+
+    #pauseResumeBtn {
+        background: var(--secondary-color);
+        color: white;
+    }
+
+    #stopBtn {
+        background: var(--danger-color);
+        color: white;
+    }
+
+    button[onclick="toggleAnswer"] {
+        background: var(--dark-gray);
+        color: white;
+    }
+
+    #speedControl {
+        background: var(--light-gray);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin: 2rem 0;
+    }
+
+    input[type="range"] {
+        width: 200px;
+        height: 4px;
+        background: #dfe6e9;
+        border-radius: 2px;
+        -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        background: var(--secondary-color);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    #answer {
+        background: var(--light-gray);
+        padding: 1.5rem;
+        border-radius: 12px;
+        font-family: monospace;
+        font-size: 1.1rem;
+        color: var(--primary-color);
+        border: 2px dashed var(--dark-gray);
+        margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .button-group {
+            flex-direction: column;
+        }
+        
+        button {
+            justify-content: center;
+        }
+    }
+</style>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +184,10 @@
             border: none;
             border-radius: 4px;
         }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
         #speedControl, #customLettersInput {
             margin: 20px 0;
         }
@@ -28,24 +196,34 @@
             padding: 15px;
             background-color: #f0f0f0;
             border-radius: 4px;
-            display: none; /* Initially hidden */
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <label>自定义字母（如 "XYZR"）：</label>
-        <input type="text" id="customLetters" maxlength="26" placeholder="留空则默认A-Z">
+        <div class="control-group">
+            <div class="input-group">
+                <label>自定义字母（如 "XYZR"）：</label>
+                <input type="text" id="customLetters" maxlength="26" placeholder="留空则默认A-Z">
+            </div>
+            <div class="input-group">
+                <label>生成字母数量：</label>
+                <input type="number" id="letterCount" value="50" min="1" max="100">
+            </div>
+            <div class="input-group">
+                <label>生成呼号数量：</label>
+                <input type="number" id="callsignCount" value="50" min="1" max="100">
+            </div>
+        </div>
         
-        <label>生成字母数量：</label>
-        <input type="number" id="letterCount" value="50" min="1" max="100">
-        
-        <label>生成呼号数量：</label>
-        <input type="number" id="callsignCount" value="50" min="1" max="100">
-        
-        <button onclick="playLetters()">播放字母练习</button>
-        <button onclick="playSimulated()">播放模拟呼号</button>
-        <button onclick="toggleAnswer()">显示/隐藏答案</button> <!-- New button -->
+        <div class="button-group">
+            <button onclick="playLetters()">▶️ 字母练习</button>
+            <button onclick="playSimulated()">📻 模拟呼号</button>
+            <button onclick="toggleAnswer()">🔍 显示答案</button>
+            <button id="pauseResumeBtn" onclick="togglePauseResume()" disabled>⏸️ 暂停</button>
+            <button id="stopBtn" onclick="stopPlayback()" disabled>⏹️ 停止</button>
+        </div>
 
         <div id="speedControl">
             <label>播放速度: 
@@ -75,7 +253,7 @@
             "Pilatus", "Tecnam", "Extra", "Van's Aircraft"
         ];
 
-        const ultraLightAircraft = ["Sling", "Tecnam", "Van's Aircraft"];
+        const ultraLightAircraft = ["Brumby", "Sling", "Tecnam", "Van's Aircraft"];
         const aviationNumbers = {
             '0': 'Zero', '1': 'One', '2': 'Two', 
             '3': 'Tree', '4': 'Four', '5': 'Five',
@@ -84,8 +262,37 @@
         };
 
         let currentAnswer = "";
+        let currentUtterance = null;
 
-        // 字母生成逻辑保持不变
+        function togglePauseResume() {
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            } else {
+                window.speechSynthesis.pause();
+            }
+            updateButtonState();
+        }
+
+        function stopPlayback() {
+            window.speechSynthesis.cancel();
+            updateButtonState();
+        }
+
+        function updateButtonState() {
+            const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const isSpeaking = window.speechSynthesis.speaking;
+            
+            pauseResumeBtn.disabled = !isSpeaking;
+            stopBtn.disabled = !isSpeaking;
+            
+            if (isSpeaking) {
+                pauseResumeBtn.textContent = window.speechSynthesis.paused ? '继续' : '暂停';
+            } else {
+                pauseResumeBtn.textContent = '暂停';
+            }
+        }
+
         function generateCustomLetters() {
             const custom = document.getElementById("customLetters").value
                 .toUpperCase().replace(/[^A-Z]/g, '');
@@ -114,7 +321,6 @@
                 let callsign, speech;
                 
                 if(ultraLightAircraft.includes(aircraft)) {
-                    // 生成4位数字呼号（每两位一组）
                     const groups = [
                         Math.floor(Math.random()*90)+10,
                         Math.floor(Math.random()*90)+10
@@ -130,7 +336,6 @@
                         ).join('');
                         speech = callsign.split('').map(c => aviationMap[c]).join(' ');
                     } else {
-                        // 生成混合呼号（至少包含1字母1数字）
                         let hasLetter = false, hasNumber = false;
                         do {
                             callsign = '';
@@ -162,14 +367,13 @@
             speakText(speechParts.join(', '));
         }
 
-        // 航空标准数字转换函数
         function convertNumberGroup(num) {
             const tens = num / 10 | 0;
             const ones = num % 10;
             
             let tenStr = '';
             if (tens === 1) {
-                tenStr = num === 10 ? 'One Zero' : aviationNumbers[ones].replace('Tree', 'Ten'); // 处理10的特殊情况
+                tenStr = num === 10 ? 'One Zero' : aviationNumbers[ones].replace('Tree', 'Ten');
             } else {
                 tenStr = aviationNumbers[tens.toString()]
                     .replace('Tree', 'Thirty')
@@ -194,6 +398,10 @@
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.rate = document.getElementById('speed').value;
             window.speechSynthesis.cancel();
+            
+            utterance.addEventListener('start', updateButtonState);
+            utterance.addEventListener('end', updateButtonState);
+            
             window.speechSynthesis.speak(utterance);
         }
 
@@ -210,6 +418,13 @@
             const div = document.getElementById('answer');
             div.style.display = (div.style.display === 'none' || div.style.display === '') ? 'block' : 'none';
         }
+
+        // 页面隐藏时停止播放
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopPlayback();
+            }
+        });
     </script>
 </body>
 </html>

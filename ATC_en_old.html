@@ -143,181 +143,27 @@
     
         <section id="basic_callsign_reader" class="section">
             <h2>Callsign Dictation Practice</h2>
-            <p>1. Click "Letter Practice" to play A-Z letters. Practice letter dictation;<br>
-                2. Click "Simulated Callsign" button to play simulated traffic "aircraft type" and "callsign". Practice recognition & dictation of "callsign" (usually only the callsign needs to be written down).</p>
-            <div class="control-group">
-                <div class="input-group">
-                    <label>Letters to Practice:</label>
-                    <input type="text" id="customLetters" maxlength="26" placeholder="e.g. XYZR，default A-Z">
-                </div>
-                <div class="input-group">
-                    <label>Number of Letters:</label>
-                    <input type="number" id="letterCount" value="20" min="1" max="100">
-                </div>
-                <div class="input-group">
-                    <label>Number of Callsigns:</label>
-                    <input type="number" id="callsignCount" value="20" min="1" max="100">
-                </div>
-            </div>
-                
-            <div class="button-group">
-                    <button onclick="playLetters()">▶️ Letter Practice</button>
-                    <button onclick="playSimulated()">📻 Simulated Callsign</button>
-                    <button onclick="toggleAnswer()">🔍 Show Answer</button>
-                    <button id="pauseResumeBtn" onclick="togglePauseResume()" disabled>⏸️ Pause/Continue</button>
-                    <button id="stopBtn" onclick="stopPlayback()" disabled>⏹️ Stop</button>
-            </div>
-        
+            <p>1. Click "Play Letter Practice" to play A-Z letters. Practice letter dictation;<br>
+                2. Click "Play Simulated Traffic" button to play simulated traffic "aircraft type" and "callsign". Practice recognition & dictation of "callsign" (usually only the callsign needs to be written down).</p>
+            <button onclick="playLetters()">Play Letter Practice</button>
+            <label>Number of Letters to Generate:</label>
+            <input type="number" id="letterCount" value="10" min="1" max="100">
+            <label>Custom Letters:</label>
+            <input type="text" id="customLetters" maxlength="26" placeholder="default A-Z">
+            <br>
+            <button onclick="playSimulated()">Play Simulated Traffic</button>
+            <label>Number of Callsigns to Generate:</label>
+            <input type="number" id="callsignCount" value="10" min="1" max="100">
+            <br>
             <div id="speedControl">
-                    <label>Play Speed(Adjust before play): 
-                        <input type="range" id="speed" min="0.3" max="2" value="1" step="0.1" oninput="updateSpeed(this.value)">
-                        <span id="speedValue">1.0</span>
-                    </label>
+                <label>Dictation Speed (adjust before you play): 
+                    <input type="range" id="speed" min="0.3" max="2" value="1" step="0.1" oninput="updateSpeed(this.value)">
+                    <span id="speedValue">1.0</span>
+                </label>
             </div>
-        
+            <button onclick="toggleAnswer()">Show/Hide Answer</button>
             <div id="answer"></div>
-
-            <style>
-                :root {
-                    --success-color: #27ae60;
-                    --danger-color: #e74c3c;
-                    --light-gray: #ecf0f1;
-                    --dark-gray: #95a5a6;
-                }
-                .control-group {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
-                }
-            
-                .input-group {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                }
-            
-                label {
-                    font-weight: 600;
-                    color: var(--primary-color);
-                    font-size: 0.9rem;
-                    text-align: left;
-                }
-            
-                input[type="text"],
-                input[type="number"] {
-                    padding: 0.8rem;
-                    border: 2px solid #dfe6e9;
-                    border-radius: 8px;
-                    font-size: 1rem;
-                    transition: all 0.3s ease;
-                }
-            
-                input[type="text"]:focus,
-                input[type="number"]:focus {
-                    border-color: var(--secondary-color);
-                    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-                    outline: none;
-                }
-            
-                .button-group {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 1rem;
-                    justify-content: center;
-                    margin: 2rem 0;
-                }
-            
-                button {
-                    padding: 0.8rem 1.5rem;
-                    border: none;
-                    border-radius: 8px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                }
-            
-                button:disabled {
-                    opacity: 0.7;
-                    cursor: not-allowed;
-                }
-            
-                button:not(:disabled):hover {
-                    background-color: var(--secondary-color);
-                    color: white;
-                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-                }
-            
-                button[onclick^="play"] {
-                    background: var(--light-gray);
-                    color: var(--primary-color);
-                }
-            
-                #pauseResumeBtn {
-                    background: var(--light-gray);
-                    color: var(--primary-color);
-                }
-            
-                #stopBtn {
-                    background: var(--danger-color);
-                    color: white;
-                }
-            
-                button[onclick="toggleAnswer"] {
-                    background: var(--dark-gray);
-                    color: var(--primary-color);
-                }
-            
-                #speedControl {
-                    background: var(--light-gray);
-                    padding: 1.5rem;
-                    border-radius: 12px;
-                    margin: 2rem 0;
-                }
-            
-                input[type="range"] {
-                    width: 200px;
-                    height: 4px;
-                    background: #dfe6e9;
-                    border-radius: 2px;
-                    -webkit-appearance: none;
-                }
-            
-                input[type="range"]::-webkit-slider-thumb {
-                    -webkit-appearance: none;
-                    width: 20px;
-                    height: 20px;
-                    background: var(--secondary-color);
-                    border-radius: 50%;
-                    cursor: pointer;
-                    transition: background 0.3s ease;
-                }
-            
-                #answer {
-                    background: var(--light-gray);
-                    padding: 1.5rem;
-                    border-radius: 12px;
-                    font-family: monospace;
-                    font-size: 1.1rem;
-                    color: var(--primary-color);
-                    border: 2px dashed var(--dark-gray);
-                    margin-top: 2rem;
-                }
-            
-                @media (max-width: 600px) {
-                    .button-group {
-                        flex-direction: column;
-                    }
-                    
-                    button {
-                        justify-content: center;
-                    }
-                }
-            </style>
-
+        
             <script>
                 const aviationMap = {
                     'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta',
@@ -345,38 +191,8 @@
                 };
         
                 let currentAnswer = "";
-                let currentUtterance = null;
         
-                function togglePauseResume() {
-                    if (window.speechSynthesis.paused) {
-                        window.speechSynthesis.resume();
-                    } else {
-                        window.speechSynthesis.pause();
-                    }
-                    updateButtonState();
-                }
-        
-                function stopPlayback() {
-                    window.speechSynthesis.cancel();
-                    updateButtonState();
-                }
-        
-                function updateButtonState() {
-                    const pauseResumeBtn = document.getElementById('pauseResumeBtn');
-                    const stopBtn = document.getElementById('stopBtn');
-                    const isSpeaking = window.speechSynthesis.speaking;
-                    
-                    pauseResumeBtn.disabled = !isSpeaking;
-                    stopBtn.disabled = !isSpeaking;
-                    /*
-                    if (isSpeaking) {
-                        pauseResumeBtn.textContent = window.speechSynthesis.paused ? '继续' : '暂停';
-                    } else {
-                        pauseResumeBtn.textContent = '暂停';
-                    }
-                    */
-                }
-        
+                // 字母生成逻辑保持不变
                 function generateCustomLetters() {
                     const custom = document.getElementById("customLetters").value
                         .toUpperCase().replace(/[^A-Z]/g, '');
@@ -405,6 +221,7 @@
                         let callsign, speech;
                         
                         if(ultraLightAircraft.includes(aircraft)) {
+                            // 生成4位数字呼号（每两位一组）
                             const groups = [
                                 Math.floor(Math.random()*90)+10,
                                 Math.floor(Math.random()*90)+10
@@ -420,6 +237,7 @@
                                 ).join('');
                                 speech = callsign.split('').map(c => aviationMap[c]).join(' ');
                             } else {
+                                // 生成混合呼号（至少包含1字母1数字）
                                 let hasLetter = false, hasNumber = false;
                                 do {
                                     callsign = '';
@@ -451,13 +269,14 @@
                     speakText(speechParts.join(', '));
                 }
         
+                // 航空标准数字转换函数
                 function convertNumberGroup(num) {
                     const tens = num / 10 | 0;
                     const ones = num % 10;
                     
                     let tenStr = '';
                     if (tens === 1) {
-                        tenStr = num === 10 ? 'One Zero' : aviationNumbers[ones].replace('Tree', 'Ten');
+                        tenStr = num === 10 ? 'One Zero' : aviationNumbers[ones].replace('Tree', 'Ten'); // 处理10的特殊情况
                     } else {
                         tenStr = aviationNumbers[tens.toString()]
                             .replace('Tree', 'Thirty')
@@ -482,10 +301,6 @@
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.rate = document.getElementById('speed').value;
                     window.speechSynthesis.cancel();
-                    
-                    utterance.addEventListener('start', updateButtonState);
-                    utterance.addEventListener('end', updateButtonState);
-                    
                     window.speechSynthesis.speak(utterance);
                 }
         
@@ -502,14 +317,12 @@
                     const div = document.getElementById('answer');
                     div.style.display = (div.style.display === 'none' || div.style.display === '') ? 'block' : 'none';
                 }
-        
-                // 页面隐藏时停止播放
-                document.addEventListener('visibilitychange', function() {
-                    if (document.hidden) {
-                        stopPlayback();
-                    }
-                });
-            </script>
+            </script>           
+            <style>
+                #speed {
+                    width: 100%;
+                }
+            </style>
         </section>
     </main>
 
