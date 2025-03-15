@@ -88,7 +88,7 @@
     <main class="container">
         <section id="ATC into" class="section">
             <h2>基本呼号读法</h2>
-            <p>陆空通话中，飞行员和空管员之间的通话是基于呼号进行的。呼号是飞机的标识，由字母和数字组成。</p>
+            <p>呼号是飞机的标识，由字母和数字组成。</p>
             <h3>发音规则</h3>
                 <li>字母：A（Alpha）、B（Bravo）、C（Charlie）、D（Delta）、E（Echo）、F（Foxtrot）、G（Golf）、H（Hotel）、I（India）、J（Juliet）、K（Kilo）、L（Lima）、M（Mike）、N（November）、O（Oscar）、P（Papa）、Q（Quebec）、R（Romeo）、S（Sierra）、T（Tango）、U（Uniform）、V（Victor）、W（Whiskey）、X（X-ray）、Y（Yankee）、Z（Zulu）</li>
                 <li>数字：3（Tree）、9（Niner）; 呼号中的数字两两为一组</li>
@@ -140,6 +140,8 @@
 
         <section id="basic_callsign_reader" class="section">
             <h2>呼号听写练习</h2>
+                <p>1. 点击“播放字母练习”，播放A-Z字母。练习字母听写；<br>
+                    2. 点击"播放模拟呼号"按钮，播放模拟交通的“机型”和“呼号”。练习“呼号”听写（通常仅需写下呼号）。</p>
                 <button onclick="playLetters()">播放字母练习</button>
                 <label>生成字母数量：</label>
                 <input type="number" id="letterCount" value="50" min="1" max="100">
@@ -179,7 +181,7 @@
                     "Pilatus", "Tecnam", "Extra", "Van's Aircraft"
                 ];
         
-                const ultraLightAircraft = ["Sling", "Tecnam", "Van's Aircraft"];
+                const ultraLightAircraft = ["Brumby", "Sling", "Tecnam", "Van's Aircraft"];
                 const aviationNumbers = {
                     '0': 'Zero', '1': 'One', '2': 'Two', 
                     '3': 'Tree', '4': 'Four', '5': 'Five',
