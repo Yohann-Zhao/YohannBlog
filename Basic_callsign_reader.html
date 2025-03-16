@@ -2,214 +2,382 @@
 <html>
 <head>
     <title>航空字母练习</title>
-    <style>
-        .container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 20px;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-        }
-        #speedControl, #customLettersInput {
-            margin: 20px 0;
-        }
-        #answer {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f0f0f0;
-            border-radius: 4px;
-            display: none; /* Initially hidden */
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <label>自定义字母（如 "XYZR"）：</label>
-        <input type="text" id="customLetters" maxlength="26" placeholder="留空则默认A-Z">
-        
-        <label>生成字母数量：</label>
-        <input type="number" id="letterCount" value="50" min="1" max="100">
-        
-        <label>生成呼号数量：</label>
-        <input type="number" id="callsignCount" value="50" min="1" max="100">
-        
-        <button onclick="playLetters()">播放字母练习</button>
-        <button onclick="playSimulated()">播放模拟呼号</button>
-        <button onclick="toggleAnswer()">显示/隐藏答案</button> <!-- New button -->
-
-        <div id="speedControl">
-            <label>播放速度: 
-                <input type="range" id="speed" min="0.3" max="2" value="1" step="0.1" oninput="updateSpeed(this.value)">
-                <span id="speedValue">1.0</span>
-            </label>
+    <section id="basic_callsign_reader" class="section">
+        <h2>呼号听写练习</h2>
+        <h3>使用说明</h3>
+        <h4>字母练习模式</h4>
+        <p>1. 点击“字母练习”，练习字母听写；2.您可自定义需要练习的字母，例如XYZR，默认为A-Z；3. 您可自定义生成字母数量1-100；</p>
+        <h4>呼号练习模式</h4>
+        <p>1. 点击"模拟呼号"按钮，播放模拟交通的“机型”和“呼号”。练习正确识别并听写“呼号”（实际应用中通常仅需写下呼号）。2.您可自定义生成模拟呼号的数量1-100</p>
+        <p>（建议使用桌面端、平板浏览器。若无法播放/语音错误，请尝试更换浏览器。）</p>
+        <br>
+        <div class="control-group">
+                <div class="input-group">
+                    <label>自定义字母：</label>
+                    <input type="text" id="customLetters" maxlength="26" placeholder="例如XYZR，默认A-Z">
+                </div>
+                <div class="input-group">
+                    <label>生成字母数量：</label>
+                    <input type="number" id="letterCount" value="20" min="1" max="100">
+                </div>
+                <div class="input-group">
+                    <label>生成呼号数量：</label>
+                    <input type="number" id="callsignCount" value="20" min="1" max="100">
+                </div>
         </div>
-
+            
+        <div class="button-group">
+                <button onclick="playLetters()">▶️ 字母练习</button>
+                <button onclick="playSimulated()">📻 模拟呼号</button>
+                <button onclick="toggleAnswer()">🔍 显示答案</button>
+                <button id="pauseResumeBtn" onclick="togglePauseResume()" disabled>⏸️ 暂停/继续</button>
+                <button id="stopBtn" onclick="stopPlayback()" disabled>⏹️ 停止</button>
+        </div>
+    
+        <div id="speedControl">
+                <label>播放速度(开始播放前调整): 
+                    <input type="range" id="speed" min="0.3" max="2" value="1" step="0.1" oninput="updateSpeed(this.value)">
+                    <span id="speedValue">1.0</span>
+                </label>
+        </div>
+    
         <div id="answer"></div>
-    </div>
 
-    <script>
-        const aviationMap = {
-            'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta',
-            'E': 'Echo', 'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel',
-            'I': 'India', 'J': 'Juliet', 'K': 'Kilo', 'L': 'Lima',
-            'M': 'Mike', 'N': 'November', 'O': 'Oscar', 'P': 'Papa',
-            'Q': 'Quebec', 'R': 'Romeo', 'S': 'Sierra', 'T': 'Tango',
-            'U': 'Uniform', 'V': 'Victor', 'W': 'Whiskey', 'X': 'X-ray',
-            'Y': 'Yankee', 'Z': 'Zulu'
-        };
-
-        const aircraftTypes = [
-            "Cessna", "Brumby", "Sling", "Diamond", "Boeing",
-            "Airbus", "Embraer", "Bombardier", "Piper", "Beechcraft",
-            "Gulfstream", "Cirrus", "Mooney", "Robin", "Socata",
-            "Pilatus", "Tecnam", "Extra", "Van's Aircraft"
-        ];
-
-        const ultraLightAircraft = ["Brumby", "Sling", "Tecnam", "Van's Aircraft"];
-        const aviationNumbers = {
-            '0': 'Zero', '1': 'One', '2': 'Two', 
-            '3': 'Tree', '4': 'Four', '5': 'Five',
-            '6': 'Six', '7': 'Seven', '8': 'Eight', 
-            '9': 'Niner'
-        };
-
-        let currentAnswer = "";
-
-        // 字母生成逻辑保持不变
-        function generateCustomLetters() {
-            const custom = document.getElementById("customLetters").value
-                .toUpperCase().replace(/[^A-Z]/g, '');
-            return custom || "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        }
-
-        function playLetters() {
-            const letters = generateCustomLetters();
-            const letterCount = parseInt(document.getElementById("letterCount").value, 10);
-            const randomString = Array.from({length: letterCount}, () => 
-                letters[Math.floor(Math.random() * letters.length)]
-            ).join('');
-            
-            currentAnswer = randomString;
-            updateAnswer();
-            speakText(randomString.split('').map(c => aviationMap[c]).join(' '));
-        }
-
-        function playSimulated() {
-            const callsignCount = parseInt(document.getElementById("callsignCount").value, 10);
-            let output = [];
-            let speechParts = [];
-            
-            for(let i=0; i<callsignCount; i++){
-                const aircraft = aircraftTypes[Math.random()*aircraftTypes.length|0];
-                let callsign, speech;
-                
-                if(ultraLightAircraft.includes(aircraft)) {
-                    // 生成4位数字呼号（每两位一组）
-                    const groups = [
-                        Math.floor(Math.random()*90)+10,
-                        Math.floor(Math.random()*90)+10
-                    ];
-                    callsign = groups.join('');
-                    speech = groups.map(n => convertNumberGroup(n)).join(' ');
-                } else {
-                    const isLettersOnly = Math.random() < 0.5;
-                    
-                    if(isLettersOnly) {
-                        callsign = Array.from({length:3}, () => 
-                            String.fromCharCode(65 + Math.random()*26|0)
-                        ).join('');
-                        speech = callsign.split('').map(c => aviationMap[c]).join(' ');
-                    } else {
-                        // 生成混合呼号（至少包含1字母1数字）
-                        let hasLetter = false, hasNumber = false;
-                        do {
-                            callsign = '';
-                            hasLetter = false;
-                            hasNumber = false;
-                            for(let j=0; j<3; j++) {
-                                if(Math.random() < 0.5) {
-                                    callsign += String.fromCharCode(65 + Math.random()*26|0);
-                                    hasLetter = true;
-                                } else {
-                                    callsign += Math.random()*10|0;
-                                    hasNumber = true;
-                                }
-                            }
-                        } while(!(hasLetter && hasNumber));
-                        
-                        speech = callsign.split('').map(c => {
-                            return /[A-Z]/.test(c) ? aviationMap[c] : convertSingleNumber(c);
-                        }).join(' ');
-                    }
+        <style>
+            :root {
+                --success-color: #27ae60;
+                --danger-color: #e74c3c;
+                --light-gray: #ecf0f1;
+                --dark-gray: #95a5a6;
+            }
+            .control-group {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+            }
+        
+            .input-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        
+            label {
+                font-weight: 600;
+                color: var(--primary-color);
+                font-size: 0.9rem;
+                text-align: left;
+            }
+        
+            input[type="text"],
+            input[type="number"] {
+                padding: 0.8rem;
+                border: 2px solid #dfe6e9;
+                border-radius: 8px;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+            }
+        
+            input[type="text"]:focus,
+            input[type="number"]:focus {
+                border-color: var(--secondary-color);
+                box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+                outline: none;
+            }
+        
+            .button-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: center;
+                margin: 2rem 0;
+            }
+        
+            button {
+                padding: 0.8rem 1.5rem;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+        
+            button:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+        
+            button:not(:disabled):hover {
+                background-color: var(--secondary-color);
+                color: white;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+        
+            button[onclick^="play"] {
+                background: var(--light-gray);
+                color: var(--primary-color);
+            }
+        
+            #pauseResumeBtn {
+                background: var(--light-gray);
+                color: var(--primary-color);
+            }
+        
+            #stopBtn {
+                background: var(--danger-color);
+                color: white;
+            }
+        
+            button[onclick="toggleAnswer"] {
+                background: var(--dark-gray);
+                color: var(--primary-color);
+            }
+        
+            #speedControl {
+                background: var(--light-gray);
+                padding: 1.5rem;
+                border-radius: 12px;
+                margin: 2rem 0;
+            }
+        
+            input[type="range"] {
+                width: 200px;
+                height: 4px;
+                background: #dfe6e9;
+                border-radius: 2px;
+                -webkit-appearance: none;
+            }
+        
+            input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 20px;
+                height: 20px;
+                background: var(--secondary-color);
+                border-radius: 50%;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
+        
+            #answer {
+                background: var(--light-gray);
+                padding: 1.5rem;
+                border-radius: 12px;
+                font-family: monospace;
+                font-size: 1.1rem;
+                color: var(--primary-color);
+                border: 2px dashed var(--dark-gray);
+                margin-top: 2rem;
+            }
+        
+            @media (max-width: 600px) {
+                .button-group {
+                    flex-direction: column;
                 }
                 
-                output.push(`${aircraft} ${callsign}`);
-                speechParts.push(`${aircraft} ${speech}`);
+                button {
+                    justify-content: center;
+                }
             }
-            
-            currentAnswer = output.join(', ');
-            updateAnswer();
-            speakText(speechParts.join(', '));
-        }
+        </style>
 
-        // 航空标准数字转换函数
-        function convertNumberGroup(num) {
-            const tens = num / 10 | 0;
-            const ones = num % 10;
-            
-            let tenStr = '';
-            if (tens === 1) {
-                tenStr = num === 10 ? 'One Zero' : aviationNumbers[ones].replace('Tree', 'Ten'); // 处理10的特殊情况
-            } else {
-                tenStr = aviationNumbers[tens.toString()]
-                    .replace('Tree', 'Thirty')
-                    .replace('Two', 'Twenty')
-                    .replace('Four', 'Forty')
-                    .replace('Five', 'Fifty')
-                    .replace('Six', 'Sixty')
-                    .replace('Seven', 'Seventy')
-                    .replace('Eight', 'Eighty')
-                    .replace('Niner', 'Ninety');
+        <script>
+            const aviationMap = {
+                'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta',
+                'E': 'Echo', 'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel',
+                'I': 'India', 'J': 'Juliet', 'K': 'Kilo', 'L': 'Lima',
+                'M': 'Mike', 'N': 'November', 'O': 'Oscar', 'P': 'Papa',
+                'Q': 'Quebec', 'R': 'Romeo', 'S': 'Sierra', 'T': 'Tango',
+                'U': 'Uniform', 'V': 'Victor', 'W': 'Whiskey', 'X': 'X-ray',
+                'Y': 'Yankee', 'Z': 'Zulu'
+            };
+    
+            const aircraftTypes = [
+                "Cessna","Cessna Citation", "Brumby", "Sling", "Diamond", "Saab", 
+                "Beech King Air","Beech Baron", "Embraer", "Bombardier", "Piper", "Piper warrior","Beechcraft",
+                "Gulfstream", "Cirrus", "Mooney", "Robin", "Socata", "BRM Aero",
+                "Pilatus", "Tecnam", "Extra", "Van's Aircraft", "Ambulance", "Careflight"
+            ];
+    
+            const ultraLightAircraft = ["Brumby", "Sling", "Tecnam", "Van's Aircraft", "BRM Aero"];
+            const aviationNumbers = {
+                '0': 'Zero', '1': 'One', '2': 'Two', 
+                '3': 'Tree', '4': 'Four', '5': 'Five',
+                '6': 'Six', '7': 'Seven', '8': 'Eight', 
+                '9': 'Niner'
+            };
+    
+            let currentAnswer = "";
+            let currentUtterance = null;
+    
+            function togglePauseResume() {
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                } else {
+                    window.speechSynthesis.pause();
+                }
+                updateButtonState();
             }
-            
-            const oneStr = aviationNumbers[ones.toString()];
-            return (num < 10) ? oneStr : `${tenStr} ${oneStr}`;
-        }
-
-        function convertSingleNumber(numChar) {
-            return aviationNumbers[numChar];
-        }
-
-        function speakText(text) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = document.getElementById('speed').value;
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function updateAnswer() {
-            const div = document.getElementById('answer');
-            div.textContent = currentAnswer;
-        }
-
-        function updateSpeed(v) {
-            document.getElementById('speedValue').textContent = v;
-        }
-
-        function toggleAnswer() {
-            const div = document.getElementById('answer');
-            div.style.display = (div.style.display === 'none' || div.style.display === '') ? 'block' : 'none';
-        }
-    </script>
+    
+            function stopPlayback() {
+                window.speechSynthesis.cancel();
+                updateButtonState();
+            }
+    
+            function updateButtonState() {
+                const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+                const stopBtn = document.getElementById('stopBtn');
+                const isSpeaking = window.speechSynthesis.speaking;
+                
+                pauseResumeBtn.disabled = !isSpeaking;
+                stopBtn.disabled = !isSpeaking;
+                /*
+                if (isSpeaking) {
+                    pauseResumeBtn.textContent = window.speechSynthesis.paused ? '继续' : '暂停';
+                } else {
+                    pauseResumeBtn.textContent = '暂停';
+                }
+                */
+            }
+    
+            function generateCustomLetters() {
+                const custom = document.getElementById("customLetters").value
+                    .toUpperCase().replace(/[^A-Z]/g, '');
+                return custom || "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            }
+    
+            function playLetters() {
+                const letters = generateCustomLetters();
+                const letterCount = parseInt(document.getElementById("letterCount").value, 10);
+                const randomString = Array.from({length: letterCount}, () => 
+                    letters[Math.floor(Math.random() * letters.length)]
+                ).join('');
+                
+                currentAnswer = randomString;
+                updateAnswer();
+                speakText(randomString.split('').map(c => aviationMap[c]).join(' '));
+            }
+    
+            function playSimulated() {
+                const callsignCount = parseInt(document.getElementById("callsignCount").value, 10);
+                let output = [];
+                let speechParts = [];
+                
+                for(let i=0; i<callsignCount; i++){
+                    const aircraft = aircraftTypes[Math.random()*aircraftTypes.length|0];
+                    let callsign, speech;
+                    
+                    if(ultraLightAircraft.includes(aircraft)) {
+                        const groups = [
+                            Math.floor(Math.random()*90)+10,
+                            Math.floor(Math.random()*90)+10
+                        ];
+                        callsign = groups.join('');
+                        speech = groups.map(n => convertNumberGroup(n)).join(' ');
+                    } else {
+                        const isLettersOnly = Math.random() < 0.5;
+                        
+                        if(isLettersOnly) {
+                            callsign = Array.from({length:3}, () => 
+                                String.fromCharCode(65 + Math.random()*26|0)
+                            ).join('');
+                            speech = callsign.split('').map(c => aviationMap[c]).join(' ');
+                        } else {
+                            let hasLetter = false, hasNumber = false;
+                            do {
+                                callsign = '';
+                                hasLetter = false;
+                                hasNumber = false;
+                                for(let j=0; j<3; j++) {
+                                    if(Math.random() < 0.5) {
+                                        callsign += String.fromCharCode(65 + Math.random()*26|0);
+                                        hasLetter = true;
+                                    } else {
+                                        callsign += Math.random()*10|0;
+                                        hasNumber = true;
+                                    }
+                                }
+                            } while(!(hasLetter && hasNumber));
+                            
+                            speech = callsign.split('').map(c => {
+                                return /[A-Z]/.test(c) ? aviationMap[c] : convertSingleNumber(c);
+                            }).join(' ');
+                        }
+                    }
+                    
+                    output.push(`${aircraft} ${callsign}`);
+                    speechParts.push(`${aircraft} ${speech}`);
+                }
+                
+                currentAnswer = output.join(', ');
+                updateAnswer();
+                speakText(speechParts.join(', '));
+            }
+    
+            function convertNumberGroup(num) {
+                const tens = num / 10 | 0;
+                const ones = num % 10;
+                
+                let tenStr = '';
+                if (tens === 1) {
+                    tenStr = num === 10 ? 'One Zero' : aviationNumbers[ones].replace('Tree', 'Ten');
+                } else {
+                    tenStr = aviationNumbers[tens.toString()]
+                        .replace('Tree', 'Thirty')
+                        .replace('Two', 'Twenty')
+                        .replace('Four', 'Forty')
+                        .replace('Five', 'Fifty')
+                        .replace('Six', 'Sixty')
+                        .replace('Seven', 'Seventy')
+                        .replace('Eight', 'Eighty')
+                        .replace('Niner', 'Ninety');
+                }
+                
+                const oneStr = aviationNumbers[ones.toString()];
+                return (num < 10) ? oneStr : `${tenStr} ${oneStr}`;
+            }
+    
+            function convertSingleNumber(numChar) {
+                return aviationNumbers[numChar];
+            }
+    
+            function speakText(text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = document.getElementById('speed').value;
+                window.speechSynthesis.cancel();
+                
+                utterance.addEventListener('start', updateButtonState);
+                utterance.addEventListener('end', updateButtonState);
+                
+                window.speechSynthesis.speak(utterance);
+            }
+    
+            function updateAnswer() {
+                const div = document.getElementById('answer');
+                div.textContent = currentAnswer;
+            }
+    
+            function updateSpeed(v) {
+                document.getElementById('speedValue').textContent = v;
+            }
+    
+            function toggleAnswer() {
+                const div = document.getElementById('answer');
+                div.style.display = (div.style.display === 'none' || div.style.display === '') ? 'block' : 'none';
+            }
+    
+            // 页面隐藏时停止播放
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    stopPlayback();
+                }
+            });
+        </script>
+    </section>
 </body>
 </html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio call | Aviation English | Yohann's Aviation Note</title>
+    <link rel="stylesheet" href="styles.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G3TQJTQ67B');
+</script>
+
+</head>
+
+<style>
+    /* 新增样式：导航路径样式 */
+    .breadcrumb {
+        padding: 1rem;
+        padding-left: 10%;
+        background: var(--background-color);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .breadcrumb a {
+        text-decoration: none;
+        color: var(--text-color);
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+        }
+
+    .breadcrumb span {
+        color: var(--text-color);
+        font-size: 0.9rem;
+        margin: 0 0.5rem;
+    }
+</style>
+
+<style>
+.nav-breadcrumb-container {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    background-color:; /* 可选：设置背景颜色 */
+    z-index: 1000; /* 确保它在其他内容之上 */
+}
+
+</style>
+<body>
+
+    <header>
+        <div class="language-switcher">
+            <a href="Radio_Call.html">中文</a> | <a href="Radio_Call_en.html">English</a>
+        </div>
+        <div class="header-content">
+            <h1>Radio Call</h1>
+        </div>
+    </header>
+
+    <div class="nav-breadcrumb-container">
+        <nav>
+            <ul>
+                <li><a href="index_en.html">Home</a></li>
+                <li><a href="theory_en.html">Theory Exams</a></li>
+                <li><a href="aviation-english_en.html" class="active">Aviation English</a></li>
+                <li><a href="about_en.html">About Me</a></li>
+            </ul>
+        </nav>
+
+        <!-- 导航路径 -->
+        <div class="breadcrumb">
+            <a href="aviation-english_en.html">All Topics</a>
+            <span>></span>
+            <a id="subject-name">Radio Call</a>
+        </div>
+        
+    </div>
+    <main class="container">
+        <section id="ATC into" class="section">
+            <h2>Basic Callsign Pronunciation</h2>
+            <p>A callsign is an identifier for an aircraft, consisting of letters and numbers.</p>
+            <h3>Pronunciation Rules</h3>
+            <ul>
+                <li>Letters: A (Alpha), B (Bravo), C (Charlie), D (Delta), E (Echo), F (Foxtrot), G (Golf), H (Hotel), I (India), J (Juliet), K (Kilo), L (Lima), M (Mike), N (November), O (Oscar), P (Papa), Q (Quebec), R (Romeo), S (Sierra), T (Tango), U (Uniform), V (Victor), W (Whiskey), X (X-ray), Y (Yankee), Z (Zulu)</li>
+                <li>Numbers: 3 (Tree), 9 (Niner); Numbers in callsigns are grouped in pairs</li>
+            </ul>
+            <h3>Pronunciation Examples</h3>
+            <ul>
+                <li>AI9: "Alpha India Niner", 8470: "Eighty Four Seventy", 172D: "One Seventy Two Delta"</li>
+            </ul>
+    
+            <style>
+                .section {
+                    padding: 3em;
+                }
+                
+                .section h2 {
+                    font-size: 1.8em;
+                    margin-bottom: 0.5em;
+                    border-bottom: 2.5px solid var(--primary-color);
+                    padding-bottom: 0.2em;
+                }
+                
+                .section h3 {
+                    font-size: 1.4em;
+                    margin-top: 1em;
+                    margin-bottom: 0.5em;
+                    color: #333;
+                }
+                
+                .section h4 {
+                    font-size: 1.1em;
+                    margin-top: 0.8em;
+                    margin-bottom: 0.4em;
+                    color: var(--primary-color);
+                }
+                
+                .section ul {
+                    list-style-type: disc;
+                    margin-left: 1.5em;
+                    margin-bottom: 1em;
+                }
+                
+                .section ul li {
+                    margin-bottom: 0.5em;
+                }
+                
+                .section p {
+                    margin-bottom: 1em;
+                    line-height: 1.6;
+                }
+            </style>
+        </section>
+    
+        <section id="basic_callsign_reader" class="section">
+            <h2>Callsign Dictation Practice</h2>
+            <h3>User Guide</h3>
+            <h4>Letter Practice Mode</h4>
+            <p>1. Click "Letter Practice", Practice letter dictation; 2. You can customize letters, e.g. XYZR, by default A-Z; 3. You can customize total letters 1-100</p>
+            <h4>Callsign Practice Mode</h4>
+                1. Click "Simulated Callsign" button to play simulated traffic "aircraft type" and "callsign". Practice recognition & dictation of "callsign" (usually only the callsign needs to be written down).<br>
+                2. You can customize total Callsigns.</p>
+            <br>
+            <p>（This release is for testing purposes only. Due to the use cost, the use policy will be adjusted in the future）</p>
+            <br>
+            <div class="control-group">
+                <div class="input-group">
+                    <label>Custom Letters：</label>
+                    <input type="text" id="customLetters" maxlength="26" placeholder="customize letters to practice. Default A-Z">
+                </div>
+                <div class="input-group">
+                    <label>Letters per group：</label>
+                    <input type="number" id="letterCount" value="10" min="1" max="100">
+                </div>
+                <div class="input-group">
+                    <label>Callsigns per group：</label>
+                    <input type="number" id="callsignCount" value="10" min="1" max="100">
+                </div>
+                <div class="input-group">
+                    <label style="cursor: pointer;">
+                        <input type="checkbox" id="voiceDiversity"> Activate diverse voices (AUS)
+                    </label>
+                </div>
+                <div class="input-group">
+                    <label style="cursor: pointer;">
+                        <input type="checkbox" id="simulateRadio"> Simulate Radio Noises
+                    </label>
+                </div>
+            </div>
+                
+            <div class="button-group">
+                <button onclick="playLetters()">▶️ Letter Practice</button>
+                <button onclick="playSimulated()">📻 Simulated Callsign</button>
+                <button onclick="toggleAnswer()">🔍 Show Answer</button>
+                <button id="pauseResumeBtn" onclick="togglePauseResume()" disabled>⏸️ Pause/Conti.</button>
+                <button id="stopBtn" onclick="stopPlayback()" disabled>⏹️ Stop</button>
+            </div>
+        
+            <div id="speedControl">
+                <label>Play Speed(Adjust before start playing): 
+                    <input type="range" id="speed" min="0.3" max="2" value="1" step="0.1" oninput="updateSpeed(this.value)">
+                    <span id="speedValue">1.0</span>
+                </label>
+            </div>
+        
+            <div id="answer"></div>
+        
+            <style>
+                :root {
+                    --success-color: #27ae60;
+                    --danger-color: #e74c3c;
+                    --border-color: #bdc3c7;
+                }
+               
+                .control-group {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 1.2rem;
+                    background: var(--light-blue);
+                    padding: 1.5rem;
+                    border-radius: 12px;
+                    margin-bottom: 2rem;
+                    border: 1px solid #d4e3f0;
+                }
+            
+                .input-group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.4rem;
+                }
+            
+                label {
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    color: var(--primary-color);
+                }
+            
+                input[type="text"],
+                input[type="number"] {
+                    padding: 0.7rem;
+                    border: 2px solid var(--border-color);
+                    border-radius: 6px;
+                    font-size: 0.95rem;
+                    transition: all 0.2s ease;
+                }
+            
+                input[type="text"]:focus,
+                input[type="number"]:focus {
+                    border-color: var(--secondary-color);
+                    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+                    outline: none;
+                }
+            
+                .button-group {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.8rem;
+                    margin: 2rem 0;
+                }
+            
+                button {
+                    padding: 0.8rem 1.4rem;
+                    border: none;
+                    border-radius: 6px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    background: var(--secondary-color);
+                    color: white;
+                }
+            
+                button:hover {
+                    background: var(--accent-color);
+                }
+            
+                button:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                    background: #95a5a6;
+                }
+            
+                #stopBtn {
+                    background: var(--danger-color);
+                }
+            
+                button[onclick="toggleAnswer"] {
+                    background: #7f8c8d;
+                }
+            
+                #speedControl {
+                    background: var(--light-blue);
+                    padding: 1.2rem;
+                    border-radius: 8px;
+                    margin: 1.5rem 0;
+                }
+            
+                input[type="range"] {
+                    width: 200px;
+                    height: 4px;
+                    background: #dfe6e9;
+                    border-radius: 2px;
+                }
+            
+                input[type="range"]::-webkit-slider-thumb {
+                    width: 16px;
+                    height: 16px;
+                    background: var(--secondary-color);
+                }
+            
+                #answer {
+                    background: var(--light-blue);
+                    padding: 1.2rem;
+                    border-radius: 8px;
+                    font-family: 'Courier New', monospace;
+                    font-size: 1.1rem;
+                    border: 2px solid var(--secondary-color);
+                    margin-top: 1.5rem;
+                }
+            
+                .input-group label input[type="checkbox"] {
+                    margin-right: 0.5rem;
+                    accent-color: var(--secondary-color);
+                }
+            
+                @media (max-width: 600px) {
+                    body {
+                        padding: 1rem;
+                    }
+                    
+                    .button-group {
+                        flex-direction: column;
+                    }
+                    
+                    button {
+                        justify-content: center;
+                    }
+                }
+            </style>
+        
+            <script>
+                const GOOGLE_TTS_API_KEY = 'AIzaSyB8kUi4-oUJgYZQFidBvtGsjLrS1dxw1W4'; 
+                const AUS_VOICES = [
+                    'en-AU-Standard-A',
+                    'en-AU-Standard-B',
+                    'en-AU-Standard-C',
+                    'en-AU-Standard-D'
+                    /*'en-AU-Wavenet-A',
+                    'en-AU-Wavenet-B',
+                    'en-AU-Wavenet-C',
+                    'en-AU-Wavenet-D'*/
+                ];
+        
+                const aviationMap = {
+                    'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta',
+                    'E': 'Echo', 'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel',
+                    'I': 'India', 'J': 'Juliet', 'K': 'Kilo', 'L': 'Lima',
+                    'M': 'Mike', 'N': 'November', 'O': 'Oscar', 'P': 'Papa',
+                    'Q': 'Quebec', 'R': 'Romeo', 'S': 'Sierra', 'T': 'Tango',
+                    'U': 'Uniform', 'V': 'Victor', 'W': 'Whiskey', 'X': 'X-ray',
+                    'Y': 'Yankee', 'Z': 'Zulu'
+                };
+        
+                const aircraftTypes = [
+                    "Cessna","Cessna Citation", "Brumby", "Sling", "Diamond", "Saab", 
+                    "Beech King Air","Beech Baron", "Embraer", "Bombardier", "Piper", "Piper warrior","Beechcraft",
+                    "Gulfstream", "Cirrus", "Mooney", "Robin", "Socata", "BRM Aero",
+                    "Pilatus", "Tecnam", "Extra", "Van's Aircraft", "Ambulance", "Careflight"
+                ];
+        
+                const ultraLightAircraft = ["Brumby", "Sling", "Tecnam", "Van's Aircraft", "BRM Aero"];
+                const aviationNumbers = {
+                    '0': 'Zero', '1': 'One', '2': 'Two', 
+                    '3': 'Tree', '4': 'Four', '5': 'Five',
+                    '6': 'Six', '7': 'Seven', '8': 'Eight', 
+                    '9': 'Niner'
+                };
+        
+                let currentAnswer = "";
+                let currentAudio = null;
+        
+                function base64ToBlob(base64Data, contentType = '', sliceSize = 512) {
+                    const byteCharacters = atob(base64Data);
+                    const byteArrays = [];
+                    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                        const slice = byteCharacters.slice(offset, offset + sliceSize);
+                        const byteNumbers = new Array(slice.length);
+                        for (let i = 0; i < slice.length; i++) {
+                            byteNumbers[i] = slice.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        byteArrays.push(byteArray);
+                    }
+                    return new Blob(byteArrays, { type: contentType });
+                }
+        
+                function togglePauseResume() {
+                    if (!currentAudio) return;
+                    if (currentAudio.paused) {
+                        currentAudio.play();
+                    } else {
+                        currentAudio.pause();
+                    }
+                }
+        
+                function stopPlayback() {
+                    if (currentAudio) {
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                        currentAudio = null;
+                    }
+                    updateButtonState();
+                }
+        
+                function updateButtonState() {
+                    const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+                    const stopBtn = document.getElementById('stopBtn');
+                    const isPlaying = currentAudio && !currentAudio.paused;
+                    
+                    pauseResumeBtn.disabled = !currentAudio;
+                    stopBtn.disabled = !currentAudio;
+                }
+        
+                function generateCustomLetters() {
+                    const custom = document.getElementById("customLetters").value
+                        .toUpperCase().replace(/[^A-Z]/g, '');
+                    return custom || "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                }
+        
+                // 添加音频效果处理函数
+                async function applyRadioEffects(audioElement) {
+                    const ctx = new AudioContext();
+                    const src = ctx.createMediaElementSource(audioElement);
+                    
+                        // 新增原始音频增益控制
+                    const sourceGain = ctx.createGain();
+                    sourceGain.gain.value = 2.5; // 默认原始音量增益2倍
+        
+        
+                    // ========== 低通滤波器参数 ==========
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = "lowpass";          // 滤波器类型
+                    filter.frequency.value = 4000;   // 截止频率 (Hz) 范围：200-8000
+                    filter.Q.value = 10;              // 共振值 范围：0.0001-100
+        
+        
+                    // 创建白噪声
+                    // ========== 白噪声参数 ==========
+                    const noiseGain = ctx.createGain();
+                    noiseGain.gain.value = 0.03;     // 噪声音量 范围：0.0-1.0
+        
+                        // ========== 连接顺序调整 ==========
+                    src.connect(sourceGain);      // 先连接增益控制
+                    sourceGain.connect(filter);   // 再连接滤波器
+                    filter.connect(ctx.destination);
+        
+                    const noise = (() => {
+                        const bufferSize = ctx.sampleRate;
+                        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                        const data = buffer.getChannelData(0);
+                        for (let i = 0; i < bufferSize; i++) {
+                            data[i] = Math.random() * 2 - 1;
+                        }
+                        const noise = ctx.createBufferSource();
+                        noise.buffer = buffer;
+                        noise.loop = true;
+                        noise.connect(noiseGain);
+                        return noise;
+                    })();
+        
+                    // 创建脉冲声
+                    function addBeep(time) {
+                        const osc = ctx.createOscillator();
+                        const gainNode = ctx.createGain();
+                        osc.type = "square";         // 波形类型：sine/square/sawtooth/triangle
+                        osc.frequency.value = 2000;  // 脉冲频率 (Hz) 范围：500-3000
+                        gainNode.gain.setValueAtTime(0.5, time);      // 初始音量
+                        gainNode.gain.exponentialRampToValueAtTime(   // 衰减曲线
+                            0.01,                   // 最终音量
+                            time + 0.2               // 持续时间（秒）
+                        );
+                        osc.connect(gainNode);
+                        gainNode.connect(ctx.destination);
+                        osc.start(time);
+                        osc.stop(time + 0.1);
+                    }
+        
+                    // 连接节点
+                    src.connect(filter);
+                    filter.connect(ctx.destination);
+                    noise.connect(filter);
+                    
+                    // 添加开始/结束脉冲
+                    const startTime = ctx.currentTime + 0.1;
+                    addBeep(startTime);
+                    audioElement.addEventListener('play', () => {
+                        noise.start();
+                        addBeep(startTime);
+                    });
+                    audioElement.addEventListener('ended', () => {
+                        addBeep(ctx.currentTime);
+                        noise.stop();
+                    });
+                    audioElement.addEventListener('pause', () => noise.stop());
+                }
+        
+        
+                async function speakText(text) {
+                    const speed = parseFloat(document.getElementById('speed').value);
+                    const useDiverse = document.getElementById('voiceDiversity').checked;
+                    const simulateRadio = document.getElementById('simulateRadio').checked;
+        
+                    try {
+                        const response = await fetch(
+                            `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_TTS_API_KEY}`,
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    input: { text: text },
+                                    voice: {
+                                        languageCode: 'en-AU',
+                                        name: useDiverse ? 
+                                            AUS_VOICES[Math.floor(Math.random() * AUS_VOICES.length)] :
+                                            'en-US-Standard-D' // 默认语音
+                                    },
+                                    audioConfig: { 
+                                        audioEncoding: 'MP3', 
+                                        speakingRate: speed,
+                                        pitch: useDiverse ? Math.random() * 4 - 2 : 0 // 随机音高(-2到+2)
+                                    }
+                                })
+                            }
+                        );
+        
+                        const data = await response.json();
+                        const audioContent = data.audioContent;
+                        const blob = base64ToBlob(audioContent, 'audio/mp3');
+                        const url = URL.createObjectURL(blob);
+        
+                        if (currentAudio) {
+                            currentAudio.pause();
+                        }
+        
+                        currentAudio = new Audio(url);
+        
+                        if(simulateRadio) {
+                            await applyRadioEffects(currentAudio);
+                        }
+        
+                        currentAudio.addEventListener('play', updateButtonState);
+                        currentAudio.addEventListener('pause', updateButtonState);
+                        currentAudio.addEventListener('ended', updateButtonState);
+                        currentAudio.play();
+                    } catch (error) {
+                        console.error('语音合成失败:', error);
+                        alert('语音合成失败，请检查API密钥和网络连接');
+                    }
+                }
+        
+        
+                function playLetters() {
+                    const letters = generateCustomLetters();
+                    const letterCount = parseInt(document.getElementById("letterCount").value, 10);
+                    const randomString = Array.from({length: letterCount}, () => 
+                        letters[Math.floor(Math.random() * letters.length)]
+                    ).join('');
+                    
+                    currentAnswer = randomString;
+                    updateAnswer();
+                    speakText(randomString.split('').map(c => aviationMap[c]).join(' '));
+                }
+        
+                function playSimulated() {
+                    const callsignCount = parseInt(document.getElementById("callsignCount").value, 10);
+                    let output = [];
+                    let speechParts = [];
+                    
+                    for(let i=0; i<callsignCount; i++){
+                        const aircraft = aircraftTypes[Math.random()*aircraftTypes.length|0];
+                        let callsign, speech;
+                        
+                        if(ultraLightAircraft.includes(aircraft)) {
+                            const groups = [
+                                Math.floor(Math.random()*90)+10,
+                                Math.floor(Math.random()*90)+10
+                            ];
+                            callsign = groups.join('');
+                            speech = groups.map(n => convertNumberGroup(n)).join(' ');
+                        } else {
+                            const isLettersOnly = Math.random() < 0.5;
+                            
+                            if(isLettersOnly) {
+                                callsign = Array.from({length:3}, () => 
+                                    String.fromCharCode(65 + Math.random()*26|0)
+                                ).join('');
+                                speech = callsign.split('').map(c => aviationMap[c]).join(' ');
+                            } else {
+                                let hasLetter = false, hasNumber = false;
+                                do {
+                                    callsign = '';
+                                    hasLetter = false;
+                                    hasNumber = false;
+                                    for(let j=0; j<3; j++) {
+                                        if(Math.random() < 0.5) {
+                                            callsign += String.fromCharCode(65 + Math.random()*26|0);
+                                            hasLetter = true;
+                                        } else {
+                                            callsign += Math.random()*10|0;
+                                            hasNumber = true;
+                                        }
+                                    }
+                                } while(!(hasLetter && hasNumber));
+                                
+                                speech = callsign.split('').map(c => {
+                                    return /[A-Z]/.test(c) ? aviationMap[c] : convertSingleNumber(c);
+                                }).join(' ');
+                            }
+                        }
+                        
+                        output.push(`${aircraft} ${callsign}`);
+                        speechParts.push(`${aircraft} ${speech}`);
+                    }
+                    
+                    currentAnswer = output.join(', ');
+                    updateAnswer();
+                    speakText(speechParts.join(', '));
+                }
+        
+                // 辅助函数保持不变...
+                function convertNumberGroup(num) {
+                    const tens = num / 10 | 0;
+                    const ones = num % 10;
+                    
+                    let tenStr = '';
+                    if (tens === 1) {
+                        tenStr = num === 10 ? 'One Zero' : aviationNumbers[ones].replace('Tree', 'Ten');
+                    } else {
+                        tenStr = aviationNumbers[tens.toString()]
+                            .replace('Tree', 'Thirty')
+                            .replace('Two', 'Twenty')
+                            .replace('Four', 'Forty')
+                            .replace('Five', 'Fifty')
+                            .replace('Six', 'Sixty')
+                            .replace('Seven', 'Seventy')
+                            .replace('Eight', 'Eighty')
+                            .replace('Niner', 'Ninety');
+                    }
+                    
+                    const oneStr = aviationNumbers[ones.toString()];
+                    return (num < 10) ? oneStr : `${tenStr} ${oneStr}`;
+                }
+        
+                function convertSingleNumber(numChar) {
+                    return aviationNumbers[numChar];
+                }
+        
+                function updateAnswer() {
+                    const div = document.getElementById('answer');
+                    div.textContent = currentAnswer;
+                }
+        
+                function updateSpeed(v) {
+                    document.getElementById('speedValue').textContent = v;
+                }
+        
+                function toggleAnswer() {
+                    const div = document.getElementById('answer');
+                    div.style.display = (div.style.display === 'none' || div.style.display === '') ? 'block' : 'none';
+                }
+        
+                document.addEventListener('visibilitychange', function() {
+                    if (document.hidden) {
+                        stopPlayback();
+                    }
+                });
+            </script>
+        </section>                
+    </main>
+
+    <footer>
+        <div class="footer-content">
+          <p>© 2025 Yohann飞行笔记 保留所有权利。</p>
+          <p>
+            本项目基于 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 许可证</a> 开源，
+            仅供非商业用途。引用内容已标注来源，侵权请联系 <a href="yuhan_zhao@nuaa.edu.cn">Email</a>。
+          </p>
+        </div>
+      </footer>
+</body>
+</html>

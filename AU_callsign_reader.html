@@ -1,4 +1,4 @@
-<section id="basic_callsign_reader" class="section">
+<section id="AU_callsign_reader" class="section">
     <h2>呼号听写练习</h2>
     <h3>使用说明</h3>
     <h4>字母练习模式</h4>
@@ -19,6 +19,11 @@
         <div class="input-group">
             <label>生成呼号数量：</label>
             <input type="number" id="callsignCount" value="20" min="1" max="100">
+        </div>
+        <div class="input-group">
+            <label style="cursor: pointer;">
+                <input type="checkbox" id="voiceDiversity"> 启用多样化人声（澳大利亚）
+            </label>
         </div>
     </div>
         
@@ -179,10 +184,32 @@
                 justify-content: center;
             }
         }
+
+        /* 添加在原有样式中 */
+        .input-group label input[type="checkbox"] {
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+        }
+
+        #voiceDiversity:checked + span {
+            color: var(--success-color);
+            font-weight: bold;
+        }
     </style>
 
     <script>
-        const GOOGLE_TTS_API_KEY = 'AIzaSyB8kUi4-oUJgYZQFidBvtGsjLrS1dxw1W4'; // 替换为你的API密钥
+        const GOOGLE_TTS_API_KEY = 'AIzaSyB8kUi4-oUJgYZQFidBvtGsjLrS1dxw1W4'; 
+        const AUS_VOICES = [
+            'en-AU-Standard-A',
+            'en-AU-Standard-B',
+            'en-AU-Standard-C',
+            'en-AU-Standard-D'
+            /*'en-AU-Wavenet-A',
+            'en-AU-Wavenet-B',
+            'en-AU-Wavenet-C',
+            'en-AU-Wavenet-D'*/
+        ];
+
         const aviationMap = {
             'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta',
             'E': 'Echo', 'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel',
@@ -261,6 +288,7 @@
 
         async function speakText(text) {
             const speed = parseFloat(document.getElementById('speed').value);
+            const useDiverse = document.getElementById('voiceDiversity').checked;
             
             try {
                 const response = await fetch(
@@ -272,8 +300,17 @@
                         },
                         body: JSON.stringify({
                             input: { text: text },
-                            voice: { languageCode: 'en-AU', name: 'en-AU-Standard-A' },
-                            audioConfig: { audioEncoding: 'MP3', speakingRate: speed }
+                            voice: {
+                                languageCode: 'en-AU',
+                                name: useDiverse ? 
+                                    AUS_VOICES[Math.floor(Math.random() * AUS_VOICES.length)] :
+                                    'en-US-Standard-D' // 默认语音
+                            },
+                            audioConfig: { 
+                                audioEncoding: 'MP3', 
+                                speakingRate: speed,
+                                pitch: useDiverse ? Math.random() * 4 - 2 : 0 // 随机音高(-2到+2)
+                            }
                         })
                     }
                 );
@@ -298,7 +335,7 @@
             }
         }
 
-        // 其余函数保持不变
+
         function playLetters() {
             const letters = generateCustomLetters();
             const letterCount = parseInt(document.getElementById("letterCount").value, 10);
@@ -367,7 +404,7 @@
             speakText(speechParts.join(', '));
         }
 
-        // 其余辅助函数保持不变...
+        // 辅助函数保持不变...
         function convertNumberGroup(num) {
             const tens = num / 10 | 0;
             const ones = num % 10;
