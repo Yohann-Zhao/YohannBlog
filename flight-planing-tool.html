@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Navigation Flight Plan (Magnetic) – MH & GS Calculator</title>
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --card: #11151a;
+      --text: #e9eef3;
+      --muted: #aab7c4;
+      --accent: #8ec5ff;
+      --good: #8ff0a4;
+      --warn: #ffd479;
+      --bad: #ff8e8e;
+      --ring: #2a84ff55;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f7f9; --card:#ffffff; --text:#0c1116; --muted:#62707e; --accent:#0a66ff; --ring:#0a66ff22;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, #0a4fff22, transparent 60%), var(--bg); color: var(--text);
+    }
+    .wrap { max-width: 900px; margin: 40px auto; padding: 0 16px; }
+    h1 { font-size: clamp(1.4rem, 1.2rem + 1.2vw, 2rem); margin: 0 0 10px; letter-spacing: .3px; }
+    p.lead { margin-top: 0; color: var(--muted); }
+    .card { background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.15); }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 720px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    .hint { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+
+    input[type="number"] {
+      width: 100%; padding: 14px 12px; border-radius: 12px; border: 1px solid rgba(127,127,127,.25); background: transparent; color: var(--text);
+      outline: none; transition: box-shadow .15s, border-color .15s; appearance: textfield;
+    }
+    input[type="number"]:focus { border-color: var(--accent); box-shadow: 0 0 0 6px var(--ring); }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    .actions { display:flex; gap:10px; flex-wrap: wrap; }
+    button {
+      cursor: pointer; border: 1px solid rgba(127,127,127,.25); background: linear-gradient(180deg, var(--accent), #4c96ff);
+      color: white; padding: 12px 16px; border-radius: 12px; font-weight: 700; letter-spacing:.2px; box-shadow: 0 6px 18px rgba(10,102,255,.25);
+    }
+    button.secondary { background: transparent; color: var(--text); }
+
+    .results { display:grid; grid-template-columns: 1fr; gap: 12px; margin-top: 14px; }
+    @media (min-width: 720px) { .results { grid-template-columns: repeat(2, 1fr); } }
+
+    .pill {
+      display:flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 14px; border: 1px dashed rgba(127,127,127,.35);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+    }
+    .pill h3 { margin: 0; font-size: .95rem; font-weight: 700; color: var(--muted); letter-spacing: .35px; }
+    .value { font-size: clamp(1.5rem, 1.1rem + 2.2vw, 2.2rem); font-weight: 800; letter-spacing: .5px; }
+
+    .inline-note { font-size: .9rem; color: var(--muted); margin-top: 10px; }
+    .note-warn { color: var(--warn); font-weight: 600; }
+
+    details { margin-top: 10px; }
+    details > summary { cursor:pointer; color: var(--muted); }
+    .small { font-size: .9rem; color: var(--muted); }
+    .units { font-variant-numeric: tabular-nums; opacity:.9; font-weight:600; }
+
+    .footer { margin-top: 18px; color: var(--muted); font-size: .85rem; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- 新增语言切换按钮（右上角） -->
+    <div style="position: absolute; right: 32px; top: 32px; z-index: 10;">
+      <a href="flight-planing-tool.html" style="text-decoration:none;">
+        <button type="button" class="secondary" style="background:var(--card);color:var(--accent);border:1px solid var(--accent);margin-right:6px;">
+          中文
+        </button>
+      </a>
+      <a href="flight-planing-tool_en.html" style="text-decoration:none;">
+        <button type="button" class="secondary" style="background:var(--card);color:var(--accent);border:1px solid var(--accent);">
+          English
+        </button>
+      </a>
+    </div>
+    <div style="margin-bottom:18px;">
+      <a href="flight-training.html">
+        <button type="button" class="secondary" style="background:var(--card);color:var(--accent);border:1px solid var(--accent);">
+          ← 返回 
+        </button>
+      </a>
+    </div>
+    <h1>磁航向与地速计算器</h1>
+    <p class="lead">输入 <strong>TRK (M)</strong>、<strong>TAS</strong>、<strong>Wind Dir (M)</strong>、<strong>Wind Speed</strong>，计算 <strong>MH</strong> 与 <strong>GS</strong>。<span class="small">风向按 <em>from</em>（风从该方向吹来）输入。</span></p>
+    <div class="card">
+      <div class="grid">
+        <div>
+          <label for="trk">TRK (M) · 航迹（磁） <span class="units">[°]</span></label>
+          <input id="trk" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="e.g. 090.0" />
+          <div class="hint">Flight Plan Track (magnetic)</div>
+        </div>
+        <div>
+          <label for="tas">TAS · 真空速 <span class="units">[kt]</span></label>
+          <input id="tas" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 120" />
+          <div class="hint">True Airspeed</div>
+        </div>
+        <div>
+          <label for="wdir">Wind Dir (M) · 风向（磁，<span class="mono">from</span>） <span class="units">[°]</span></label>
+          <input id="wdir" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="e.g. 045.0" />
+          <div class="hint">Wind Direction (magnetic, <span class="mono">from</span>)</div>
+        </div>
+        <div>
+          <label for="wspd">Wind Spd · 风速 <span class="units">[kt]</span></label>
+          <input id="wspd" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 20" />
+          <div class="hint">Wind Speed</div>
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top:14px">
+        <button id="calc">计算 MH / GS</button>
+        <button id="sample" class="secondary" type="button">示例数值</button>
+        <button id="reset" class="secondary" type="button">清空</button>
+      </div>
+
+      <div class="results">
+        <div class="pill">
+          <h3>MH · 磁航向</h3>
+          <div class="value" id="mh">—</div>
+        </div>
+        <div class="pill">
+          <h3>GS · 地速</h3>
+          <div class="value" id="gs">—</div>
+        </div>
+      </div>
+
+      <div class="inline-note" id="note"></div>
+
+      <details>
+        <summary>展开：计算细节（WCA / 侧风 / 迎尾风）</summary>
+        <div class="grid" style="margin-top:10px">
+          <div class="pill"><h3>WCA · 风修正角 [°]</h3><div class="value" id="wca">—</div></div>
+          <div class="pill"><h3>Crosswind · 侧风 [kt]</h3><div class="value" id="xwind">—</div></div>
+          <div class="pill"><h3>Head/Tail · 迎/尾风 [kt]</h3><div class="value" id="hwind">—</div></div>
+          <div class="pill"><h3>风相对航迹角 β [°]</h3><div class="value" id="beta">—</div></div>
+        </div>
+      </details>
+
+      <div class="footer">缩写：TRK (M) = Flight Plan Track（磁）；TAS = True Airspeed；MH = Magnetic Heading；GS = Ground Speed。</div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const deg2rad = d => d * Math.PI / 180;
+    const rad2deg = r => r * 180 / Math.PI;
+
+    const norm360 = d => (d % 360 + 360) % 360; // → [0, 360)
+    const norm180 = d => {
+      let a = (d + 180) % 360; if (a < 0) a += 360; return a - 180; // → (-180, 180]
+    };
+
+    function parseVal(id) {
+      const v = parseFloat($(id).value);
+      return Number.isFinite(v) ? v : null;
+    }
+
+    function formatDeg(x) {
+      return Number.isFinite(x) ? `${(Math.round(x)).toString().padStart(3,'0')}°` : '—';
+    }
+    function formatKt(x) {
+      return Number.isFinite(x) ? `${Math.round(x)} kt` : '—';
+    }
+
+    function compute() {
+      const trk = parseVal('#trk');
+      const tas = parseVal('#tas');
+      const wdir = parseVal('#wdir');
+      const wspd = parseVal('#wspd');
+
+      const out = { mh: NaN, gs: NaN, wca: NaN, xwind: NaN, hwind: NaN, beta: NaN };
+      $('#note').textContent = '';
+
+      if ([trk, tas, wdir, wspd].some(v => v === null)) { render(out); return; }
+      if (tas <= 0) { $('#note').innerHTML = '⚠️ TAS 必须大于 0。'; render(out); return; }
+
+      const beta = norm180(wdir - trk); // wind FROM wdir relative to course (from = headwind at 0°)
+      const sinb = Math.sin(deg2rad(beta));
+      const cosb = Math.cos(deg2rad(beta));
+
+      const xwind = wspd * sinb;            // +: 风来自右侧 → 向右修正
+      const headwind = wspd * cosb;         // +: 迎风（减速）；-: 尾风（加速）
+
+      // Wind Correction Angle
+      const ratio = (wspd * sinb) / tas;    // crosswind / TAS
+      let unreachable = false;
+      let wcaRad;
+      if (Math.abs(ratio) <= 1) {
+        wcaRad = Math.asin(ratio);
+      } else {
+        // 超过极限：侧风分量 > TAS，无法保持给定航迹
+        wcaRad = Math.sign(ratio) * (Math.PI / 2);
+        unreachable = true;
+      }
+      const wca = rad2deg(wcaRad);
+
+      // Magnetic Heading & Ground Speed (maintaining TRK)
+      const mh = norm360(trk + wca);        // steer into wind
+      let gs = tas * Math.cos(wcaRad) - headwind; // GS = TAS·cos(WCA) − 迎风分量
+      if (gs < 0) gs = 0; // 物理下限
+
+      out.mh = mh; out.gs = gs; out.wca = wca; out.xwind = xwind; out.hwind = headwind; out.beta = beta;
+      render(out, unreachable);
+    }
+
+    function render(o, unreachable=false) {
+      $('#mh').textContent = formatDeg(o.mh);
+      $('#gs').textContent = formatKt(o.gs);
+      $('#wca').textContent = Number.isFinite(o.wca) ? `${o.wca.toFixed(1)}°` : '—';
+      $('#xwind').textContent = Number.isFinite(o.xwind) ? `${o.xwind.toFixed(1)} kt` : '—';
+      $('#hwind').textContent = Number.isFinite(o.hwind) ? `${o.hwind.toFixed(1)} kt` : '—';
+      $('#beta').textContent = Number.isFinite(o.beta) ? `${o.beta.toFixed(1)}°` : '—';
+
+      if (unreachable) {
+        $('#note').innerHTML = '⚠️ <span class="note-warn">给定 <b>TAS</b> 无法抵消侧风（|侧风| &gt; TAS）。已按 |WCA| = 90° 近似显示，建议调整计划。</span>';
+      }
+    }
+
+    // Wire up UI
+    ['#trk','#tas','#wdir','#wspd'].forEach(sel => $(sel).addEventListener('input', compute));
+    $('#calc').addEventListener('click', (e) => { e.preventDefault(); compute(); });
+    $('#reset').addEventListener('click', () => {
+      ['#trk','#tas','#wdir','#wspd'].forEach(sel => $(sel).value = '');
+      render({}); $('#note').textContent = '';
+    });
+    $('#sample').addEventListener('click', () => {
+      $('#trk').value = '090';
+      $('#tas').value = '120';
+      $('#wdir').value = '045';
+      $('#wspd').value = '20';
+      compute();
+    });
+
+    // Initial render
+    render({});
+  </script>
+</body>
+</html>
