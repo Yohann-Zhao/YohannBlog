@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flight Planning Tool · 一页整合（Step1–5）</title>
+  <style>
+    :root{
+      --bg:#0b1020; --panel:#121a2d; --muted:#94a3b8; --text:#e6edf3; --brand:#3b82f6; --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
+      --bd:1px solid rgba(148,163,184,.18);
+      --accent1:rgba(59,130,246,.14); /* 蓝 */
+      --accent2:rgba(16,185,129,.14); /* 绿 */
+    }
+    html,body{background:var(--bg); color:var(--text); font:15px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";}
+    h1{font-size:22px;margin:16px 0 14px}
+    h2{font-size:16px;margin:18px 0 10px;color:#cbd5e1}
+    .wrap{max-width:980px;margin:0 auto;padding:20px}
+    .card{background:var(--panel); border:var(--bd); border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.22)}
+    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:12px}
+    .col-6{grid-column:span 6}
+    .col-4{grid-column:span 4}
+    .col-3{grid-column:span 3}
+    .col-12{grid-column:span 12}
+    label{display:block;font-weight:600;margin:2px 0 6px;color:#cbd5e1}
+    input[type=number], select{width:100%; box-sizing:border-box; background:#0e162a; color:var(--text); border:var(--bd); border-radius:10px; padding:10px 12px; outline:none}
+    input::placeholder{color:#64748b}
+    .units{opacity:.7;margin-left:6px}
+    .hint{font-size:12px;color:var(--muted)}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    button, .btn{border:var(--bd); background:#0e162a; color:var(--text); padding:8px 12px; border-radius:10px; cursor:pointer; text-decoration:none}
+    button.secondary{opacity:.85}
+    .pill{background:#0e162a;border:var(--bd);border-radius:12px;padding:10px 12px}
+    .pill h3{font-size:12px;opacity:.75;margin:0 0 6px}
+    .pill .value{font-size:18px;font-weight:700}
+    .note{font-size:13px;color:#eab308;margin-top:8px}
+    table{width:100%; border-collapse:separate; border-spacing:0; margin-top:10px}
+    th,td{border-top:var(--bd); border-left:var(--bd); padding:10px 12px; text-align:left}
+    th:first-child, td:first-child{border-top-left-radius:10px}
+    th:last-child, td:last-child{border-top-right-radius:10px}
+    tr:last-child td:first-child{border-bottom-left-radius:10px}
+    tr:last-child td:last-child{border-bottom-right-radius:10px}
+    th{background:#0e162a;color:#cbd5e1}
+    td{background:#0b1427}
+    .bar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:8px 0 6px}
+    .tight{margin-top:10px}
+    .sep{height:1px;background:rgba(148,163,184,.18);margin:18px 0}
+    .small{font-size:12px;color:var(--muted)}
+    .right{margin-left:auto}
+
+    /* 分组盒子：同一行区分 A / B */
+    .group{border:var(--bd); border-radius:12px; padding:12px; background:rgba(255,255,255,.02)}
+    .group--a{background:var(--accent1)}
+    .group--b{background:var(--accent2)}
+    .group h3{margin:0 0 8px; font-size:13px; letter-spacing:.3px; opacity:.9}
+
+    /* 顶部返回与语言切换 */
+    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--panel);border:var(--bd);border-radius:14px;padding:10px 12px;margin-bottom:12px;position:sticky;top:8px;z-index:10;backdrop-filter:saturate(120%) blur(6px)}
+    .lang{display:flex;align-items:center;gap:6px}
+    .lang a{color:var(--text);text-decoration:none;padding:2px 6px;border-radius:8px}
+    .lang a.active{outline:1px solid rgba(148,163,184,.35)}
+
+    .footer{margin-top:16px;text-align:center;opacity:.78}
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+                   "Liberation Mono", "Courier New", monospace;
+      letter-spacing:.2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="btn" href="flight-training.html">← 返回之前页</a>
+      <div class="lang small">
+        <span>Language：</span>
+        <a href="integrated-flight-planning-tool.html" class="active" aria-current="page">中文</a>
+        <span>·</span>
+        <a href="integrated-flight-planning-tool_en.html">English</a>
+      </div>
+    </div>
+
+    <h1>Flight Planning Tool · 一页整合（Step 1 → 5）</h1>
+
+    <!-- Step 1 -->
+    <h2>Step 1 · 线性插值：目标高度风矢量 <span class="small">（可跳过，直接做 Step 2）</span></h2>
+    <div class="card" id="step1">
+      <div class="grid">
+        <!-- 行 1：高度块 A / B -->
+        <div class="col-6">
+          <div class="group group--a">
+            <h3>高度块 A</h3>
+            <div class="grid">
+              <div class="col-6">
+                <label for="s1_alt1">高度 1 <span class="units">ft</span></label>
+                <select id="s1_alt1">
+                  <option>1000</option><option>2000</option><option>5000</option>
+                  <option selected>7000</option><option>10000</option><option>14000</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="s1_dir1">风向 1（M · from）<span class="units">°</span></label>
+                <input id="s1_dir1" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="如 270.0" />
+              </div>
+              <div class="col-6">
+                <label for="s1_spd1">风速 1 <span class="units">kt</span></label>
+                <input id="s1_spd1" type="number" inputmode="decimal" min="0" step="0.1" placeholder="如 25" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="group group--b">
+            <h3>高度块 B</h3>
+            <div class="grid">
+              <div class="col-6">
+                <label for="s1_alt2">高度 2 <span class="units">ft</span></label>
+                <select id="s1_alt2">
+                  <option selected>1000</option><option>2000</option><option>5000</option>
+                  <option>7000</option><option>10000</option><option>14000</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="s1_dir2">风向 2（M · from）<span class="units">°</span></label>
+                <input id="s1_dir2" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="如 240.0" />
+              </div>
+              <div class="col-6">
+                <label for="s1_spd2">风速 2 <span class="units">kt</span></label>
+                <input id="s1_spd2" type="number" inputmode="decimal" min="0" step="0.1" placeholder="如 35" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 行 2：目标高度（单独一行一个块） -->
+        <div class="col-12">
+          <div class="group">
+            <label for="s1_target">目标高度 <span class="units">ft</span></label>
+            <input id="s1_target" type="number" inputmode="decimal" min="0" step="50" placeholder="如 6500" />
+            <div class="hint">建议选在两高度之间；超出范围将提示为外推。</div>
+          </div>
+        </div>
+
+        <!-- 行 3：输出（单独一行） -->
+        <div class="col-6">
+          <div class="pill"><h3>目标高度风向（M · from）</h3><div class="value" id="s1_out_dir">—</div></div>
+        </div>
+        <div class="col-6">
+          <div class="pill"><h3>目标高度风速</h3><div class="value" id="s1_out_spd">—</div></div>
+        </div>
+
+        <!-- 行 4：算法提示/外推提示 -->
+        <div class="col-12 note" id="s1_note"></div>
+
+        <!-- 行 5：最后为清空按钮 -->
+        <div class="col-12" style="display:flex; justify-content:flex-end; gap:10px">
+          <button class="secondary" id="s1_clear" type="button">清空（Step 1）</button>
+        </div>
+      </div>
+      <!-- Step 1 末尾备注 -->
+      <div class="small" style="margin-top:10px; opacity:.85">
+        备注：本页不提供 True Direction → Magnetic Direction 的直接换算，是希望你在筹划时自行心算 <em>True→Magnetic</em>。
+        这是飞行训练中最容易出错的环节之一（尤其在不同变差/偏差环境下），刻意练习心算更有助于形成稳健的习惯。
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Step 2 -->
+    <h2>Step 2 · 由 TRK + 风矢量 → 计算 MH 与 GS <span class="small">（默认采用 Step 1 结果做预填，亦可在此修改）</span></h2>
+    <div class="card" id="step2">
+      <div class="bar">
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <span class="small">航段模板：</span>
+          <select id="leg_template">
+            <option value="">— 选择航段模板 —</option>
+            <option value="YPMQ-YCFS">YPMQ → YCFS · TRK 359°M · 68nm</option>
+            <option value="YCFS-YGFN">YCFS → YGFN · TRK 340°M · 34nm</option>
+          </select>
+          <span class="small">TAS 模板：</span>
+          <select id="tas_template">
+            <option value="125" selected>DA40NG · 125 kt（默认）</option>
+            <option value="160">DA42 · 160 kt</option>
+            <option value="">自定义</option>
+          </select>
+        </div>
+        <button class="secondary right" id="s2_clear" type="button">清空（Step 2）</button>
+      </div>
+
+      <div class="grid tight">
+        <div class="col-3">
+          <label for="s2_trk">TRK（航迹·M）<span class="units">°</span></label>
+          <input id="s2_trk" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="如 359" />
+        </div>
+        <div class="col-3">
+          <label for="s2_tas">TAS <span class="units">kt</span></label>
+          <input id="s2_tas" type="number" inputmode="decimal" min="0" step="0.1" placeholder="如 125" />
+        </div>
+        <div class="col-3" id="s2_wdir_wrap">
+          <label for="s2_wdir">风向（M · from）<span class="units">°</span></label>
+          <input id="s2_wdir" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="如 340" />
+          <div class="hint" id="s2_wdir_hint">已从 Step 1 预填，亦可在此修改（修改将清空 Step 1）。</div>
+        </div>
+        <div class="col-3" id="s2_wspd_wrap">
+          <label for="s2_wspd">风速 <span class="units">kt</span></label>
+          <input id="s2_wspd" type="number" inputmode="decimal" min="0" step="0.1" placeholder="如 12" />
+        </div>
+
+        <div class="col-6">
+          <div class="pill"><h3>MH（磁航向）</h3><div class="value" id="s2_out_mh">—</div></div>
+        </div>
+        <div class="col-6">
+          <div class="pill"><h3>GS（地速）</h3><div class="value" id="s2_out_gs">—</div></div>
+        </div>
+        <div class="col-12 note" id="s2_note"></div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Step 3 -->
+    <h2>Step 3 · ETI（预计区间用时）</h2>
+    <div class="card" id="step3">
+      <div class="bar">
+        <span class="small">DIST 与模板联动；若手动改动，将自动取消模板选择。</span>
+        <button class="secondary right" id="s3_clear" type="button">清空（Step 3）</button>
+      </div>
+      <div class="grid tight">
+        <div class="col-4">
+          <label for="s3_dist">DIST <span class="units">nm</span></label>
+          <input id="s3_dist" type="number" inputmode="decimal" min="0" step="0.1" placeholder="如 68" />
+        </div>
+        <div class="col-4">
+          <div class="pill"><h3>ETI</h3><div class="value" id="s3_out_eti">—</div></div>
+        </div>
+        <div class="col-4 small" style="display:flex;align-items:center">公式：ETI = DIST / GS × 60</div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Step 4 -->
+    <h2>Step 4 · Trip Fuel</h2>
+    <div class="card" id="step4">
+      <div class="bar">
+        <div class="row">
+          <span class="small">燃流模板（默认 DA40NG）：</span>
+          <select id="ff_template">
+            <option value="25" selected>DA40NG · 25 L/h（默认）</option>
+            <option value="45">DA42 · 45 L/h</option>
+            <option value="">自定义</option>
+          </select>
+        </div>
+        <button class="secondary right" id="s4_clear" type="button">清空（Step 4）</button>
+      </div>
+      <div class="grid tight">
+        <div class="col-4">
+          <label for="s4_ff">Fuel Flow <span class="units">L/h</span></label>
+          <input id="s4_ff" type="number" inputmode="decimal" min="0" step="0.1" placeholder="如 25" />
+        </div>
+        <div class="col-4">
+          <div class="pill"><h3>Trip Fuel</h3><div class="value" id="s4_out_fuel">—</div></div>
+        </div>
+        <div class="col-4 small" style="display:flex;align-items:center">Trip Fuel = ETI / 60 × Fuel Flow（向上取整到整数 L）</div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Step 5 -->
+    <h2>Step 5 · 汇总表</h2>
+    <div class="card" id="step5">
+      <table>
+        <thead>
+          <tr>
+            <th>TRK (M)</th>
+            <th>Wind</th>
+            <th>HDG (M)</th>
+            <th>GS</th>
+            <th>DIST</th>
+            <th>ETI</th>
+            <th>Trip Fuel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="t_trk">—</td>
+            <td id="t_wind">—</td>
+            <td id="t_mh">—</td>
+            <td id="t_gs">—</td>
+            <td id="t_dist">—</td>
+            <td id="t_eti">—</td>
+            <td id="t_fuel">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="small" style="margin-top:8px">Wind 格式示例：<span class="mono">340M/06kt</span></div>
+      <div class="footer">© Yohann 飞行笔记 原创，版权所有</div>
+    </div>
+  </div>
+
+<script>
+// ===== 工具函数 =====
+const deg2rad = d => (d * Math.PI) / 180;
+const rad2deg = r => (r * 180) / Math.PI;
+const norm360 = d => { let x = d % 360; if (x < 0) x += 360; return x; };
+const pad2 = n => String(Math.abs(Math.round(n))).padStart(2,'0');
+const pad3 = n => String(Math.abs(Math.round(n))).padStart(3,'0');
+const fmtDegM = d => Number.isFinite(d) ? pad3(norm360(Math.round(d))) + '\u00B0M' : '—';
+const fmtMin = m => Number.isFinite(m) ? (m<10?m.toFixed(1):Math.round(m)) + ' min' : '—';
+const fmtFuel = x => Number.isFinite(x) ? Math.round(x) + ' L' : '—'; // 显示为整数
+const fmtWind = (dir, spd) => (Number.isFinite(dir) && Number.isFinite(spd)) ? `${pad3(Math.round(norm360(dir)))}M/${pad2(spd)}kt` : '—';
+function parseNum(id){ const el=document.querySelector(id); const v=parseFloat(el.value); return Number.isFinite(v)?v:null; }
+
+// 气象风：FROM + kt -> (u,v) 以及反变换
+function fromDirSpdToUV(dirDeg, spd){
+  if(!Number.isFinite(dirDeg)||!Number.isFinite(spd)) return {u:NaN,v:NaN};
+  const r=deg2rad(dirDeg); // from-bearing
+  const u = -spd * Math.sin(r); // 向东+
+  const v = -spd * Math.cos(r); // 向北+
+  return {u,v};
+}
+function uvToFromDirSpd(u,v){
+  const spd = Math.hypot(u,v);
+  const dir = norm360(rad2deg(Math.atan2(u,v))+180);
+  return {dir, spd};
+}
+
+// ===== 全局状态 =====
+const state = {
+  s1: {dir:null, spd:null, valid:false},
+  s2: {trk:null, tas:null, wdir:null, wspd:null, mh:null, gs:null},
+  s3: {dist:null, eti:null},
+  s4: {ff:null, fuel:null},
+  flags: { applyingLeg:false }
+};
+
+function updateSummary(){
+  document.querySelector('#t_trk').textContent = fmtDegM(state.s2.trk);
+  document.querySelector('#t_wind').textContent = fmtWind(activeWindDir(), activeWindSpd());
+  document.querySelector('#t_mh').textContent = fmtDegM(state.s2.mh);
+  document.querySelector('#t_gs').textContent = Number.isFinite(state.s2.gs) ? Math.round(state.s2.gs)+' kt' : '—';
+  document.querySelector('#t_dist').textContent = Number.isFinite(state.s3.dist) ? (+state.s3.dist).toFixed(0)+' nm' : '—';
+  document.querySelector('#t_eti').textContent = fmtMin(state.s3.eti);
+  document.querySelector('#t_fuel').textContent = fmtFuel(state.s4.fuel);
+}
+
+// ===== Step 1：插值 =====
+function step1Compute(){
+  const alt1=parseNum('#s1_alt1');
+  const alt2=parseNum('#s1_alt2');
+  const d1=parseNum('#s1_dir1');
+  const s1=parseNum('#s1_spd1');
+  const d2=parseNum('#s1_dir2');
+  const s2=parseNum('#s1_spd2');
+  const at=parseNum('#s1_target');
+
+  const noteEl = document.querySelector('#s1_note');
+  noteEl.textContent='';
+  let outDir=null,outSpd=null, valid=false;
+
+  if([alt1,alt2,d1,s1,d2,s2,at].every(v=>v!==null)){
+    if(alt1===alt2){ noteEl.textContent='⚠️ 高度 1 与 2 不能相同。'; }
+    else if(s1<0||s2<0){ noteEl.textContent='⚠️ 风速需为非负数。'; }
+    else{
+      const {u:u1,v:v1}=fromDirSpdToUV(norm360(d1),s1);
+      const {u:u2,v:v2}=fromDirSpdToUV(norm360(d2),s2);
+      const t=(at-alt1)/(alt2-alt1);
+      const u=u1 + t*(u2-u1);
+      const v=v1 + t*(v2-v1);
+      const r=uvToFromDirSpd(u,v);
+      outDir=r.dir; outSpd=r.spd; valid=Number.isFinite(outDir)&&Number.isFinite(outSpd);
+      if(t<0||t>1){ noteEl.textContent='⚠️ 目标高度在两层之外（外推）。'; }
+    }
+  }
+  state.s1 = {dir: outDir, spd: outSpd, valid};
+  document.querySelector('#s1_out_dir').textContent = Number.isFinite(outDir) ? pad3(Math.round(outDir))+'°M' : '—';
+  document.querySelector('#s1_out_spd').textContent = Number.isFinite(outSpd) ? Math.round(outSpd)+' kt' : '—';
+
+  // 预填 Step 2 风字段（可编辑；用户覆盖会清空 Step 1）
+  if(valid){
+    document.querySelector('#s2_wdir').value = Math.round(outDir);
+    document.querySelector('#s2_wspd').value = Math.round(outSpd);
+  }
+  document.querySelector('#s2_wdir_hint').textContent = '已从 Step 1 预填，亦可在此修改（修改将清空 Step 1）。';
+
+  step2Compute(); // 级联
+}
+
+function step1Clear(){
+  ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].forEach(id=>document.querySelector(id).value='');
+  document.querySelector('#s1_alt1').value='7000';
+  document.querySelector('#s1_alt2').value='1000';
+  document.querySelector('#s1_note').textContent='';
+  state.s1={dir:null,spd:null,valid:false};
+  document.querySelector('#s1_out_dir').textContent='—';
+  document.querySelector('#s1_out_spd').textContent='—';
+  step2Compute();
+}
+
+// ===== Step 2：MH/GS =====
+function activeWindDir(){ return state.s1.valid ? state.s1.dir : state.s2.wdir; }
+function activeWindSpd(){ return state.s1.valid ? state.s1.spd : state.s2.wspd; }
+
+function step2Compute(){
+  state.s2.trk = parseNum('#s2_trk');
+  state.s2.tas = parseNum('#s2_tas');
+  state.s2.wdir = parseNum('#s2_wdir');
+  state.s2.wspd = parseNum('#s2_wspd');
+
+  const trk=state.s2.trk, tas=state.s2.tas, wdir=activeWindDir(), wspd=activeWindSpd();
+  const noteEl=document.querySelector('#s2_note');
+  noteEl.textContent='';
+  let mh=null, gs=null;
+
+  if([trk,tas,wdir,wspd].every(v=>Number.isFinite(v))){
+    if(tas<=0){ noteEl.textContent='⚠️ TAS 应大于 0。'; }
+    else{
+      const windTo = norm360(wdir+180);
+      const d = deg2rad(windTo - trk);
+      const cross = wspd * Math.sin(d);
+      const head = wspd * Math.cos(d);
+      const ratio = Math.abs(cross) / tas;
+      if(ratio>1){
+        noteEl.textContent = '⚠️ 横风大于 TAS，无法维持该 TRK。';
+      } else {
+        const drift = Math.asin(cross / tas);
+        mh = norm360(trk - rad2deg(drift));
+        gs = tas * Math.cos(drift) + head;
+      }
+    }
+  }
+  state.s2.mh = Number.isFinite(mh)?mh:null;
+  state.s2.gs = Number.isFinite(gs)?gs:null;
+
+  document.querySelector('#s2_out_mh').textContent = fmtDegM(state.s2.mh);
+  document.querySelector('#s2_out_gs').textContent = Number.isFinite(state.s2.gs)? Math.round(state.s2.gs)+' kt' : '—';
+
+  step3Compute(); // 级联
+}
+
+function step2Clear(){
+  ['#s2_trk','#s2_tas','#s2_wdir','#s2_wspd'].forEach(id=>document.querySelector(id).value='');
+  document.querySelector('#leg_template').value='';
+  document.querySelector('#tas_template').value='';
+  document.querySelector('#s2_note').textContent='';
+  state.s2={trk:null,tas:null,wdir:null,wspd:null,mh:null,gs:null};
+  step3Compute();
+}
+
+// Step 2 风编辑→清空 Step 1（避免不一致）
+function clearStep1OnWindEdit(){
+  const anyFilled = ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].some(sel=>document.querySelector(sel).value.trim()!=='');
+  if(state.s1.valid || anyFilled){ step1Clear(); }
+}
+
+// 模板联动 TRK & DIST
+function applyLegTemplate(v){
+  state.flags.applyingLeg = true;
+  if(v==='YPMQ-YCFS'){
+    document.querySelector('#s2_trk').value = '359';
+    document.querySelector('#s3_dist').value = '68';
+  } else if(v==='YCFS-YGFN'){
+    document.querySelector('#s2_trk').value = '340';
+    document.querySelector('#s3_dist').value = '34';
+  }
+  state.flags.applyingLeg = false;
+  step2Compute();
+}
+
+// ===== Step 3：ETI =====
+function step3Compute(){
+  state.s3.dist = parseNum('#s3_dist');
+  const gs = state.s2.gs;
+  let eti=null;
+  if(Number.isFinite(state.s3.dist) && Number.isFinite(gs) && gs>0){
+    eti = state.s3.dist / gs * 60;
+  }
+  state.s3.eti = Number.isFinite(eti)?eti:null;
+  document.querySelector('#s3_out_eti').textContent = fmtMin(state.s3.eti);
+  step4Compute(); // 级联
+}
+
+function step3Clear(){
+  document.querySelector('#s3_dist').value='';
+  state.s3={dist:null,eti:null};
+  document.querySelector('#s3_out_eti').textContent='—';
+  step4Compute();
+}
+
+// ===== Step 4：Trip Fuel =====
+function step4Compute(){
+  const ff = parseNum('#s4_ff');
+  state.s4.ff = ff;
+  const eti = state.s3.eti;
+  let fuel=null;
+  if(Number.isFinite(eti) && Number.isFinite(ff)){
+    fuel = Math.ceil(eti/60 * ff); // 向上取整
+  }
+  state.s4.fuel = Number.isFinite(fuel)?fuel:null;
+  document.querySelector('#s4_out_fuel').textContent = fmtFuel(state.s4.fuel);
+  updateSummary();
+}
+
+function step4Clear(){
+  document.querySelector('#ff_template').value='';
+  document.querySelector('#s4_ff').value='';
+  state.s4={ff:null,fuel:null};
+  document.querySelector('#s4_out_fuel').textContent='—';
+  updateSummary();
+}
+
+// ===== 事件绑定 =====
+['#s1_alt1','#s1_alt2'].forEach(sel=>document.querySelector(sel).addEventListener('change', step1Compute));
+['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].forEach(sel=>document.querySelector(sel).addEventListener('input', step1Compute));
+
+document.querySelector('#s1_clear').addEventListener('click', step1Clear);
+
+['#s2_trk','#s2_tas','#s2_wdir','#s2_wspd'].forEach(sel=>document.querySelector(sel).addEventListener('input', step2Compute));
+// Step 2 风编辑→清空 Step 1
+['#s2_wdir','#s2_wspd'].forEach(sel=>document.querySelector(sel).addEventListener('input', clearStep1OnWindEdit));
+
+document.querySelector('#s2_clear').addEventListener('click', step2Clear);
+
+document.querySelector('#leg_template').addEventListener('change', (e)=>applyLegTemplate(e.target.value));
+
+document.querySelector('#tas_template').addEventListener('change', (e)=>{
+  const v=e.target.value; if(v){ document.querySelector('#s2_tas').value=v; } else {/* 自定义保留 */}
+  step2Compute();
+});
+// 手动改 TAS 则清空模板选择
+document.querySelector('#s2_tas').addEventListener('input', ()=>{ document.querySelector('#tas_template').value=''; });
+
+// Step3：手动改 DIST 则清空 Step2 的航段模板选择（保留其它数据）
+document.querySelector('#s3_dist').addEventListener('input', ()=>{
+  if(!state.flags.applyingLeg){ document.querySelector('#leg_template').value=''; }
+  step3Compute();
+});
+document.querySelector('#s3_clear').addEventListener('click', step3Clear);
+
+// Step4
+document.querySelector('#ff_template').addEventListener('change', (e)=>{
+  const v=e.target.value; if(v){ document.querySelector('#s4_ff').value=v; } else { /* keep custom */ }
+  step4Compute();
+});
+document.querySelector('#s4_ff').addEventListener('input', ()=>{ document.querySelector('#ff_template').value=''; step4Compute(); });
+document.querySelector('#s4_clear').addEventListener('click', step4Clear);
+
+// ===== 初始渲染 =====
+// 默认：Step2 使用 DA40NG TAS 125 kt，Step4 使用 DA40NG 25 L/h
+(function initDefaults(){
+  document.querySelector('#tas_template').value='125';
+  document.querySelector('#s2_tas').value='125';
+  document.querySelector('#ff_template').value='25';
+  document.querySelector('#s4_ff').value='25';
+})();
+
+step1Compute();
+updateSummary();
+</script>
+</body>
+</html>
