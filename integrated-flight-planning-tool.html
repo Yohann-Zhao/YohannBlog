@@ -410,6 +410,21 @@ function step1Clear(){
 function activeWindDir(){ return state.s1.valid ? state.s1.dir : state.s2.wdir; }
 function activeWindSpd(){ return state.s1.valid ? state.s1.spd : state.s2.wspd; }
 
+// 航段模板映射（TRK°M, DIST nm）
+const LEG_MAP = {
+  'RER-YCFS':   { trk:184, dist:21 },
+  'YGFN-RER':   { trk:131, dist:17 },
+  'YKMP-YPMQ':  { trk:155, dist:22 },
+  'YPMQ-YARM':  { trk:298, dist:84 },
+  'YPMQ-YCFS':  { trk:359, dist:68 },
+  'YPMQ-YKMP':  { trk:335, dist:22 },
+  'YPMQ-YTRE':  { trk:202, dist:33 },
+  'YPMQ-YSTW':  { trk:269, dist:107 },
+  'YSTW-YPMQ':  { trk:91,  dist:107 }, // 091° → 填 91 数值即可
+  'YTRE-YPMQ':  { trk:22,  dist:33 },
+  'YCFS-YGFN':  { trk:340, dist:34 }
+};
+
 function step2Compute(){
   state.s2.trk = parseNum('#s2_trk');
   state.s2.tas = parseNum('#s2_tas');
@@ -462,15 +477,13 @@ function clearStep1OnWindEdit(){
   if(state.s1.valid || anyFilled){ step1Clear(); }
 }
 
-// 模板联动 TRK & DIST
+// 模板联动 TRK & DIST（支持所有选项）
 function applyLegTemplate(v){
   state.flags.applyingLeg = true;
-  if(v==='YPMQ-YCFS'){
-    document.querySelector('#s2_trk').value = '359';
-    document.querySelector('#s3_dist').value = '68';
-  } else if(v==='YCFS-YGFN'){
-    document.querySelector('#s2_trk').value = '340';
-    document.querySelector('#s3_dist').value = '34';
+  const leg = LEG_MAP[v];
+  if(leg){
+    document.querySelector('#s2_trk').value  = String(leg.trk);
+    document.querySelector('#s3_dist').value = String(leg.dist);
   }
   state.flags.applyingLeg = false;
   step2Compute();

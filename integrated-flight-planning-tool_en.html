@@ -394,20 +394,24 @@ function step1Compute(){
   step2Compute();
 }
 
-function step1Clear(){
-  ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].forEach(id=>document.querySelector(id).value='');
-  document.querySelector('#s1_alt1').value='7000';
-  document.querySelector('#s1_alt2').value='1000';
-  document.querySelector('#s1_note').textContent='';
-  state.s1={dir:null,spd:null,valid:false};
-  document.querySelector('#s1_out_dir').textContent='—';
-  document.querySelector('#s1_out_spd').textContent='—';
-  step2Compute();
-}
-
 // ===== Step 2 =====
 function activeWindDir(){ return state.s1.valid ? state.s1.dir : state.s2.wdir; }
 function activeWindSpd(){ return state.s1.valid ? state.s1.spd : state.s2.wspd; }
+
+// Leg template map (TRK°M, DIST nm)
+const LEG_MAP = {
+  'RER-YCFS':   { trk:184, dist:21 },
+  'YGFN-RER':   { trk:131, dist:17 },
+  'YKMP-YPMQ':  { trk:155, dist:22 },
+  'YPMQ-YARM':  { trk:298, dist:84 },
+  'YPMQ-YCFS':  { trk:359, dist:68 },
+  'YPMQ-YKMP':  { trk:335, dist:22 },
+  'YPMQ-YTRE':  { trk:202, dist:33 },
+  'YPMQ-YSTW':  { trk:269, dist:107 },
+  'YSTW-YPMQ':  { trk:91,  dist:107 },
+  'YTRE-YPMQ':  { trk:22,  dist:33 },
+  'YCFS-YGFN':  { trk:340, dist:34 }
+};
 
 function step2Compute(){
   state.s2.trk = parseNum('#s2_trk');
@@ -446,6 +450,17 @@ function step2Compute(){
   step3Compute();
 }
 
+function step1Clear(){
+  ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].forEach(id=>document.querySelector(id).value='');
+  document.querySelector('#s1_alt1').value='7000';
+  document.querySelector('#s1_alt2').value='1000';
+  document.querySelector('#s1_note').textContent='';
+  state.s1={dir:null,spd:null,valid:false};
+  document.querySelector('#s1_out_dir').textContent='—';
+  document.querySelector('#s1_out_spd').textContent='—';
+  step2Compute();
+}
+
 function step2Clear(){
   ['#s2_trk','#s2_tas','#s2_wdir','#s2_wspd'].forEach(id=>document.querySelector(id).value='');
   document.querySelector('#leg_template').value='';
@@ -461,15 +476,13 @@ function clearStep1OnWindEdit(){
   if(state.s1.valid || anyFilled){ step1Clear(); }
 }
 
-// Template linkage: TRK & DIST
+// Template linkage: TRK & DIST (covers all options)
 function applyLegTemplate(v){
   state.flags.applyingLeg = true;
-  if(v==='YPMQ-YCFS'){
-    document.querySelector('#s2_trk').value = '359';
-    document.querySelector('#s3_dist').value = '68';
-  } else if(v==='YCFS-YGFN'){
-    document.querySelector('#s2_trk').value = '340';
-    document.querySelector('#s3_dist').value = '34';
+  const leg = LEG_MAP[v];
+  if(leg){
+    document.querySelector('#s2_trk').value  = String(leg.trk);
+    document.querySelector('#s3_dist').value = String(leg.dist);
   }
   state.flags.applyingLeg = false;
   step2Compute();
