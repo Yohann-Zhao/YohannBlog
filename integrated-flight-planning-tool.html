@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Flight Planning Tool · 一页整合（Step1–5）</title>
   <style>
     :root{
@@ -11,37 +11,42 @@
       --accent1:rgba(59,130,246,.14); /* 蓝 */
       --accent2:rgba(16,185,129,.14); /* 绿 */
     }
-    html,body{background:var(--bg); color:var(--text); font:15px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";}
-    h1{font-size:22px;margin:16px 0 14px}
-    h2{font-size:16px;margin:18px 0 10px;color:#cbd5e1}
-    .wrap{max-width:980px;margin:0 auto;padding:20px}
+
+    html{-webkit-text-size-adjust:100%;}
+    html,body{background:var(--bg); color:var(--text); font:16px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";}
+    h1{font-size:clamp(18px,4.3vw,22px);margin:16px 0 14px}
+    h2{font-size:clamp(14px,3.6vw,16px);margin:18px 0 10px;color:#cbd5e1}
+
+    .wrap{max-width:980px;margin:0 auto;padding:clamp(14px,3vw,20px)}
     .card{background:var(--panel); border:var(--bd); border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.22)}
-    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:12px}
+
+    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:clamp(8px,2.5vw,12px)}
     .col-6{grid-column:span 6}
     .col-4{grid-column:span 4}
     .col-3{grid-column:span 3}
     .col-12{grid-column:span 12}
+
     label{display:block;font-weight:600;margin:2px 0 6px;color:#cbd5e1}
-    input[type=number], select{width:100%; box-sizing:border-box; background:#0e162a; color:var(--text); border:var(--bd); border-radius:10px; padding:10px 12px; outline:none}
+    input[type=number], select{
+      width:100%; box-sizing:border-box; background:#0e162a; color:var(--text);
+      border:var(--bd); border-radius:10px; padding:10px 12px; outline:none;
+      font-size:16px; /* 防iOS放大 */ min-height:44px;
+    }
     input::placeholder{color:#64748b}
     .units{opacity:.7;margin-left:6px}
     .hint{font-size:12px;color:var(--muted)}
     .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    button, .btn{border:var(--bd); background:#0e162a; color:var(--text); padding:8px 12px; border-radius:10px; cursor:pointer; text-decoration:none}
+    button, .btn{
+      border:var(--bd); background:#0e162a; color:var(--text);
+      padding:10px 14px; border-radius:10px; cursor:pointer; text-decoration:none;
+      min-height:44px; font-size:16px;
+    }
     button.secondary{opacity:.85}
     .pill{background:#0e162a;border:var(--bd);border-radius:12px;padding:10px 12px}
     .pill h3{font-size:12px;opacity:.75;margin:0 0 6px}
     .pill .value{font-size:18px;font-weight:700}
     .note{font-size:13px;color:#eab308;margin-top:8px}
-    table{width:100%; border-collapse:separate; border-spacing:0; margin-top:10px}
-    th,td{border-top:var(--bd); border-left:var(--bd); padding:10px 12px; text-align:left}
-    th:first-child, td:first-child{border-top-left-radius:10px}
-    th:last-child, td:last-child{border-top-right-radius:10px}
-    tr:last-child td:first-child{border-bottom-left-radius:10px}
-    tr:last-child td:last-child{border-bottom-right-radius:10px}
-    th{background:#0e162a;color:#cbd5e1}
-    td{background:#0b1427}
-    .bar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:8px 0 6px}
+    .bar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:8px 0 6px;flex-wrap:wrap}
     .tight{margin-top:10px}
     .sep{height:1px;background:rgba(148,163,184,.18);margin:18px 0}
     .small{font-size:12px;color:var(--muted)}
@@ -53,17 +58,45 @@
     .group--b{background:var(--accent2)}
     .group h3{margin:0 0 8px; font-size:13px; letter-spacing:.3px; opacity:.9}
 
-    /* 顶部返回与语言切换 */
-    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--panel);border:var(--bd);border-radius:14px;padding:10px 12px;margin-bottom:12px;position:sticky;top:8px;z-index:10;backdrop-filter:saturate(120%) blur(6px)}
+    /* 顶部返回与语言切换（适配刘海） */
+    .topbar{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;
+      background:var(--panel);border:var(--bd);border-radius:14px;
+      padding:calc(10px + env(safe-area-inset-top,0)) 12px 10px;
+      margin-bottom:12px;position:sticky;top:max(8px, env(safe-area-inset-top,0));
+      z-index:10;backdrop-filter:saturate(120%) blur(6px); flex-wrap:wrap;
+    }
     .lang{display:flex;align-items:center;gap:6px}
-    .lang a{color:var(--text);text-decoration:none;padding:2px 6px;border-radius:8px}
+    .lang a{color:var(--text);text-decoration:none;padding:4px 8px;border-radius:8px}
     .lang a.active{outline:1px solid rgba(148,163,184,.35)}
+
+    /* 表格容器：小屏横向滚动 */
+    .table-wrap{overflow:auto; -webkit-overflow-scrolling:touch; border-radius:12px; border:var(--bd)}
+    table{width:100%; border-collapse:separate; border-spacing:0; margin:0}
+    th,td{border-top:var(--bd); border-left:var(--bd); padding:10px 12px; text-align:left; white-space:nowrap}
+    th:first-child, td:first-child{border-top-left-radius:10px}
+    th:last-child, td:last-child{border-top-right-radius:10px}
+    tr:last-child td:first-child{border-bottom-left-radius:10px}
+    tr:last-child td:last-child{border-bottom-right-radius:10px}
+    th{background:#0e162a;color:#cbd5e1}
+    td{background:#0b1427}
 
     .footer{margin-top:16px;text-align:center;opacity:.78}
     .mono{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
                    "Liberation Mono", "Courier New", monospace;
       letter-spacing:.2px;
+    }
+
+    /* —— 响应式规则 —— */
+    @media (max-width: 720px){
+      /* 小屏统一单列显示 */
+      .col-3, .col-4, .col-6{grid-column:span 12}
+      .pill .value{font-size:17px}
+      .bar{flex-direction:column; align-items:stretch}
+      .right{margin-left:0}
+      .topbar{gap:8px}
+      .lang{margin-left:auto}
     }
   </style>
 </head>
@@ -149,7 +182,7 @@
         </div>
 
         <!-- 行 4：算法提示/外推提示 -->
-        <div class="col-12 note" id="s1_note"></div>
+        <div class="col-12 note" id="s1_note" aria-live="polite"></div>
 
         <!-- 行 5：最后为清空按钮 -->
         <div class="col-12" style="display:flex; justify-content:flex-end; gap:10px">
@@ -220,7 +253,7 @@
         <div class="col-6">
           <div class="pill"><h3>GS（地速）</h3><div class="value" id="s2_out_gs">—</div></div>
         </div>
-        <div class="col-12 note" id="s2_note"></div>
+        <div class="col-12 note" id="s2_note" aria-live="polite"></div>
       </div>
     </div>
 
@@ -278,37 +311,39 @@
     <!-- Step 5 -->
     <h2>Step 5 · 汇总表</h2>
     <div class="card" id="step5">
-      <table>
-        <thead>
-          <tr>
-            <th>TRK (M)</th>
-            <th>Wind</th>
-            <th>HDG (M)</th>
-            <th>GS</th>
-            <th>DIST</th>
-            <th>ETI</th>
-            <th>Trip Fuel</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td id="t_trk">—</td>
-            <td id="t_wind">—</td>
-            <td id="t_mh">—</td>
-            <td id="t_gs">—</td>
-            <td id="t_dist">—</td>
-            <td id="t_eti">—</td>
-            <td id="t_fuel">—</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>TRK (M)</th>
+              <th>Wind</th>
+              <th>HDG (M)</th>
+              <th>GS</th>
+              <th>DIST</th>
+              <th>ETI</th>
+              <th>Trip Fuel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="t_trk">—</td>
+              <td id="t_wind">—</td>
+              <td id="t_mh">—</td>
+              <td id="t_gs">—</td>
+              <td id="t_dist">—</td>
+              <td id="t_eti">—</td>
+              <td id="t_fuel">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="small" style="margin-top:8px">Wind 格式示例：<span class="mono">340M/06kt</span></div>
       <div class="footer">© Yohann 飞行笔记 原创，版权所有</div>
     </div>
   </div>
 
 <script>
-// ===== 工具函数 =====
+/* ===== 工具函数 ===== */
 const deg2rad = d => (d * Math.PI) / 180;
 const rad2deg = r => (r * 180) / Math.PI;
 const norm360 = d => { let x = d % 360; if (x < 0) x += 360; return x; };
@@ -316,16 +351,16 @@ const pad2 = n => String(Math.abs(Math.round(n))).padStart(2,'0');
 const pad3 = n => String(Math.abs(Math.round(n))).padStart(3,'0');
 const fmtDegM = d => Number.isFinite(d) ? pad3(norm360(Math.round(d))) + '\u00B0M' : '—';
 const fmtMin = m => Number.isFinite(m) ? (m<10?m.toFixed(1):Math.round(m)) + ' min' : '—';
-const fmtFuel = x => Number.isFinite(x) ? Math.round(x) + ' L' : '—'; // 显示为整数
+const fmtFuel = x => Number.isFinite(x) ? Math.round(x) + ' L' : '—';
 const fmtWind = (dir, spd) => (Number.isFinite(dir) && Number.isFinite(spd)) ? `${pad3(Math.round(norm360(dir)))}M/${pad2(spd)}kt` : '—';
 function parseNum(id){ const el=document.querySelector(id); const v=parseFloat(el.value); return Number.isFinite(v)?v:null; }
 
-// 气象风：FROM + kt -> (u,v) 以及反变换
+/* 气象风：FROM + kt -> (u,v) 以及反变换 */
 function fromDirSpdToUV(dirDeg, spd){
   if(!Number.isFinite(dirDeg)||!Number.isFinite(spd)) return {u:NaN,v:NaN};
-  const r=deg2rad(dirDeg); // from-bearing
-  const u = -spd * Math.sin(r); // 向东+
-  const v = -spd * Math.cos(r); // 向北+
+  const r=deg2rad(dirDeg); /* from-bearing */
+  const u = -spd * Math.sin(r); /* 向东+ */
+  const v = -spd * Math.cos(r); /* 向北+ */
   return {u,v};
 }
 function uvToFromDirSpd(u,v){
@@ -334,7 +369,7 @@ function uvToFromDirSpd(u,v){
   return {dir, spd};
 }
 
-// ===== 全局状态 =====
+/* ===== 全局状态 ===== */
 const state = {
   s1: {dir:null, spd:null, valid:false},
   s2: {trk:null, tas:null, wdir:null, wspd:null, mh:null, gs:null},
@@ -353,7 +388,7 @@ function updateSummary(){
   document.querySelector('#t_fuel').textContent = fmtFuel(state.s4.fuel);
 }
 
-// ===== Step 1：插值 =====
+/* ===== Step 1：插值 ===== */
 function step1Compute(){
   const alt1=parseNum('#s1_alt1');
   const alt2=parseNum('#s1_alt2');
@@ -385,14 +420,14 @@ function step1Compute(){
   document.querySelector('#s1_out_dir').textContent = Number.isFinite(outDir) ? pad3(Math.round(outDir))+'°M' : '—';
   document.querySelector('#s1_out_spd').textContent = Number.isFinite(outSpd) ? Math.round(outSpd)+' kt' : '—';
 
-  // 预填 Step 2 风字段（可编辑；用户覆盖会清空 Step 1）
+  /* 预填 Step 2 风字段（可编辑；用户覆盖会清空 Step 1） */
   if(valid){
     document.querySelector('#s2_wdir').value = Math.round(outDir);
     document.querySelector('#s2_wspd').value = Math.round(outSpd);
   }
   document.querySelector('#s2_wdir_hint').textContent = '已从 Step 1 预填，亦可在此修改（修改将清空 Step 1）。';
 
-  step2Compute(); // 级联
+  step2Compute(); /* 级联 */
 }
 
 function step1Clear(){
@@ -406,11 +441,11 @@ function step1Clear(){
   step2Compute();
 }
 
-// ===== Step 2：MH/GS =====
+/* ===== Step 2：MH/GS ===== */
 function activeWindDir(){ return state.s1.valid ? state.s1.dir : state.s2.wdir; }
 function activeWindSpd(){ return state.s1.valid ? state.s1.spd : state.s2.wspd; }
 
-// 航段模板映射（TRK°M, DIST nm）
+/* 航段模板映射（TRK°M, DIST nm） */
 const LEG_MAP = {
   'RER-YCFS':   { trk:184, dist:21 },
   'YGFN-RER':   { trk:131, dist:17 },
@@ -420,7 +455,7 @@ const LEG_MAP = {
   'YPMQ-YKMP':  { trk:335, dist:22 },
   'YPMQ-YTRE':  { trk:202, dist:33 },
   'YPMQ-YSTW':  { trk:269, dist:107 },
-  'YSTW-YPMQ':  { trk:91,  dist:107 }, // 091° → 填 91 数值即可
+  'YSTW-YPMQ':  { trk:91,  dist:107 },
   'YTRE-YPMQ':  { trk:22,  dist:33 },
   'YCFS-YGFN':  { trk:340, dist:34 }
 };
@@ -459,7 +494,7 @@ function step2Compute(){
   document.querySelector('#s2_out_mh').textContent = fmtDegM(state.s2.mh);
   document.querySelector('#s2_out_gs').textContent = Number.isFinite(state.s2.gs)? Math.round(state.s2.gs)+' kt' : '—';
 
-  step3Compute(); // 级联
+  step3Compute(); /* 级联 */
 }
 
 function step2Clear(){
@@ -471,13 +506,13 @@ function step2Clear(){
   step3Compute();
 }
 
-// Step 2 风编辑→清空 Step 1（避免不一致）
+/* Step 2 风编辑→清空 Step 1（避免不一致） */
 function clearStep1OnWindEdit(){
   const anyFilled = ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].some(sel=>document.querySelector(sel).value.trim()!=='');
   if(state.s1.valid || anyFilled){ step1Clear(); }
 }
 
-// 模板联动 TRK & DIST（支持所有选项）
+/* 模板联动 TRK & DIST（支持所有选项） */
 function applyLegTemplate(v){
   state.flags.applyingLeg = true;
   const leg = LEG_MAP[v];
@@ -489,7 +524,7 @@ function applyLegTemplate(v){
   step2Compute();
 }
 
-// ===== Step 3：ETI =====
+/* ===== Step 3：ETI ===== */
 function step3Compute(){
   state.s3.dist = parseNum('#s3_dist');
   const gs = state.s2.gs;
@@ -499,7 +534,7 @@ function step3Compute(){
   }
   state.s3.eti = Number.isFinite(eti)?eti:null;
   document.querySelector('#s3_out_eti').textContent = fmtMin(state.s3.eti);
-  step4Compute(); // 级联
+  step4Compute(); /* 级联 */
 }
 
 function step3Clear(){
@@ -509,14 +544,14 @@ function step3Clear(){
   step4Compute();
 }
 
-// ===== Step 4：Trip Fuel =====
+/* ===== Step 4：Trip Fuel ===== */
 function step4Compute(){
   const ff = parseNum('#s4_ff');
   state.s4.ff = ff;
   const eti = state.s3.eti;
   let fuel=null;
   if(Number.isFinite(eti) && Number.isFinite(ff)){
-    fuel = Math.ceil(eti/60 * ff); // 向上取整
+    fuel = Math.ceil(eti/60 * ff); /* 向上取整 */
   }
   state.s4.fuel = Number.isFinite(fuel)?fuel:null;
   document.querySelector('#s4_out_fuel').textContent = fmtFuel(state.s4.fuel);
@@ -531,14 +566,13 @@ function step4Clear(){
   updateSummary();
 }
 
-// ===== 事件绑定 =====
+/* ===== 事件绑定 ===== */
 ['#s1_alt1','#s1_alt2'].forEach(sel=>document.querySelector(sel).addEventListener('change', step1Compute));
 ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].forEach(sel=>document.querySelector(sel).addEventListener('input', step1Compute));
 
 document.querySelector('#s1_clear').addEventListener('click', step1Clear);
 
 ['#s2_trk','#s2_tas','#s2_wdir','#s2_wspd'].forEach(sel=>document.querySelector(sel).addEventListener('input', step2Compute));
-// Step 2 风编辑→清空 Step 1
 ['#s2_wdir','#s2_wspd'].forEach(sel=>document.querySelector(sel).addEventListener('input', clearStep1OnWindEdit));
 
 document.querySelector('#s2_clear').addEventListener('click', step2Clear);
@@ -549,17 +583,14 @@ document.querySelector('#tas_template').addEventListener('change', (e)=>{
   const v=e.target.value; if(v){ document.querySelector('#s2_tas').value=v; } else {/* 自定义保留 */}
   step2Compute();
 });
-// 手动改 TAS 则清空模板选择
 document.querySelector('#s2_tas').addEventListener('input', ()=>{ document.querySelector('#tas_template').value=''; });
 
-// Step3：手动改 DIST 则清空 Step2 的航段模板选择（保留其它数据）
 document.querySelector('#s3_dist').addEventListener('input', ()=>{
   if(!state.flags.applyingLeg){ document.querySelector('#leg_template').value=''; }
   step3Compute();
 });
 document.querySelector('#s3_clear').addEventListener('click', step3Clear);
 
-// Step4
 document.querySelector('#ff_template').addEventListener('change', (e)=>{
   const v=e.target.value; if(v){ document.querySelector('#s4_ff').value=v; } else { /* keep custom */ }
   step4Compute();
@@ -567,8 +598,7 @@ document.querySelector('#ff_template').addEventListener('change', (e)=>{
 document.querySelector('#s4_ff').addEventListener('input', ()=>{ document.querySelector('#ff_template').value=''; step4Compute(); });
 document.querySelector('#s4_clear').addEventListener('click', step4Clear);
 
-// ===== 初始渲染 =====
-// 默认：Step2 使用 DA40NG TAS 125 kt，Step4 使用 DA40NG 25 L/h
+/* ===== 初始渲染 ===== */
 (function initDefaults(){
   document.querySelector('#tas_template').value='125';
   document.querySelector('#s2_tas').value='125';
