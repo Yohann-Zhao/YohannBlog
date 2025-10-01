@@ -3,15 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Flight Planning Tool · One-Page (Steps 1–5)</title>
+  <title>Flight Planning Tool · Integrated (Step 1–5)</title>
   <style>
     :root{
       --bg:#0b1020; --panel:#121a2d; --muted:#94a3b8; --text:#e6edf3; --brand:#3b82f6; --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
       --bd:1px solid rgba(148,163,184,.18);
-      --accent1:rgba(59,130,246,.14); /* blue */
-      --accent2:rgba(16,185,129,.14); /* green */
+      --accent1:rgba(59,130,246,.14);
+      --accent2:rgba(16,185,129,.14);
     }
-
     html{-webkit-text-size-adjust:100%;}
     html,body{background:var(--bg); color:var(--text); font:16px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";}
     h1{font-size:clamp(18px,4.3vw,22px);margin:16px 0 14px}
@@ -28,15 +27,17 @@
 
     label{display:block;font-weight:600;margin:2px 0 6px;color:#cbd5e1}
     input[type=number], select{
-      width:100%; box-sizing:border-box; background:#0e162a; color:var(--text); border:var(--bd); border-radius:10px; padding:10px 12px; outline:none;
-      font-size:16px; /* prevent iOS zoom */ min-height:44px;
+      width:100%; box-sizing:border-box; background:#0e162a; color:var(--text);
+      border:var(--bd); border-radius:10px; padding:10px 12px; outline:none;
+      font-size:16px; min-height:44px;
     }
     input::placeholder{color:#64748b}
     .units{opacity:.7;margin-left:6px}
     .hint{font-size:12px;color:var(--muted)}
     .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
     button, .btn{
-      border:var(--bd); background:#0e162a; color:var(--text); padding:10px 14px; border-radius:10px; cursor:pointer; text-decoration:none;
+      border:var(--bd); background:#0e162a; color:var(--text);
+      padding:10px 14px; border-radius:10px; cursor:pointer; text-decoration:none;
       min-height:44px; font-size:16px;
     }
     button.secondary{opacity:.85}
@@ -50,13 +51,11 @@
     .small{font-size:12px;color:var(--muted)}
     .right{margin-left:auto}
 
-    /* grouped blocks */
     .group{border:var(--bd); border-radius:12px; padding:12px; background:rgba(255,255,255,.02)}
     .group--a{background:var(--accent1)}
     .group--b{background:var(--accent2)}
     .group h3{margin:0 0 8px; font-size:13px; letter-spacing:.3px; opacity:.9}
 
-    /* topbar with safe-area + sticky */
     .topbar{
       display:flex;gap:12px;align-items:center;justify-content:space-between;
       background:var(--panel);border:var(--bd);border-radius:14px;
@@ -68,7 +67,6 @@
     .lang a{color:var(--text);text-decoration:none;padding:4px 8px;border-radius:8px}
     .lang a.active{outline:1px solid rgba(148,163,184,.35)}
 
-    /* table: horizontal scroll on small screens */
     .table-wrap{overflow:auto; -webkit-overflow-scrolling:touch; border-radius:12px; border:var(--bd)}
     table{width:100%; border-collapse:separate; border-spacing:0; margin:0}
     th,td{border-top:var(--bd); border-left:var(--bd); padding:10px 12px; text-align:left; white-space:nowrap}
@@ -86,7 +84,6 @@
       letter-spacing:.2px;
     }
 
-    /* —— responsive rules —— */
     @media (max-width: 720px){
       .col-3, .col-4, .col-6{grid-column:span 12}
       .pill .value{font-size:17px}
@@ -100,7 +97,7 @@
 <body>
   <div class="wrap">
     <div class="topbar">
-      <a class="btn" href="flight-training_en.html">← Back to previous page</a>
+      <a class="btn" href="flight-training.html">← Back to previous page</a>
       <div class="lang small">
         <span>Language:</span>
         <a href="integrated-flight-planning-tool.html">中文</a>
@@ -109,16 +106,15 @@
       </div>
     </div>
 
-    <h1>Flight Planning Tool · One-Page (Step 1 → 5)</h1>
+    <h1>Flight Planning Tool · Integrated (Step 1 → 5)</h1>
 
     <!-- Step 1 -->
-    <h2>Step 1 · Linear interpolation: Wind at target altitude <span class="small">(optional — you may jump to Step 2)</span></h2>
+    <h2>Step 1 · Linear interpolation: wind at target altitude <span class="small">(You can skip this and go straight to Step 2)</span></h2>
     <div class="card" id="step1">
       <div class="grid">
-        <!-- Row 1: Level A / B -->
         <div class="col-6">
           <div class="group group--a">
-            <h3>Level A</h3>
+            <h3>Altitude block A</h3>
             <div class="grid">
               <div class="col-6">
                 <label for="s1_alt1">Altitude 1 <span class="units">ft</span></label>
@@ -128,11 +124,11 @@
                 </select>
               </div>
               <div class="col-6">
-                <label for="s1_dir1">Wind Dir 1 (M · from) <span class="units">°</span></label>
+                <label for="s1_dir1">Wind dir 1 (M · from) <span class="units">°</span></label>
                 <input id="s1_dir1" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="e.g. 270.0" />
               </div>
               <div class="col-6">
-                <label for="s1_spd1">Wind Spd 1 <span class="units">kt</span></label>
+                <label for="s1_spd1">Wind spd 1 <span class="units">kt</span></label>
                 <input id="s1_spd1" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 25" />
               </div>
             </div>
@@ -140,7 +136,7 @@
         </div>
         <div class="col-6">
           <div class="group group--b">
-            <h3>Level B</h3>
+            <h3>Altitude block B</h3>
             <div class="grid">
               <div class="col-6">
                 <label for="s1_alt2">Altitude 2 <span class="units">ft</span></label>
@@ -150,71 +146,55 @@
                 </select>
               </div>
               <div class="col-6">
-                <label for="s1_dir2">Wind Dir 2 (M · from) <span class="units">°</span></label>
+                <label for="s1_dir2">Wind dir 2 (M · from) <span class="units">°</span></label>
                 <input id="s1_dir2" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="e.g. 240.0" />
               </div>
               <div class="col-6">
-                <label for="s1_spd2">Wind Spd 2 <span class="units">kt</span></label>
+                <label for="s1_spd2">Wind spd 2 <span class="units">kt</span></label>
                 <input id="s1_spd2" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 35" />
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Row 2: Target altitude block -->
         <div class="col-12">
           <div class="group">
             <label for="s1_target">Target altitude <span class="units">ft</span></label>
             <input id="s1_target" type="number" inputmode="decimal" min="0" step="50" placeholder="e.g. 6500" />
-            <div class="hint">Best within the two levels; if outside, interpolation becomes extrapolation.</div>
+            <div class="hint">Prefer an altitude between A and B; if out of range, result will be an extrapolation.</div>
           </div>
         </div>
 
-        <!-- Row 3: Output line -->
         <div class="col-6">
-          <div class="pill"><h3>Wind Dir at target (M · from)</h3><div class="value" id="s1_out_dir">—</div></div>
+          <div class="pill"><h3>Wind dir at target (M · from)</h3><div class="value" id="s1_out_dir">—</div></div>
         </div>
         <div class="col-6">
-          <div class="pill"><h3>Wind Spd at target</h3><div class="value" id="s1_out_spd">—</div></div>
+          <div class="pill"><h3>Wind spd at target</h3><div class="value" id="s1_out_spd">—</div></div>
         </div>
 
-        <!-- Row 4: warning/note before button -->
         <div class="col-12 note" id="s1_note" aria-live="polite"></div>
 
-        <!-- Row 5: clear button only -->
         <div class="col-12" style="display:flex; justify-content:flex-end; gap:10px">
           <button class="secondary" id="s1_clear" type="button">Clear (Step 1)</button>
         </div>
       </div>
       <div class="small" style="margin-top:10px; opacity:.85">
-        Note: this page intentionally does <em>not</em> provide a True Direction → Magnetic Direction auto-conversion.
-        We encourage you to do the mental math for True→Magnetic during planning — it's a common error-prone step in flight training and worth deliberate practice.
+        Note: This page does not provide a direct True→Magnetic conversion. Doing the mental math for True→Magnetic during planning helps build robust habits (variation/deviation contexts often cause errors). Practice it deliberately 😉
       </div>
     </div>
 
     <div class="sep"></div>
 
     <!-- Step 2 -->
-    <h2>Step 2 · From TRK + wind → compute MH & GS <span class="small">(prefill from Step 1, but editable here)</span></h2>
+    <h2>Step 2 · From TRK + wind → compute MH & GS <span class="small">(Pre-fills from Step 1 when available; you can overwrite here)</span></h2>
     <div class="card" id="step2">
       <div class="bar">
         <div class="row" style="gap:8px;flex-wrap:wrap">
-          <span class="small">Leg templates:</span>
+          <span class="small">Leg template:</span>
           <select id="leg_template">
-            <option value="">— Select Leg Template —</option>
-            <option value="RER-YCFS">RER → YCFS · TRK 184°M · 21nm</option>
-            <option value="YGFN-RER">YGFN → RER · TRK 131°M · 17nm</option>
-            <option value="YKMP-YPMQ">YKMP → YPMQ · TRK 155°M · 22nm</option>
-            <option value="YPMQ-YARM">YPMQ → YARM · TRK 298°M · 84nm</option>
-            <option value="YPMQ-YCFS">YPMQ → YCFS · TRK 359°M · 68nm</option>
-            <option value="YPMQ-YKMP">YPMQ → YKMP · TRK 335°M · 22nm</option>
-            <option value="YPMQ-YTRE">YPMQ → YTRE · TRK 202°M · 33nm</option>
-            <option value="YPMQ-YSTW">YPMQ → YSTW · TRK 269°M · 107nm</option>
-            <option value="YSTW-YPMQ">YSTW → YPMQ · TRK 091°M · 107nm</option>
-            <option value="YTRE-YPMQ">YTRE → YPMQ · TRK 022°M · 33nm</option>
-            <option value="YCFS-YGFN">YCFS → YGFN · TRK 340°M · 34nm</option>
+            <option value="">— Select a leg —</option>
           </select>
-          <span class="small">TAS templates:</span>
+          <span class="small">TAS template:</span>
           <select id="tas_template">
             <option value="125" selected>DA40NG · 125 kt (default)</option>
             <option value="160">DA42 · 160 kt</option>
@@ -226,7 +206,7 @@
 
       <div class="grid tight">
         <div class="col-3">
-          <label for="s2_trk">TRK (mag) <span class="units">°</span></label>
+          <label for="s2_trk">TRK (magnetic) <span class="units">°</span></label>
           <input id="s2_trk" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="e.g. 359" />
         </div>
         <div class="col-3">
@@ -234,17 +214,17 @@
           <input id="s2_tas" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 125" />
         </div>
         <div class="col-3" id="s2_wdir_wrap">
-          <label for="s2_wdir">Wind Dir (M · from) <span class="units">°</span></label>
+          <label for="s2_wdir">Wind dir (M · from) <span class="units">°</span></label>
           <input id="s2_wdir" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="e.g. 340" />
-          <div class="hint" id="s2_wdir_hint">Prefilled from Step 1; editing here will clear Step 1.</div>
+          <div class="hint" id="s2_wdir_hint">Pre-filled from Step 1; editing here clears Step 1.</div>
         </div>
         <div class="col-3" id="s2_wspd_wrap">
-          <label for="s2_wspd">Wind Spd <span class="units">kt</span></label>
+          <label for="s2_wspd">Wind spd <span class="units">kt</span></label>
           <input id="s2_wspd" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 12" />
         </div>
 
         <div class="col-6">
-          <div class="pill"><h3>MH (mag heading)</h3><div class="value" id="s2_out_mh">—</div></div>
+          <div class="pill"><h3>MH (magnetic heading)</h3><div class="value" id="s2_out_mh">—</div></div>
         </div>
         <div class="col-6">
           <div class="pill"><h3>GS (ground speed)</h3><div class="value" id="s2_out_gs">—</div></div>
@@ -259,7 +239,7 @@
     <h2>Step 3 · ETI (Estimated Time Interval)</h2>
     <div class="card" id="step3">
       <div class="bar">
-        <span class="small">DIST syncs with the leg template; if you edit it manually, the leg template selection will be cleared.</span>
+        <span class="small">DIST links to the leg template; manual edits will clear the selection.</span>
         <button class="secondary right" id="s3_clear" type="button">Clear (Step 3)</button>
       </div>
       <div class="grid tight">
@@ -277,11 +257,11 @@
     <div class="sep"></div>
 
     <!-- Step 4 -->
-    <h2>Step 4 · Trip Fuel</h2>
+    <h2>Step 4 · Trip fuel</h2>
     <div class="card" id="step4">
       <div class="bar">
         <div class="row">
-          <span class="small">Fuel flow template (default DA40NG):</span>
+          <span class="small">Fuel flow template (DA40NG default):</span>
           <select id="ff_template">
             <option value="25" selected>DA40NG · 25 L/h (default)</option>
             <option value="45">DA42 · 45 L/h</option>
@@ -292,13 +272,13 @@
       </div>
       <div class="grid tight">
         <div class="col-4">
-          <label for="s4_ff">Fuel Flow <span class="units">L/h</span></label>
+          <label for="s4_ff">Fuel flow <span class="units">L/h</span></label>
           <input id="s4_ff" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 25" />
         </div>
         <div class="col-4">
-          <div class="pill"><h3>Trip Fuel</h3><div class="value" id="s4_out_fuel">—</div></div>
+          <div class="pill"><h3>Trip fuel</h3><div class="value" id="s4_out_fuel">—</div></div>
         </div>
-        <div class="col-4 small" style="display:flex;align-items:center">Trip Fuel = ETI / 60 × Fuel Flow (rounded up to integer L)</div>
+        <div class="col-4 small" style="display:flex;align-items:center">Trip fuel = ETI / 60 × Fuel flow (rounded up to whole litres)</div>
       </div>
     </div>
 
@@ -317,7 +297,7 @@
               <th>GS</th>
               <th>DIST</th>
               <th>ETI</th>
-              <th>Trip Fuel</th>
+              <th>Trip fuel</th>
             </tr>
           </thead>
           <tbody>
@@ -339,7 +319,7 @@
   </div>
 
 <script>
-// ===== Utilities =====
+/* ===== Utilities ===== */
 const deg2rad = d => (d * Math.PI) / 180;
 const rad2deg = r => (r * 180) / Math.PI;
 const norm360 = d => { let x = d % 360; if (x < 0) x += 360; return x; };
@@ -347,16 +327,16 @@ const pad2 = n => String(Math.abs(Math.round(n))).padStart(2,'0');
 const pad3 = n => String(Math.abs(Math.round(n))).padStart(3,'0');
 const fmtDegM = d => Number.isFinite(d) ? pad3(norm360(Math.round(d))) + '\u00B0M' : '—';
 const fmtMin = m => Number.isFinite(m) ? (m<10?m.toFixed(1):Math.round(m)) + ' min' : '—';
-const fmtFuel = x => Number.isFinite(x) ? Math.round(x) + ' L' : '—'; // integer display
+const fmtFuel = x => Number.isFinite(x) ? Math.round(x) + ' L' : '—';
 const fmtWind = (dir, spd) => (Number.isFinite(dir) && Number.isFinite(spd)) ? `${pad3(Math.round(norm360(dir)))}M/${pad2(spd)}kt` : '—';
 function parseNum(id){ const el=document.querySelector(id); const v=parseFloat(el.value); return Number.isFinite(v)?v:null; }
 
-// Wind conversions: FROM + kt -> (u,v) and back
+/* Met wind (FROM) in (u,v) and back */
 function fromDirSpdToUV(dirDeg, spd){
   if(!Number.isFinite(dirDeg)||!Number.isFinite(spd)) return {u:NaN,v:NaN};
   const r=deg2rad(dirDeg);
-  const u = -spd * Math.sin(r); // east +
-  const v = -spd * Math.cos(r); // north +
+  const u = -spd * Math.sin(r);
+  const v = -spd * Math.cos(r);
   return {u,v};
 }
 function uvToFromDirSpd(u,v){
@@ -365,7 +345,7 @@ function uvToFromDirSpd(u,v){
   return {dir, spd};
 }
 
-// ===== Global state =====
+/* ===== Global state ===== */
 const state = {
   s1: {dir:null, spd:null, valid:false},
   s2: {trk:null, tas:null, wdir:null, wspd:null, mh:null, gs:null},
@@ -384,7 +364,7 @@ function updateSummary(){
   document.querySelector('#t_fuel').textContent = fmtFuel(state.s4.fuel);
 }
 
-// ===== Step 1 =====
+/* ===== Step 1: Interpolation ===== */
 function step1Compute(){
   const alt1=parseNum('#s1_alt1');
   const alt2=parseNum('#s1_alt2');
@@ -400,7 +380,7 @@ function step1Compute(){
 
   if([alt1,alt2,d1,s1,d2,s2,at].every(v=>v!==null)){
     if(alt1===alt2){ noteEl.textContent='⚠️ Altitude 1 and 2 cannot be the same.'; }
-    else if(s1<0||s2<0){ noteEl.textContent='⚠️ Wind speed must be non-negative.'; }
+    else if(s1<0||s2<0){ noteEl.textContent='⚠️ Wind speed must be non‑negative.'; }
     else{
       const {u:u1,v:v1}=fromDirSpdToUV(norm360(d1),s1);
       const {u:u2,v:v2}=fromDirSpdToUV(norm360(d2),s2);
@@ -413,37 +393,65 @@ function step1Compute(){
     }
   }
   state.s1 = {dir: outDir, spd: outSpd, valid};
-  document.querySelector('#s1_out_dir').textContent = Number.isFinite(outDir) ? `${pad3(Math.round(outDir))}°M` : '—';
+  document.querySelector('#s1_out_dir').textContent = Number.isFinite(outDir) ? pad3(Math.round(outDir))+'°M' : '—';
   document.querySelector('#s1_out_spd').textContent = Number.isFinite(outSpd) ? Math.round(outSpd)+' kt' : '—';
 
-  // Prefill Step 2 wind fields (editable; user edits will clear Step 1)
   if(valid){
     document.querySelector('#s2_wdir').value = Math.round(outDir);
     document.querySelector('#s2_wspd').value = Math.round(outSpd);
   }
-  document.querySelector('#s2_wdir_hint').textContent = 'Prefilled from Step 1; editing here will clear Step 1.';
+  document.querySelector('#s2_wdir_hint').textContent = 'Pre-filled from Step 1; editing here clears Step 1.';
 
   step2Compute();
 }
 
-// ===== Step 2 =====
+function step1Clear(){
+  ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].forEach(id=>document.querySelector(id).value='');
+  document.querySelector('#s1_alt1').value='7000';
+  document.querySelector('#s1_alt2').value='1000';
+  document.querySelector('#s1_note').textContent='';
+  state.s1={dir:null,spd:null,valid:false};
+  document.querySelector('#s1_out_dir').textContent='—';
+  document.querySelector('#s1_out_spd').textContent='—';
+  step2Compute();
+}
+
+/* ===== Step 2: MH/GS ===== */
 function activeWindDir(){ return state.s1.valid ? state.s1.dir : state.s2.wdir; }
 function activeWindSpd(){ return state.s1.valid ? state.s1.spd : state.s2.wspd; }
 
-// Leg template map (TRK°M, DIST nm)
-const LEG_MAP = {
-  'RER-YCFS':   { trk:184, dist:21 },
-  'YGFN-RER':   { trk:131, dist:17 },
-  'YKMP-YPMQ':  { trk:155, dist:22 },
-  'YPMQ-YARM':  { trk:298, dist:84 },
-  'YPMQ-YCFS':  { trk:359, dist:68 },
-  'YPMQ-YKMP':  { trk:335, dist:22 },
-  'YPMQ-YTRE':  { trk:202, dist:33 },
-  'YPMQ-YSTW':  { trk:269, dist:107 },
-  'YSTW-YPMQ':  { trk:91,  dist:107 },
-  'YTRE-YPMQ':  { trk:22,  dist:33 },
-  'YCFS-YGFN':  { trk:340, dist:34 }
-};
+/* ★ Single source: Leg templates (edit here only) */
+const LEG_DATA = [
+  { id:'YPMQ-YCFS', from:'YPMQ', to:'YCFS', trk:359, dist:68 },
+  { id:'YCFS-YPMQ', from:'YCFS', to:'YPMQ', trk:179, dist:68 },
+  { id:'YCFS-YGFN', from:'YCFS', to:'YGFN', trk:340, dist:34 },
+  { id:'YGFN-YCFS', from:'YGFN', to:'YCFS', trk:160, dist:34 },
+  { id:'YGFN-RER',  from:'YGFN', to:'RER',  trk:131, dist:17 },
+  { id:'RER-YCFS',  from:'RER',  to:'YCFS', trk:184, dist:21 },
+  { id:'YPMQ-YSTW', from:'YPMQ', to:'YSTW', trk:269, dist:107},
+  { id:'YSTW-YPMQ', from:'YSTW', to:'YPMQ', trk:91,  dist:107},
+  { id:'PMQ-TW', from:'PMQ', to:'TW', trk:269, dist:107},
+  { id:'TW-PMQ', from:'TW', to:'PMQ', trk:91,  dist:107},
+  { id:'YPMQ-YARM', from:'YPMQ', to:'YARM', trk:298, dist:84 },
+  { id:'YARM-YPMQ', from:'YARM', to:'YPMQ', trk:119, dist:84 },
+  { id:'YPMQ-YTRE', from:'YPMQ', to:'YTRE', trk:202, dist:33 },
+  { id:'YTRE-YPMQ', from:'YTRE', to:'YPMQ', trk:22,  dist:33 },
+  { id:'YPMQ-YKMP', from:'YPMQ', to:'YKMP', trk:335, dist:22 },
+  { id:'YKMP-YPMQ', from:'YKMP', to:'YPMQ', trk:155, dist:22 },
+];
+
+const LEG_INDEX = Object.fromEntries(LEG_DATA.map(l => [l.id, l]));
+
+function populateLegOptions(){
+  const sel = document.querySelector('#leg_template');
+  while(sel.options.length > 1) sel.remove(1);
+  for(const leg of LEG_DATA){
+    const opt = document.createElement('option');
+    opt.value = leg.id;
+    opt.textContent = `${leg.from} → ${leg.to} · TRK ${leg.trk}°M · ${leg.dist}nm`;
+    sel.appendChild(opt);
+  }
+}
 
 function step2Compute(){
   state.s2.trk = parseNum('#s2_trk');
@@ -465,7 +473,7 @@ function step2Compute(){
       const head = wspd * Math.cos(d);
       const ratio = Math.abs(cross) / tas;
       if(ratio>1){
-        noteEl.textContent = '⚠️ Crosswind exceeds TAS; cannot hold the planned TRK.';
+        noteEl.textContent = '⚠️ Crosswind exceeds TAS; maintaining this TRK is not possible.';
       } else {
         const drift = Math.asin(cross / tas);
         mh = norm360(trk - rad2deg(drift));
@@ -482,17 +490,6 @@ function step2Compute(){
   step3Compute();
 }
 
-function step1Clear(){
-  ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].forEach(id=>document.querySelector(id).value='');
-  document.querySelector('#s1_alt1').value='7000';
-  document.querySelector('#s1_alt2').value='1000';
-  document.querySelector('#s1_note').textContent='';
-  state.s1={dir:null,spd:null,valid:false};
-  document.querySelector('#s1_out_dir').textContent='—';
-  document.querySelector('#s1_out_spd').textContent='—';
-  step2Compute();
-}
-
 function step2Clear(){
   ['#s2_trk','#s2_tas','#s2_wdir','#s2_wspd'].forEach(id=>document.querySelector(id).value='');
   document.querySelector('#leg_template').value='';
@@ -502,16 +499,14 @@ function step2Clear(){
   step3Compute();
 }
 
-// Step 2 wind edit → clear Step 1 (avoid inconsistency)
 function clearStep1OnWindEdit(){
   const anyFilled = ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].some(sel=>document.querySelector(sel).value.trim()!=='');
   if(state.s1.valid || anyFilled){ step1Clear(); }
 }
 
-// Template linkage: TRK & DIST (covers all options)
 function applyLegTemplate(v){
   state.flags.applyingLeg = true;
-  const leg = LEG_MAP[v];
+  const leg = LEG_INDEX[v];
   if(leg){
     document.querySelector('#s2_trk').value  = String(leg.trk);
     document.querySelector('#s3_dist').value = String(leg.dist);
@@ -520,7 +515,7 @@ function applyLegTemplate(v){
   step2Compute();
 }
 
-// ===== Step 3 =====
+/* ===== Step 3: ETI ===== */
 function step3Compute(){
   state.s3.dist = parseNum('#s3_dist');
   const gs = state.s2.gs;
@@ -540,14 +535,14 @@ function step3Clear(){
   step4Compute();
 }
 
-// ===== Step 4 =====
+/* ===== Step 4: Trip fuel ===== */
 function step4Compute(){
   const ff = parseNum('#s4_ff');
   state.s4.ff = ff;
   const eti = state.s3.eti;
   let fuel=null;
   if(Number.isFinite(eti) && Number.isFinite(ff)){
-    fuel = Math.ceil(eti/60 * ff); // round up
+    fuel = Math.ceil(eti/60 * ff);
   }
   state.s4.fuel = Number.isFinite(fuel)?fuel:null;
   document.querySelector('#s4_out_fuel').textContent = fmtFuel(state.s4.fuel);
@@ -562,14 +557,13 @@ function step4Clear(){
   updateSummary();
 }
 
-// ===== Bindings =====
+/* ===== Event bindings ===== */
 ['#s1_alt1','#s1_alt2'].forEach(sel=>document.querySelector(sel).addEventListener('change', step1Compute));
 ['#s1_dir1','#s1_spd1','#s1_dir2','#s1_spd2','#s1_target'].forEach(sel=>document.querySelector(sel).addEventListener('input', step1Compute));
 
 document.querySelector('#s1_clear').addEventListener('click', step1Clear);
 
 ['#s2_trk','#s2_tas','#s2_wdir','#s2_wspd'].forEach(sel=>document.querySelector(sel).addEventListener('input', step2Compute));
-// Step 2 wind edit → clear Step 1
 ['#s2_wdir','#s2_wspd'].forEach(sel=>document.querySelector(sel).addEventListener('input', clearStep1OnWindEdit));
 
 document.querySelector('#s2_clear').addEventListener('click', step2Clear);
@@ -577,20 +571,19 @@ document.querySelector('#s2_clear').addEventListener('click', step2Clear);
 document.querySelector('#leg_template').addEventListener('change', (e)=>applyLegTemplate(e.target.value));
 
 document.querySelector('#tas_template').addEventListener('change', (e)=>{
-  const v=e.target.value; if(v){ document.querySelector('#s2_tas').value=v; } else {/* keep custom */}
+  const v=e.target.value; if(v){ document.querySelector('#s2_tas').value=v; } else {/* custom */}
   step2Compute();
 });
-// Manual TAS edit clears TAS template selection
 document.querySelector('#s2_tas').addEventListener('input', ()=>{ document.querySelector('#tas_template').value=''; });
 
-// Step3: manual DIST edit clears leg template selection (keep other fields)
+/* Step3: manual DIST edit clears leg selection (but keeps other fields) */
 document.querySelector('#s3_dist').addEventListener('input', ()=>{
   if(!state.flags.applyingLeg){ document.querySelector('#leg_template').value=''; }
   step3Compute();
 });
 document.querySelector('#s3_clear').addEventListener('click', step3Clear);
 
-// Step4
+/* Step4 */
 document.querySelector('#ff_template').addEventListener('change', (e)=>{
   const v=e.target.value; if(v){ document.querySelector('#s4_ff').value=v; } else { /* keep custom */ }
   step4Compute();
@@ -598,13 +591,13 @@ document.querySelector('#ff_template').addEventListener('change', (e)=>{
 document.querySelector('#s4_ff').addEventListener('input', ()=>{ document.querySelector('#ff_template').value=''; step4Compute(); });
 document.querySelector('#s4_clear').addEventListener('click', step4Clear);
 
-// ===== Init defaults =====
-// Default: Step2 DA40NG TAS 125 kt, Step4 DA40NG 25 L/h
+/* ===== Init ===== */
 (function initDefaults(){
   document.querySelector('#tas_template').value='125';
   document.querySelector('#s2_tas').value='125';
   document.querySelector('#ff_template').value='25';
   document.querySelector('#s4_ff').value='25';
+  populateLegOptions();
 })();
 
 step1Compute();

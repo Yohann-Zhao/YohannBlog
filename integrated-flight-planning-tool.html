@@ -206,17 +206,7 @@
           <span class="small">航段模板：</span>
           <select id="leg_template">
             <option value="">— 选择航段模板 —</option>
-            <option value="RER-YCFS">RER → YCFS · TRK 184°M · 21nm</option>
-            <option value="YGFN-RER">YGFN → RER · TRK 131°M · 17nm</option>
-            <option value="YKMP-YPMQ">YKMP → YPMQ · TRK 155°M · 22nm</option>
-            <option value="YPMQ-YARM">YPMQ → YARM · TRK 298°M · 84nm</option>
-            <option value="YPMQ-YCFS">YPMQ → YCFS · TRK 359°M · 68nm</option>
-            <option value="YPMQ-YKMP">YPMQ → YKMP · TRK 335°M · 22nm</option>
-            <option value="YPMQ-YTRE">YPMQ → YTRE · TRK 202°M · 33nm</option>
-            <option value="YPMQ-YSTW">YPMQ → YSTW · TRK 269°M · 107nm</option>
-            <option value="YSTW-YPMQ">YSTW → YPMQ · TRK 091°M · 107nm</option>
-            <option value="YTRE-YPMQ">YTRE → YPMQ · TRK 022°M · 33nm</option>
-            <option value="YCFS-YGFN">YCFS → YGFN · TRK 340°M · 34nm</option>
+            <!-- 其余选项由 JS 根据单一数据源动态注入 -->
           </select>
           <span class="small">TAS 模板：</span>
           <select id="tas_template">
@@ -445,20 +435,41 @@ function step1Clear(){
 function activeWindDir(){ return state.s1.valid ? state.s1.dir : state.s2.wdir; }
 function activeWindSpd(){ return state.s1.valid ? state.s1.spd : state.s2.wspd; }
 
-/* 航段模板映射（TRK°M, DIST nm） */
-const LEG_MAP = {
-  'RER-YCFS':   { trk:184, dist:21 },
-  'YGFN-RER':   { trk:131, dist:17 },
-  'YKMP-YPMQ':  { trk:155, dist:22 },
-  'YPMQ-YARM':  { trk:298, dist:84 },
-  'YPMQ-YCFS':  { trk:359, dist:68 },
-  'YPMQ-YKMP':  { trk:335, dist:22 },
-  'YPMQ-YTRE':  { trk:202, dist:33 },
-  'YPMQ-YSTW':  { trk:269, dist:107 },
-  'YSTW-YPMQ':  { trk:91,  dist:107 },
-  'YTRE-YPMQ':  { trk:22,  dist:33 },
-  'YCFS-YGFN':  { trk:340, dist:34 }
-};
+/* ★ 单一数据源：航段模板（在此增删改） */
+const LEG_DATA = [
+  { id:'YPMQ-YCFS', from:'YPMQ', to:'YCFS', trk:359, dist:68 },
+  { id:'YCFS-YPMQ', from:'YCFS', to:'YPMQ', trk:179, dist:68 },
+  { id:'YCFS-YGFN', from:'YCFS', to:'YGFN', trk:340, dist:34 },
+  { id:'YGFN-YCFS', from:'YGFN', to:'YCFS', trk:160, dist:34 },
+  { id:'YGFN-RER',  from:'YGFN', to:'RER',  trk:131, dist:17 },
+  { id:'RER-YCFS',  from:'RER',  to:'YCFS', trk:184, dist:21 },
+  { id:'YPMQ-YSTW', from:'YPMQ', to:'YSTW', trk:269, dist:107},
+  { id:'YSTW-YPMQ', from:'YSTW', to:'YPMQ', trk:91,  dist:107},
+  { id:'PMQ-TW', from:'PMQ', to:'TW', trk:269, dist:107},
+  { id:'TW-PMQ', from:'TW', to:'PMQ', trk:91,  dist:107},
+  { id:'YPMQ-YARM', from:'YPMQ', to:'YARM', trk:298, dist:84 },
+  { id:'YARM-YPMQ', from:'YARM', to:'YPMQ', trk:119, dist:84 },
+  { id:'YPMQ-YTRE', from:'YPMQ', to:'YTRE', trk:202, dist:33 },
+  { id:'YTRE-YPMQ', from:'YTRE', to:'YPMQ', trk:22,  dist:33 },
+  { id:'YPMQ-YKMP', from:'YPMQ', to:'YKMP', trk:335, dist:22 },
+  { id:'YKMP-YPMQ', from:'YKMP', to:'YPMQ', trk:155, dist:22 },
+];
+
+/* 建立索引，便于查找 */
+const LEG_INDEX = Object.fromEntries(LEG_DATA.map(l => [l.id, l]));
+
+/* 动态渲染下拉选项 */
+function populateLegOptions(){
+  const sel = document.querySelector('#leg_template');
+  // 先清理除第一项外的所有选项
+  while(sel.options.length > 1) sel.remove(1);
+  for(const leg of LEG_DATA){
+    const opt = document.createElement('option');
+    opt.value = leg.id;
+    opt.textContent = `${leg.from} → ${leg.to} · TRK ${leg.trk}°M · ${leg.dist}nm`;
+    sel.appendChild(opt);
+  }
+}
 
 function step2Compute(){
   state.s2.trk = parseNum('#s2_trk');
@@ -512,10 +523,10 @@ function clearStep1OnWindEdit(){
   if(state.s1.valid || anyFilled){ step1Clear(); }
 }
 
-/* 模板联动 TRK & DIST（支持所有选项） */
+/* 模板联动 TRK & DIST（来源于单一数据源） */
 function applyLegTemplate(v){
   state.flags.applyingLeg = true;
-  const leg = LEG_MAP[v];
+  const leg = LEG_INDEX[v];
   if(leg){
     document.querySelector('#s2_trk').value  = String(leg.trk);
     document.querySelector('#s3_dist').value = String(leg.dist);
@@ -585,12 +596,14 @@ document.querySelector('#tas_template').addEventListener('change', (e)=>{
 });
 document.querySelector('#s2_tas').addEventListener('input', ()=>{ document.querySelector('#tas_template').value=''; });
 
+/* Step3：手动 DIST 编辑会清空航段模板选择（但不改动其它字段） */
 document.querySelector('#s3_dist').addEventListener('input', ()=>{
   if(!state.flags.applyingLeg){ document.querySelector('#leg_template').value=''; }
   step3Compute();
 });
 document.querySelector('#s3_clear').addEventListener('click', step3Clear);
 
+/* Step4 */
 document.querySelector('#ff_template').addEventListener('change', (e)=>{
   const v=e.target.value; if(v){ document.querySelector('#s4_ff').value=v; } else { /* keep custom */ }
   step4Compute();
@@ -604,6 +617,7 @@ document.querySelector('#s4_clear').addEventListener('click', step4Clear);
   document.querySelector('#s2_tas').value='125';
   document.querySelector('#ff_template').value='25';
   document.querySelector('#s4_ff').value='25';
+  populateLegOptions(); // 动态注入航段模板
 })();
 
 step1Compute();
