@@ -17,158 +17,314 @@
   </script>
 
   <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #12182b;
-      --text: #e6e8ef;
-      --muted: #a9b0c7;
-      --brand: #6ea8fe;
-      --brand-2: #9cc7ff;
-      --warn: #ffcb6b;
-      --danger: #ff6b6b;
-      --ok: #6ea8fe;
-      --mark: #ffee88;
-      --card: #0f1526;
-      --border: rgba(255,255,255,.08);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 15px;
+    /* ===== Light Blue Theme (Modern) ===== */
+    :root{
+      /* Core palette */
+      --bg: #f5f9ff;               /* page background */
+      --bg-1: #eef5ff;             /* subtle gradient stop */
+      --panel: #ffffff;            /* controls/cards base */
+      --card: #ffffff;
+      --text: #1f2a44;             /* primary text */
+      --muted: #5b6b80;            /* secondary text */
+      --brand: #1976d2;            /* primary blue */
+      --brand-2: #64b5f6;          /* softer blue for accents */
+      --warn: #f59e0b;             /* amber */
+      --danger: #ef4444;           /* red */
+      --ok: #0ea5e9;               /* cyan/ok */
+
+      /* UI tokens */
+      --border: #e6eef8;           /* light borders */
+      --border-dashed: #d7e5fb;    /* dashed variant */
+      --shadow: 0 8px 28px rgba(25, 118, 210, .12), 0 2px 10px rgba(15, 23, 42, .06);
+      --radius: 16px;
       --fs-base: 16px;
       --maxw: 980px;
+
+      /* Appbar offset */
+      --appbarH: 84px;
+
+      /* Scrollbar (TOC) */
+      --scrollbar-track: #f1f6ff;
+      --scrollbar-thumb: #c9ddfb;
+      --scrollbar-thumb-hover: #aaceff;
     }
-    :root { --appbarH: 84px; }
     [id]{ scroll-margin-top: var(--appbarH, 84px); }
     html { font-size: var(--fs-base); }
-    body {
+    body{
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      background: linear-gradient(180deg, var(--bg), #0a0f1e 60%);
       color: var(--text);
+      /* Soft blue airy background */
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #eaf3ff 0%, rgba(234,243,255,0) 60%),
+        radial-gradient(800px 520px at 95% -10%, #f0f7ff 0%, rgba(240,247,255,0) 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-1) 60%, #f7fbff 100%);
     }
 
-    header.appbar {
+    /* App Bar */
+    header.appbar{
       position: sticky; top: 0; z-index: 100;
       backdrop-filter: saturate(150%) blur(10px);
-      background: linear-gradient(90deg, rgba(14,18,34,.85), rgba(14,18,34,.6));
+      background: rgba(255,255,255,.86);
       border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 18px rgba(30, 64, 175, .08);
     }
-    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 10px 16px; }
-    .appbar .row { display: grid; grid-template-columns: 1fr; gap: 8px; align-items: center; }
+    .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 10px 16px; }
+    .appbar .row{ display: grid; grid-template-columns: 1fr; gap: 8px; align-items: center; }
 
+    /* Title */
     h1.title{
-      font-size: clamp(17px, 1.1rem + 0.4vw, 22px);
+      font-size: clamp(18px, 1.1rem + 0.4vw, 22px);
       margin: 0; letter-spacing: .2px; line-height: 1.1;
       display: inline-flex; align-items: baseline; gap: 10px; flex-wrap: nowrap;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis; justify-self: start;
     }
     h1.title .author{
       font-size: 0.8em; color: var(--muted); font-weight: 700;
-      border: 1px solid var(--border); padding: 2px 8px; border-radius: 999px;
-      background: rgba(255,255,255,.04); white-space: nowrap;
+      border: 1px solid var(--border); padding: 2px 10px; border-radius: 999px;
+      background: #f8fbff;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: box-shadow .15s ease, border-color .15s ease, transform .02s ease;
     }
+    h1.title .author:hover{
+      border-color: #cfe0fb;
+      box-shadow: 0 6px 16px rgba(25,118,210,.12);
+    }
+    h1.title .author:active{ transform: translateY(1px); }
 
-    .controls {
+    /* Controls */
+    .controls{
       isolation: isolate; display: grid;
       grid-template-columns: auto 1fr auto;
       align-items: center; gap: 10px; width: 100%;
     }
     .controls > * { position: relative; z-index: 1; }
-    .search { z-index: 0; position: relative; min-width: 0; }
-    .search input {
+    .chip, button, .toggle, select{
+      background: var(--panel); color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 999px; padding: 8px 12px;
+      box-shadow: var(--shadow); font-weight: 600; cursor: pointer;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .02s ease;
+    }
+    .chip:hover, button:hover, select:hover{ border-color: #cfe0fb; }
+    .chip:active, button:active{ transform: translateY(1px); }
+    .chip:focus-visible, button:focus-visible, select:focus-visible{
+      outline: 3px solid rgba(25,118,210,.25); outline-offset: 2px;
+    }
+
+    /* Search */
+    .search{ z-index: 0; position: relative; min-width: 0; }
+    .search input{
       width: 100%; background: var(--panel); color: var(--text);
       border: 1px solid var(--border); outline: none;
       padding: 10px 12px 10px 36px; border-radius: 999px; box-shadow: var(--shadow);
       background-clip: padding-box;
     }
-    .search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: .65; pointer-events: none; }
-    .chip, button, .toggle, select {
-      background: var(--panel); color: var(--text);
-      border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow);
-      font-weight: 600; cursor: pointer;
-    }
+    .search input::placeholder{ color: #7d8aa4; }
+    .search svg{ position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: .7; pointer-events: none; color: #5d90da; }
 
-    #toc-select {
+    /* TOC / Layout */
+    #toc-select{
       min-width: 112px; width: max-content; max-width: 34vw;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       position: relative; z-index: 2; appearance: none; padding-right: 28px;
     }
-
-    .grid { display: grid; grid-template-columns: 1fr; gap: 18px; padding: 16px; }
-    @media (min-width: 920px) {
-      .appbar .row { grid-template-columns: 1fr auto; }
-      h1.title { justify-self: start; }
-      .grid { grid-template-columns: 260px 1fr; align-items: start; }
+    .grid{ display: grid; grid-template-columns: 1fr; gap: 18px; padding: 16px; }
+    @media (min-width: 920px){
+      .appbar .row{ grid-template-columns: 1fr auto; }
+      h1.title{ justify-self: start; }
+      .grid{ grid-template-columns: 260px 1fr; align-items: start; }
     }
 
-    nav.toc { position: sticky; top: 68px; align-self: start; background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 12px; box-shadow: var(--shadow); }
-    nav.toc h2 { margin: 6px 8px 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; }
-    nav.toc a { display: block; padding: 8px 10px; margin: 4px 0; text-decoration: none; color: var(--text); border-radius: 10px; border: 1px dashed transparent; }
-    nav.toc a:hover { background: linear-gradient(90deg, rgba(111,168,255,.12), transparent); border-color: var(--border); }
-    nav.toc .sub { margin-left: 10px; font-size: .94em; color: var(--muted); }
-    nav.toc .sub2 { margin-left: 22px; font-size: .90em; color: var(--muted); }
+    nav.toc{
+      position: sticky; top: 68px; align-self: start;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px; box-shadow: var(--shadow);
+      max-height: calc(100vh - 96px); overflow: auto;
 
-    #toc-select { display: none; }
-    @media (max-width: 919px) {
+      /* Scrollbar theming */
+      scrollbar-gutter: stable; /* avoid layout shift when scrollbar shows */
+      scrollbar-width: thin;    /* Firefox */
+      scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Firefox */
+    }
+    /* Chrome/Edge/WebKit */
+    nav.toc::-webkit-scrollbar{ width: 10px; }
+    nav.toc::-webkit-scrollbar-track{
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+    nav.toc::-webkit-scrollbar-thumb{
+      background: linear-gradient(180deg, var(--scrollbar-thumb), #b7d2ff);
+      border-radius: 10px;
+      border: 2px solid var(--scrollbar-track);
+    }
+    nav.toc::-webkit-scrollbar-thumb:hover{
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    nav.toc h2{ margin: 6px 8px 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; }
+    nav.toc a{
+      display: block; padding: 8px 10px; margin: 4px 0; text-decoration: none; color: var(--text);
+      border-radius: 10px; border: 1px dashed transparent;
+    }
+    nav.toc a:hover{
+      background: linear-gradient(90deg, rgba(25,118,210,.10), rgba(25,118,210,0) 85%);
+      border-color: var(--border-dashed);
+    }
+    nav.toc .sub { margin-left: 10px; font-size: .94em; color: var(--muted); }
+    nav.toc .sub2{ margin-left: 22px; font-size: .90em; color: var(--muted); }
+
+    /* Mobile TOC */
+    #toc-select{ display: none; }
+    @media (max-width: 919px){
       header.appbar .wrap{ padding: 6px 12px; }
       h1.title{ font-size: 18px; gap: 8px; justify-self: center; text-align: center; }
       h1.title .author{ font-size: 0.74em; padding: 1px 6px; }
-      nav.toc { display: none !important; }
-      #toc-select { display: inline-flex; font-size: 14px; }
-      .controls { gap: 8px; grid-template-columns: auto minmax(120px, 1fr) minmax(96px, max-content); }
-      #toc-select { max-width: 30vw; }
-      .search input { padding: 8px 10px 8px 30px; }
+      nav.toc{ display: none !important; }
+      #toc-select{ display: inline-flex; font-size: 14px; }
+      .controls{ gap: 8px; grid-template-columns: auto minmax(120px, 1fr) minmax(96px, max-content); }
+      #toc-select{ max-width: 30vw; }
+      .search input{ padding: 8px 10px 8px 30px; }
       button#go-back{ padding: 6px 10px; font-size: 14px; }
     }
-    @media (max-width: 420px) {
-      .controls { grid-template-columns: auto minmax(110px, 1fr) minmax(92px, max-content); gap: 6px; }
-      #toc-select { max-width: 28vw; }
+    @media (max-width: 420px){
+      .controls{ grid-template-columns: auto minmax(110px, 1fr) minmax(92px, max-content); gap: 6px; }
+      #toc-select{ max-width: 28vw; }
     }
 
-    section.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
-    section.card h2 { margin-top: 0; display: flex; align-items: center; gap: 10px; }
-    section.card h3 { margin-top: 1.2em; }
-    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,.06); font-size: .85em; color: var(--brand); }
-    .tag { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: .78em; letter-spacing: .12em; }
-    .warn { color: var(--warn); font-weight: 700; }
-    .danger { color: var(--danger); font-weight: 700; }
-    .ok { color: var(--ok); font-weight: 700; }
-    .muted { color: var(--muted); }
-    .kv { display: grid; grid-template-columns: 1fr; gap: 8px; }
-    @media (min-width: 720px) { .kv { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    ul.check { list-style: none; padding: 0; margin: .25rem 0 1rem; }
-    ul.check li { padding: 6px 8px; border-left: 3px solid transparent; }
-    ul.check li + li { border-top: 1px dashed var(--border); }
-    ul.check li[data-type="flow"] { border-left-color: var(--brand); }
-    ul.check li[data-type="callout"] { border-left-color: var(--warn); background: linear-gradient(90deg, rgba(255,203,107,.12), transparent); }
+    /* Cards / Content */
+    section.card{
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
+    }
+    section.card h2{ margin-top: 0; display: flex; align-items: center; gap: 10px; }
+    section.card h3{ margin-top: 1.1em; }
+    .badge{
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: #f4f9ff; font-size: .85em; color: var(--brand); font-weight: 700;
+    }
+    .tag{ color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: .78em; letter-spacing: .12em; }
+    .warn{ color: var(--warn); font-weight: 700; }
+    .danger{ color: var(--danger); font-weight: 700; }
+    .ok{ color: var(--ok); font-weight: 700; }
+    .muted{ color: var(--muted); }
 
-    details { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; background: linear-gradient(180deg, rgba(255,255,255,.02), transparent); }
-    details > summary { cursor: pointer; font-weight: 700; list-style: none; }
-    details[open] { background: linear-gradient(180deg, rgba(110,168,254,.08), transparent); }
+    .kv{ display: grid; grid-template-columns: 1fr; gap: 8px; }
+    @media (min-width: 720px){ .kv{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
 
-    table { width: 100%; border-collapse: collapse; margin: .5rem 0 1rem; }
-    th, td { border: 1px dashed var(--border); padding: 8px 10px; text-align: left; }
-    th { color: var(--muted); font-weight: 700; }
-    td strong { white-space: nowrap; }
+    ul.check{ list-style: none; padding: 0; margin: .25rem 0 1rem; }
+    ul.check li{ padding: 6px 8px; border-left: 3px solid transparent; }
+    ul.check li + li{ border-top: 1px dashed var(--border); }
+    ul.check li[data-type="flow"]{ border-left-color: var(--brand); background: linear-gradient(90deg, rgba(25,118,210,.08), transparent); }
+    ul.check li[data-type="callout"]{ border-left-color: var(--warn); background: linear-gradient(90deg, rgba(245,158,11,.14), transparent); }
 
-    footer { color: var(--muted); text-align: center; padding: 24px; }
+    details{
+      border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px;
+      background: linear-gradient(180deg, rgba(25,118,210,.04), rgba(255,255,255,0));
+    }
+    details > summary{ cursor: pointer; font-weight: 700; list-style: none; }
+    details[open]{ background: linear-gradient(180deg, rgba(100,181,246,.16), rgba(255,255,255,0)); }
 
-    mark.hl { background: rgba(110,168,254,.35); color: #fff; padding: 0 .15em; border-radius: .2em; box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset; }
+    /* Tables */
+    table{ width: 100%; border-collapse: collapse; margin: .5rem 0 1rem; }
+    th, td{ border: 1px dashed var(--border-dashed); padding: 8px 10px; text-align: left; }
+    th{ color: var(--muted); font-weight: 700; background: #f7fbff; }
+    td strong{ white-space: nowrap; }
 
-    .topbtn { position: fixed; bottom: 18px; right: 18px; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; box-shadow: var(--shadow); background: var(--panel); border: 1px solid var(--border); cursor: pointer; opacity: .9; }
+    /* Links & marks (GLOBAL) */
+    a{ color: var(--brand); }
+    mark.hl{
+      background: rgba(25,118,210,.22);
+      color: inherit; padding: 0 .15em; border-radius: .2em;
+      box-shadow: 0 0 0 1px rgba(25,118,210,.18) inset;
+    }
 
-    nav.toc { max-height: calc(100vh - 96px); overflow: auto; }
-    nav.toc details { margin: 6px 0; border: 1px dashed var(--border); border-radius: 10px; padding: 4px; background: rgba(255,255,255,.02); }
-    nav.toc summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; }
-    nav.toc summary::-webkit-details-marker { display: none; }
-    nav.toc summary a { flex: 1; text-decoration: none; color: var(--text); }
-    nav.toc details[open] { background: linear-gradient(180deg, rgba(110,168,254,.08), transparent); }
+    /* ==== STRONGER HOVER FOR ALL CLICKABLES IN MAIN ==== */
+    /* 1) Links */
+    main a[href]{
+      position: relative;
+      text-decoration: underline;
+      text-decoration-thickness: 0.06em;
+      text-underline-offset: 0.18em;
+      text-decoration-color: rgba(25,118,210,.35);
+      border-radius: .35em;
+      padding: 0 2px;
+      transition: color .15s ease, text-decoration-color .15s ease, text-decoration-thickness .15s ease, box-shadow .15s ease, transform .06s ease, background-color .15s ease;
+    }
+    main a[href]:hover{
+      color: #0f5fb3;
+      text-decoration-thickness: .14em;
+      text-decoration-color: rgba(25,118,210,.9);
+      background: linear-gradient(transparent 60%, rgba(25,118,210,.18) 0);
+      box-shadow: 0 4px 0 rgba(25,118,210,.35) inset;
+    }
+    main a[href]:active{
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 rgba(25,118,210,.45) inset;
+    }
 
-    @media print {
-      header.appbar, nav.toc, .topbtn { display: none !important; }
-      body { background: #fff; color: #000; }
-      section.card { break-inside: avoid; box-shadow: none; border-color: #ddd; }
-      a { color: #000; text-decoration: none; }
-      th, td { border-color: #bbb; }
+    /* 2) Collapsible summaries */
+    main details > summary{
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+      transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    main details > summary:hover{
+      background: linear-gradient(180deg, rgba(25,118,210,.14), rgba(255,255,255,0));
+      border-color: #bcd6fb;
+      box-shadow: 0 6px 16px rgba(25,118,210,.12);
+    }
+    main details[open] > summary{
+      background: linear-gradient(180deg, rgba(100,181,246,.24), rgba(255,255,255,0));
+      border-color: #a9ccfb;
+    }
+    main details > summary::after{
+      content: '▸';
+      float: right;
+      opacity: .65;
+      transition: transform .15s ease;
+    }
+    main details[open] > summary::after{
+      transform: rotate(90deg);
+    }
+
+    /* 3) Generic focus ring for keyboard users */
+    main a[href]:focus-visible,
+    main details > summary:focus-visible,
+    main [role="button"]:focus-visible,
+    main button:focus-visible{
+      outline: 3px solid rgba(25,118,210,.35);
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
+
+    /* Back to top */
+    .topbtn{
+      position: fixed; bottom: 18px; right: 18px; width: 44px; height: 44px;
+      border-radius: 50%; display: grid; place-items: center; box-shadow: var(--shadow);
+      background: var(--panel); border: 1px solid var(--border); cursor: pointer; opacity: .95;
+      transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .topbtn:hover{
+      border-color: #cfe0fb;
+      box-shadow: 0 10px 24px rgba(25,118,210,.18);
+    }
+    .topbtn:active{ transform: translateY(1px); }
+
+    footer{ color: var(--muted); text-align: center; padding: 24px; }
+
+    /* Print */
+    @media print{
+      header.appbar, nav.toc, .topbtn{ display: none !important; }
+      body{ background: #fff; color: #000; }
+      section.card{ break-inside: avoid; box-shadow: none; border-color: #ddd; }
+      a{ color: #000; text-decoration: none; }
+      th, td{ border-color: #bbb; }
     }
   </style>
 </head>
@@ -178,13 +334,13 @@
       <div class="row">
         <h1 class="title">
           VFR DA40NG Training Note
-          <small class="author">Yohann Aviation Note</small>
+          <a id="brand-link" class="author" href="#" role="link" title="Home · Yohann Aviation Note">Yohann Aviation Note</a>
         </h1>
         <div class="controls">
           <button id="go-back" class="chip" title="Go Back">← Go Back</button>
           <div class="search" aria-label="Search">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input id="q" placeholder="Search calls, flows, acronyms… (e.g. BUMFISH‑W, RPUFF, PFL)" aria-label="Search all content" />
+            <input id="q" placeholder="Search calls, flows, acronyms… (e.g. BUMFISH-W, RPUFF, PFL)" aria-label="Search all content" />
           </div>
           <select id="toc-select" aria-label="Contents"></select>
         </div>
@@ -225,7 +381,7 @@
       <!-- RPL -->
       <section class="card" id="rpl">
         <h2>RPL Overview <span class="badge">VFR</span></h2>
-        <p class="muted">DA40NG reference speeds & key patterns for VFR training. Built for quick study in cockpit or on phone—searchable, collapsible, and print‑friendly.</p>
+        <p class="muted">DA40NG reference speeds & key patterns for VFR training. Built for quick study in cockpit or on phone—searchable, collapsible, and print-friendly.</p>
       </section>
 
       <!-- Basics -->
@@ -266,13 +422,11 @@
         <h2>Straight & Level (S&amp;L) <span class="badge">Handling</span></h2>
         <ul class="check">
           <li><strong>PWR + attitude = Performance</strong></li>
-          <li> — don't chase performance, maintain attitude</li>
-          <li><strong>Learn to trim</strong></li>
-          <li> — rough trim to release pressure on elevator</li>
-          <li> — after Speed stabilizes, precise trim.</li>
-          <li> — Common mistake reminder: Never use trim to change your pitch! Always set your attitude using your elevator first, then use the trim to release the pressure on elevator.</li>
+          <li>Don't chase performance; maintain attitude.</li>
+          <li><strong>Learn to trim</strong> — rough trim to release elevator pressure; after speed stabilizes, precise trim.</li>
+          <li class="warn">Never use trim to change pitch; set attitude with elevator, then trim off pressure.</li>
           <li><strong>Use small, smooth, deliberate control inputs.</strong></li>
-          <li><strong>Don't focus too much on Instruments.</strong></li>
+          <li><strong>Don't over-focus on instruments.</strong></li>
         </ul>
       </section>
 
@@ -280,8 +434,8 @@
         <h2>Climb <span class="badge">Handling</span></h2>
         <ul class="check">
           <li>Into Climb: Lookout above; <strong>PAST</strong>.</li>
-          <li>During Climb: <strong>ALAP</strong> scan. Limit bank in climb (guide: ≤<strong>15°</strong> AOB).every 1000' — clear nose; </li>
-          <li>Level off: prior to <strong>10% VS</strong>'s height start lowering attitude; <strong>ASPT</strong>; after Speed stabilizes, precise trim.</li>
+          <li>During Climb: <strong>ALAP</strong> scan. Limit bank in climb (guide: ≤<strong>15°</strong> AOB). Every 1000' — clear nose.</li>
+          <li>Level off: prior to <strong>10% VS</strong> of the height — start lowering attitude; <strong>ASPT</strong>; after speed stabilizes, precise trim.</li>
         </ul>
       </section>
 
@@ -289,21 +443,21 @@
         <h2>Descend <span class="badge">Handling</span></h2>
         <ul class="check">
           <li>Into Descent: Lookout below; <strong>PAST</strong>.</li>
-          <li>During Descent: <strong>ALAP</strong> scan. If long descent — check PWR still available; </li>
-          <li>Level off: prior to <strong>10% VS</strong>'s height start increasing PWR; <strong>PAST</strong>; after Speed stabilizes, precise trim.</li>
+          <li>During Descent: <strong>ALAP</strong> scan. If long descent — check power still available.</li>
+          <li>Level off: prior to <strong>10% VS</strong> of the height — start increasing power; <strong>PAST</strong>; after speed stabilizes, precise trim.</li>
         </ul>
         <ul class="check">
-          <li>If Glide: wait for planned IAS (e.g., best glide <strong>88 kt</strong> when required), then lowering attitude</li>
+          <li>If Glide: wait for planned IAS (e.g., best glide <strong>88 kt</strong> when required), then lower attitude.</li>
         </ul>
       </section>
 
       <section class="card" id="turns">
         <h2>Turns <span class="badge">Handling</span></h2>
         <ul class="check">
-          <li>Flow: <strong>B&amp;B, B → ALAP → anticipate 1/3 AOB's HDG → B&amp;B, B</strong>.</li>
-          <li>Climbing turn: over‑bank tendency — limit ~<strong>15°</strong> AOB. Descending turn: neutral/under‑bank tendency.</li>
-          <li class="muted">AOB guides: Climb ≤<strong>15°</strong>; <strong>CCT/AWK ≤ 20°</strong>; Normal ≤ Rate‑1 unless briefed.</li>
-          <li>Rate‑1 Turn: <strong> AOB = TAS/10 + 7</strong> — 360° in 2 min; 180°/1 min; 90°/30 s; 30°/10 s.</li>
+          <li>Flow: <strong>B&amp;B → ALAP → anticipate 1/3 AOB's HDG → B&amp;B</strong>.</li>
+          <li>Climbing turn: over-bank tendency — limit ~<strong>15°</strong> AOB. Descending turn: neutral/under-bank tendency.</li>
+          <li class="muted">AOB guides: Climb ≤<strong>15°</strong>; <strong>CCT/AWK ≤ 20°</strong>; Normal ≤ Rate-1 unless briefed.</li>
+          <li>Rate-1 Turn: <strong>AOB ≈ TAS/10 + 7</strong> — 360° in 2 min; 180°/1 min; 90°/30 s; 30°/10 s.</li>
           <li>Slow down for tight turn/orbit.</li>
         </ul>
         <details>
@@ -324,13 +478,13 @@
       <section class="card" id="stall">
         <h2>Stall <span class="badge">HASELL</span></h2>
         <details id="hasell">
-          <summary>HASELL Check — pre‑stall/airwork</summary>
+          <summary>HASELL Check — pre-stall/airwork</summary>
           <ul class="check">
             <li><strong>H – Height:</strong> Sufficient to recover with a suitable safety margin — recover by <strong>3000' AGL minimum</strong>.</li>
             <li><strong>A – Airframe:</strong> Flaps & undercarriage set (as required for the exercise).</li>
             <li><strong>S – Security:</strong> Doors <strong>closed & locked</strong>, harnesses secure; fire extinguisher secure; no loose articles in cockpit.</li>
             <li><strong>E – Engine:</strong> Engine temps & pressures in the green; <strong>fuel pumps ON</strong>.</li>
-            <li><strong>L – Location:</strong> Clear of built‑up areas; suitable forced‑landing area selected; clear of cloud horizontally & vertically.</li>
+            <li><strong>L – Location:</strong> Clear of built-up areas; suitable forced-landing area selected; clear of cloud horizontally & vertically.</li>
             <li><strong>L – Lookout:</strong> Clear the airspace laterally & vertically.</li>
           </ul>
         </details>
@@ -372,14 +526,14 @@
           <li><strong>ABEAM THR</strong>: Speed check ≤110 → <strong>Flap TO</strong> (indicator TO). <span class="muted">NVFR: pitch ~−2.5°</span> <span class="muted">(Option: report abeam to CFS TWR per local SOP)</span></li>
           <li><strong>Flapless</strong>: DW <strong>PWR 40%</strong> (no flap indication — <em>visual check</em>).</li>
           <li><strong>APP @45°</strong> (first third light/hill): lookout, radio; set <strong>PWR ~20%</strong> (flapless ~<strong>10%</strong>) and start descending turn.</li>
-          <li><strong>Mid‑base</strong>: half sky/half ground; <strong>ROD 500 fpm</strong>; <strong>85–90 kt</strong>. <span class="muted">NVFR: pitch ~−5°</span></li>
+          <li><strong>Mid-base</strong>: half sky/half ground; <strong>ROD 500 fpm</strong>; <strong>85–90 kt</strong>. <span class="muted">NVFR: pitch ~−5°</span></li>
           <li><strong>Flapless</strong>: just below S&amp;L, <strong>90–95 kt</strong>. Consider wind — headwind: slower turn; tailwind: turn early.</li>
         </ul>
         <details id="cct-flows">
-          <summary>Flows &amp; Calls — BUMFISH‑W / RPUFF</summary>
+          <summary>Flows &amp; Calls — BUMFISH-W / RPUFF</summary>
           <div class="kv">
             <div>
-              <h4 class="tag">BUMFISH‑W</h4>
+              <h4 class="tag">BUMFISH-W</h4>
               <ul class="check">
                 <li><strong>B</strong>rakes — firm; park brake <strong>OFF</strong>.</li>
                 <li><strong>U</strong>ndercarriage — (fixed).</li>
@@ -396,7 +550,7 @@
                 <li><strong>R</strong>WY clear / cleared to land.</li>
                 <li><strong>P</strong>rofile, alignment, performance — v<sub>ref</sub> guidance:
                   <ul>
-                    <li>Short‑field: aim <strong>77</strong> (do not go below <strong>77</strong>).</li>
+                    <li>Short-field: aim <strong>77</strong> (do not go below <strong>77</strong>).</li>
                     <li>LDG flap: <strong>80–85</strong> (v<sub>ref</sub> ~77).</li>
                     <li>Flapless: <strong>85–90</strong> (v<sub>ref</sub> ~82).</li>
                   </ul>
@@ -413,18 +567,18 @@
           </ul>
         </details>
         <details>
-          <summary>Crosswind — flare & roll‑out</summary>
+          <summary>Crosswind — flare & roll-out</summary>
           <ul class="check">
             <li>Nose straight with <strong>rudder</strong> on centreline.</li>
-            <li>Use <strong>aileron</strong> to stay on centreline during roll‑out (and keep it in after touchdown).</li>
+            <li>Use <strong>aileron</strong> to stay on centreline during roll-out (and keep it in after touchdown).</li>
           </ul>
         </details>
 
-        <h3>Touch‑and‑Go / Short‑field / Flapless</h3>
+        <h3>Touch-and-Go / Short-field / Flapless</h3>
         <ul class="check">
-          <li><strong>T&amp;G</strong>: hold back‑pressure; smoothly to <strong>FULL PWR within ~3 s</strong>.</li>
-          <li><strong>Flapless T&amp;G</strong>: hold back‑pressure; easy “bloom”; select <strong>TO flap</strong> — expect easy lift‑off.</li>
-          <li><strong>Short‑field landing</strong>: aim for threshold; PWR <strong>IDLE</strong> over gable marker; gentle braking.</li>
+          <li><strong>T&amp;G</strong>: hold back-pressure; smoothly to <strong>FULL PWR within ~3 s</strong>.</li>
+          <li><strong>Flapless T&amp;G</strong>: hold back-pressure; easy “bloom”; select <strong>TO flap</strong> — expect easy lift-off.</li>
+          <li><strong>Short-field landing</strong>: aim for threshold; PWR <strong>IDLE</strong> over gable marker; gentle braking.</li>
         </ul>
       </section>
 
@@ -437,17 +591,17 @@
       <section class="card" id="steep">
         <h2>Steep Turns <span class="badge">Airwork</span></h2>
         <ul class="check">
-          <li>Choose reference & lead ref; lookout: Right → Center → Up → Left → Left‑back.</li>
+          <li>Choose reference & lead ref; lookout: Right → Center → Up → Left → Left-back.</li>
           <li><strong>45°</strong> / <strong>60°</strong> AOB options.</li>
-          <li><strong>PWR ~65%</strong> for 45°; flow: <strong>B&amp;B → 30° AOB → add back‑pressure</strong> → <strong>ALAP</strong>.</li>
-          <li>Recovery: <strong>B&amp;B → 30° AOB → release back‑pressure</strong>; for 60° consider <strong>PWR ~75%</strong>.</li>
+          <li><strong>PWR ~65%</strong> for 45°; flow: <strong>B&amp;B → 30° AOB → add back-pressure</strong> → <strong>ALAP</strong>.</li>
+          <li>Recovery: <strong>B&amp;B → 30° AOB → release back-pressure</strong>; for 60° consider <strong>PWR ~75%</strong>.</li>
         </ul>
       </section>
 
       <section class="card" id="compass">
         <h2>Compass Turns <span class="badge">Airwork</span></h2>
         <ul class="check">
-          <li>S. Hemisphere：ONUS - Overshoot North. Undershoot South</li>
+          <li>S. Hemisphere：ONUS — Overshoot North, Undershoot South.</li>
           <li>North: roll out 30° after; South: roll out 30° before.</li>
           <li>East/West: roll out on heading.</li>
         </ul>
@@ -462,13 +616,11 @@
         <h2>PFL — Forced Landing <span class="badge">Emergencies</span></h2>
         <p><strong>Glide ratio:</strong> ~<strong>1:9.7</strong>. <span class="muted">Training ratio often uses ~<strong>1:7</strong> to allow for turns/inefficiencies.</span></p>
         <ul class="check">
-          <li class="warn"><strong>Step1. Use glide range to select touchdown zone (TDZ). Neither too close nor too far!
-          </strong></li>
-          <li class="warn"><strong>Step2. Plan a Final into wind!</strong></li>
-          <li class="warn"><strong>Step3.Track to the final and MODIFY the CCT on the way (keep thinking: do you have enough height for a base leg? down wind leg? more legs?)</strong></li>
-          </strong></li>
-          <li class="warn"><strong>Step4. Always Wings LEVEL to check spacing. If getting closer/further, adjust the legs. Its recommonded to adjust your base leg's length by undershoot or overshoot final.</strong></li>
-          <li>small tailwind (≤ ~5 kt) acceptable if improves field choice.</li>
+          <li class="warn"><strong>Step 1.</strong> Use glide range to select touchdown zone (TDZ). Neither too close nor too far!</li>
+          <li class="warn"><strong>Step 2.</strong> Plan a Final into wind!</li>
+          <li class="warn"><strong>Step 3.</strong> Track to final and <strong>modify</strong> the CCT on the way (keep thinking: do you have enough height for a base leg? downwind leg?).</li>
+          <li class="warn"><strong>Step 4.</strong> Keep <strong>wings level</strong> to check spacing. If getting closer/further, adjust the legs. It’s recommended to adjust base length by under/overshooting final.</li>
+          <li>Small tailwind (≤ ~5 kt) acceptable if it improves field choice.</li>
           <li>Aviate first. Make sure you are able to reach the TDZ.</li>
         </ul>
         <details>
@@ -488,7 +640,7 @@
             </div>
           </div>
           <ul class="check">
-            <li>TDZ ~<strong>1/3</strong> into field. Plan backwards from TDZ. Low‑key (turn base) ~<strong>1200–1500'</strong> AGL.</li>
+            <li>TDZ ~<strong>1/3</strong> into field. Plan backwards from TDZ. Low-key (turn base) ~<strong>1200–1500'</strong> AGL.</li>
             <li>Rough guide: ~<strong>1.5 nm / 1000'</strong> (short RWY: closer).</li>
           </ul>
         </details>
@@ -501,7 +653,7 @@
             <li><strong>ELT ON</strong>; XPDR <strong>7700</strong>.</li>
             <li><strong>PAX brief</strong> (see section).</li>
             <li><strong>Secure engine</strong> (when committed): ENG Master <strong>OFF</strong>; Fuel Pump <strong>OFF</strong>; Fuel XFR Pump <strong>OFF</strong>; Throttle <strong>IDLE</strong>; Fuel Tank <strong>OFF</strong>; <em>Before landing</em>: Electric Master <strong>OFF</strong>.</li>
-            <li>Re‑check PWR availability each <strong>1000'</strong>.</li>
+            <li>Re-check PWR availability each <strong>1000'</strong>.</li>
           </ul>
         </details>
       </section>
@@ -510,7 +662,7 @@
       <section class="card" id="psl">
         <h2>PSL — Precautionary Search &amp; Landing <span class="badge">Emergencies</span></h2>
         <ul class="check">
-          <li>Assess Field Length: T/O Flap + PWR 50% -> GS 90 kt/ /45 meters per second</li>
+          <li>Assess Field Length: T/O Flap + PWR 50% → GS ≈ 90 kt ≈ 45 m/s (rule of thumb for timing a low pass).</li>
         </ul>
       </section>
 
@@ -555,9 +707,9 @@
           <summary>Communication Failure</summary>
           <ul class="check">
             <li>Maintain terrain clearance; remain <strong>VMC</strong> if possible.</li>
-            <li>Indications: In‑flight — HJ: rocking wings; HN: on/off landing/nav lights. On ground — HJ: waggling ailerons/rudder; HN: on/off landing/nav lights.</li>
+            <li>Indications: In-flight — HJ: rocking wings; HN: on/off landing/nav lights. On ground — HJ: waggling ailerons/rudder; HN: on/off landing/nav lights.</li>
             <li><strong>VFR Class G</strong> / CTA/RA/IFR: remain VFR in Class G; land at <strong>nearest</strong> AD; report arrival to ATS via <strong>SAR telephone</strong>.</li>
-            <li>Squawk <strong>7600</strong>; listen to ATIS or voice‑mod Navaids; transmit blind (<strong>PAI</strong>).</li>
+            <li>Squawk <strong>7600</strong>; listen to ATIS or voice-mod Navaids; transmit blind (<strong>PAI</strong>).</li>
             <li>If in IMC: proceed per latest ATC route clearance & planned level; hold to give ATS/traffic time to respond, then proceed.</li>
           </ul>
         </details>
@@ -610,35 +762,19 @@
         <ul class="check">
           <li><strong>TMG</strong>: <strong>Time</strong> — <strong>Map</strong> — <strong>Ground</strong>.</li>
           <li><strong>CBTTT</strong>: <strong>Course</strong> — <strong>HDG Bug</strong> — <strong>Time</strong> — <strong>Track</strong> — <strong>Trim</strong>.</li>
-          <li>Map Scale cues (rule‑of‑thumb): 1‑finger ≈ VTC 2.5 nm / VNC 5 nm / WAC 10 nm. 4‑finger ≈ ×4.</li>
-          <li>Small Divert (dog leg): due small cloud or terrain, ETA changes as follows:</li>
-          <table>
-            <thead>
-              <tr>
-              <th>HDG Change</th>
-              <th>Correction Factor</th>
-              <th>Explanation</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-              <td>60°</td>
-              <td>+1×</td>
-              <td>Add 1× the time flying the new leg to the total ETA.</td>
-              </tr>
-              <tr>
-              <td>45°</td>
-              <td>+2/3×</td>
-              <td>Add 2/3× the time flying the new leg to the total ETA.</td>
-              </tr>
-              <tr>
-              <td>30°</td>
-              <td>+1/4×</td>
-              <td>Add 1/4× the time flying the new leg to the total ETA.</td>
-              </tr>
-            </tbody>
-            </table>
+          <li>Map Scale cues (rule-of-thumb): 1-finger ≈ VTC 2.5 nm / VNC 5 nm / WAC 10 nm. 4-finger ≈ ×4.</li>
+          <li>Small Divert (dog-leg): due to small cloud or terrain, ETA changes as follows:</li>
         </ul>
+        <table>
+          <thead>
+            <tr><th>HDG Change</th><th>Correction Factor</th><th>Explanation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>60°</td><td>+1×</td><td>Add 1× the time flying the new leg to the total ETA.</td></tr>
+            <tr><td>45°</td><td>+2/3×</td><td>Add 2/3× the time flying the new leg to the total ETA.</td></tr>
+            <tr><td>30°</td><td>+1/4×</td><td>Add 1/4× the time flying the new leg to the total ETA.</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <section class="card" id="lost-divert">
@@ -647,11 +783,8 @@
           <div>
             <h3 id="divert">Divert</h3>
             <ul class="check">
-              <li><strong>T</strong>: Time — Record current time.</li>
-              <li><strong>R</strong>: Rough track</li> 
-              <li>— precise track (⚠ consider <strong>T → M</strong> conversion)</li>
-              <li>— re‑plan distance & ETA.</li>
-              <li>— <strong>Re‑config</strong> as required.</li>
+              <li><strong>T</strong>: Time — record current time.</li>
+              <li><strong>R</strong>: Rough track → then precise track (⚠ consider <strong>T→M</strong> conversion); re-plan distance & ETA; re-configure as required.</li>
               <li><strong>E</strong>: Endurance — fuel remaining vs options.</li>
               <li><strong>A</strong>: Airspace — clearance / hemispherical levels / terrain / VMC.</li>
               <li><strong>N</strong>: <strong>FPL amend</strong> (DIV from, <strong>DCT</strong> to, SAR).</li>
@@ -660,7 +793,7 @@
           <div>
             <h3 id="lost">Lost Procedure</h3>
             <ul class="check">
-              <li><strong>TAHAGMD</strong>(Yohann’s mnemonic):</li>
+              <li><strong>TAHAGMD</strong> (Yohann’s mnemonic):</li>
               <li><strong>T — Time</strong>: note current time; recall the last known position time.</li>
               <li><strong>A — Anchor</strong>: <strong>Timer 1 min</strong>, make a gentle <strong>left turn</strong> (stabilise and think).</li>
               <li><strong>H — Holding Config</strong>: set a safe hold: <strong>PWR 65%</strong>, <strong>T/O flap</strong>; maintain safe altitude.</li>
@@ -672,7 +805,7 @@
             <details>
               <summary>When TAHAGMD not work — <em>for awareness only</em> (Not required in our training)</summary>
               <ul class="check">
-                <li><em>Yohann’s mnemonic</em>: <strong>“Climb higher to aid ATC prominently.”</strong></li>
+                <li><em>Yohann’s cue</em>: <strong>“Climb higher to aid ATC prominently.”</strong></li>
                 <li><strong>Climb</strong> to see further / improve comms, but <strong>do not climb above possible CTA</strong>.</li>
                 <li><strong>Use Navaid</strong>/GNSS to assist fixing.</li>
                 <li><strong>Seek ATC / FIS</strong> for help; be ready to squawk <strong>IDENT</strong>.</li>
@@ -730,7 +863,7 @@
               if (!node || !node.parentNode) return NodeFilter.FILTER_REJECT;
               if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
               const tag = node.parentNode.nodeName.toLowerCase();
-              if (tag === 'script' || tag === 'style' || tag === 'mark') return NodeFilter.FILTER_REJECT; // FIXED: proper tag checks
+              if (tag === 'script' || tag === 'style' || tag === 'mark') return NodeFilter.FILTER_REJECT;
               return NodeFilter.FILTER_ACCEPT;
             }
           }
@@ -858,10 +991,9 @@
           history.replaceState(null, '', '#' + id);
         });
 
-        // Populate mobile TOC select (FIX: previously empty)
+        // Populate mobile TOC select
         const tocSelect = document.getElementById('toc-select');
         if (tocSelect) {
-          // Reset options
           tocSelect.innerHTML = '';
           const opt = document.createElement('option');
           opt.value = ''; opt.textContent = 'Contents'; opt.selected = true; opt.disabled = true;
@@ -930,8 +1062,32 @@
       document.getElementById('topbtn')?.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
+
+      // Brand link: zh → index.html; else → index_en.html
+      (function(){
+        const brand = document.getElementById('brand-link');
+        if(!brand) return;
+
+        function resolveLang(){
+          const lang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+          return (lang || '').toLowerCase();
+        }
+        function goHome(ev){
+          ev && ev.preventDefault();
+          const lang = resolveLang();
+          const url = lang.startsWith('zh') ? 'index.html' : 'index_en.html';
+          window.location.href = url;
+        }
+
+        brand.addEventListener('click', goHome);
+        brand.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' '){
+            goHome(e);
+          }
+        });
+      })();
     })();
   </script>
-  <!-- Content reorganized from VFR DA40NG Training Note.docx; UI adapted from MEA IR DA42 Training Note template. -->
+  <!-- Content reorganized from VFR DA40NG Training Note.docx; UI adapted and rethemed to light blue. -->
 </body>
 </html>
