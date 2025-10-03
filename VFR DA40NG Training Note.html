@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VFR DA40NG Training Note | Yohann Aviation Note</title>
+  <meta name="author" content="Yohann Aviation Note" />
+  <meta name="description" content="Compact, searchable, and print-friendly VFR flight notes for DA40NG: speeds, flows, circuits, airwork, PFL/PSL, emergencies, and VFR navigation." />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('js', new Date());
+  gtag('config', 'G-G3TQJTQ67B');
+  </script>
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #12182b;
+      --text: #e6e8ef;
+      --muted: #a9b0c7;
+      --brand: #6ea8fe;
+      --brand-2: #9cc7ff;
+      --warn: #ffcb6b;
+      --danger: #ff6b6b;
+      --ok: #6ea8fe;
+      --mark: #ffee88;
+      --card: #0f1526;
+      --border: rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 15px;
+      --fs-base: 16px;
+      --maxw: 980px;
+    }
+    :root { --appbarH: 84px; }
+    [id]{ scroll-margin-top: var(--appbarH, 84px); }
+    html { font-size: var(--fs-base); }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, var(--bg), #0a0f1e 60%);
+      color: var(--text);
+    }
+
+    header.appbar {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: saturate(150%) blur(10px);
+      background: linear-gradient(90deg, rgba(14,18,34,.85), rgba(14,18,34,.6));
+      border-bottom: 1px solid var(--border);
+    }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 10px 16px; }
+    .appbar .row { display: grid; grid-template-columns: 1fr; gap: 8px; align-items: center; }
+
+    h1.title{
+      font-size: clamp(17px, 1.1rem + 0.4vw, 22px);
+      margin: 0; letter-spacing: .2px; line-height: 1.1;
+      display: inline-flex; align-items: baseline; gap: 10px; flex-wrap: nowrap;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; justify-self: start;
+    }
+    h1.title .author{
+      font-size: 0.8em; color: var(--muted); font-weight: 700;
+      border: 1px solid var(--border); padding: 2px 8px; border-radius: 999px;
+      background: rgba(255,255,255,.04); white-space: nowrap;
+    }
+
+    .controls {
+      isolation: isolate; display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center; gap: 10px; width: 100%;
+    }
+    .controls > * { position: relative; z-index: 1; }
+    .search { z-index: 0; position: relative; min-width: 0; }
+    .search input {
+      width: 100%; background: var(--panel); color: var(--text);
+      border: 1px solid var(--border); outline: none;
+      padding: 10px 12px 10px 36px; border-radius: 999px; box-shadow: var(--shadow);
+      background-clip: padding-box;
+    }
+    .search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: .65; pointer-events: none; }
+    .chip, button, .toggle, select {
+      background: var(--panel); color: var(--text);
+      border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow);
+      font-weight: 600; cursor: pointer;
+    }
+
+    #toc-select {
+      min-width: 112px; width: max-content; max-width: 34vw;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      position: relative; z-index: 2; appearance: none; padding-right: 28px;
+    }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 18px; padding: 16px; }
+    @media (min-width: 920px) {
+      .appbar .row { grid-template-columns: 1fr auto; }
+      h1.title { justify-self: start; }
+      .grid { grid-template-columns: 260px 1fr; align-items: start; }
+    }
+
+    nav.toc { position: sticky; top: 68px; align-self: start; background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px; box-shadow: var(--shadow); }
+    nav.toc h2 { margin: 6px 8px 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; }
+    nav.toc a { display: block; padding: 8px 10px; margin: 4px 0; text-decoration: none; color: var(--text); border-radius: 10px; border: 1px dashed transparent; }
+    nav.toc a:hover { background: linear-gradient(90deg, rgba(111,168,255,.12), transparent); border-color: var(--border); }
+    nav.toc .sub { margin-left: 10px; font-size: .94em; color: var(--muted); }
+    nav.toc .sub2 { margin-left: 22px; font-size: .90em; color: var(--muted); }
+
+    #toc-select { display: none; }
+    @media (max-width: 919px) {
+      header.appbar .wrap{ padding: 6px 12px; }
+      h1.title{ font-size: 18px; gap: 8px; justify-self: center; text-align: center; }
+      h1.title .author{ font-size: 0.74em; padding: 1px 6px; }
+      nav.toc { display: none !important; }
+      #toc-select { display: inline-flex; font-size: 14px; }
+      .controls { gap: 8px; grid-template-columns: auto minmax(120px, 1fr) minmax(96px, max-content); }
+      #toc-select { max-width: 30vw; }
+      .search input { padding: 8px 10px 8px 30px; }
+      button#go-back{ padding: 6px 10px; font-size: 14px; }
+    }
+    @media (max-width: 420px) {
+      .controls { grid-template-columns: auto minmax(110px, 1fr) minmax(92px, max-content); gap: 6px; }
+      #toc-select { max-width: 28vw; }
+    }
+
+    section.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+    section.card h2 { margin-top: 0; display: flex; align-items: center; gap: 10px; }
+    section.card h3 { margin-top: 1.2em; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,.06); font-size: .85em; color: var(--brand); }
+    .tag { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: .78em; letter-spacing: .12em; }
+    .warn { color: var(--warn); font-weight: 700; }
+    .danger { color: var(--danger); font-weight: 700; }
+    .ok { color: var(--ok); font-weight: 700; }
+    .muted { color: var(--muted); }
+    .kv { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    @media (min-width: 720px) { .kv { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    ul.check { list-style: none; padding: 0; margin: .25rem 0 1rem; }
+    ul.check li { padding: 6px 8px; border-left: 3px solid transparent; }
+    ul.check li + li { border-top: 1px dashed var(--border); }
+    ul.check li[data-type="flow"] { border-left-color: var(--brand); }
+    ul.check li[data-type="callout"] { border-left-color: var(--warn); background: linear-gradient(90deg, rgba(255,203,107,.12), transparent); }
+
+    details { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; background: linear-gradient(180deg, rgba(255,255,255,.02), transparent); }
+    details > summary { cursor: pointer; font-weight: 700; list-style: none; }
+    details[open] { background: linear-gradient(180deg, rgba(110,168,254,.08), transparent); }
+
+    table { width: 100%; border-collapse: collapse; margin: .5rem 0 1rem; }
+    th, td { border: 1px dashed var(--border); padding: 8px 10px; text-align: left; }
+    th { color: var(--muted); font-weight: 700; }
+    td strong { white-space: nowrap; }
+
+    footer { color: var(--muted); text-align: center; padding: 24px; }
+
+    mark.hl { background: rgba(110,168,254,.35); color: #fff; padding: 0 .15em; border-radius: .2em; box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset; }
+
+    .topbtn { position: fixed; bottom: 18px; right: 18px; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; box-shadow: var(--shadow); background: var(--panel); border: 1px solid var(--border); cursor: pointer; opacity: .9; }
+
+    nav.toc { max-height: calc(100vh - 96px); overflow: auto; }
+    nav.toc details { margin: 6px 0; border: 1px dashed var(--border); border-radius: 10px; padding: 4px; background: rgba(255,255,255,.02); }
+    nav.toc summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; }
+    nav.toc summary::-webkit-details-marker { display: none; }
+    nav.toc summary a { flex: 1; text-decoration: none; color: var(--text); }
+    nav.toc details[open] { background: linear-gradient(180deg, rgba(110,168,254,.08), transparent); }
+
+    @media print {
+      header.appbar, nav.toc, .topbtn { display: none !important; }
+      body { background: #fff; color: #000; }
+      section.card { break-inside: avoid; box-shadow: none; border-color: #ddd; }
+      a { color: #000; text-decoration: none; }
+      th, td { border-color: #bbb; }
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="wrap">
+      <div class="row">
+        <h1 class="title">
+          VFR DA40NG Training Note
+          <small class="author">Yohann Aviation Note</small>
+        </h1>
+        <div class="controls">
+          <button id="go-back" class="chip" title="Go Back">← Go Back</button>
+          <div class="search" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input id="q" placeholder="Search calls, flows, acronyms… (e.g. BUMFISH‑W, RPUFF, PFL)" aria-label="Search all content" />
+          </div>
+          <select id="toc-select" aria-label="Contents"></select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid wrap">
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+      <!-- H1: RPL -->
+      <a href="#rpl">RPL</a>
+      <!-- H2 under RPL: Basics / CCT / AWK / Emergencies / PAX -->
+      <a href="#basics" class="sub">Basics</a>
+      <a href="#sl" class="sub sub2">Straight &amp; Level (S&amp;L)</a>
+      <a href="#climb" class="sub sub2">Climb</a>
+      <a href="#descend" class="sub sub2">Descend</a>
+      <a href="#turns" class="sub sub2">Turns</a>
+      <a href="#stall" class="sub sub2">Stall</a>
+      <a href="#cct" class="sub">CCT</a>
+      <a href="#awk" class="sub">AWK</a>
+      <a href="#steep" class="sub sub2">Steep Turns</a>
+      <a href="#compass" class="sub sub2">Compass Turns</a>
+      <a href="#pfl" class="sub sub2">PFL — Forced Landing</a>
+      <a href="#psl" class="sub sub2">PSL — Precautionary Search &amp; Landing</a>
+      <a href="#emergencies" class="sub">Emergency Procedures</a>
+      <a href="#pax" class="sub">PAX Brief</a>
+      
+      <!-- H1: PPL Navigation block -->
+      <a href="#nav">PPL Navigation</a>
+      <a href="#normal-nav" class="sub">Normal Nav</a>
+      <a href="#lost-divert" class="sub">Lost &amp; Divert</a>
+      <a href="#divert" class="sub sub2">Divert</a>
+      <a href="#lost" class="sub sub2">Lost Procedure</a>
+    </nav>
+
+    <main>
+      <!-- RPL -->
+      <section class="card" id="rpl">
+        <h2>RPL Overview <span class="badge">VFR</span></h2>
+        <p class="muted">DA40NG reference speeds & key patterns for VFR training. Built for quick study in cockpit or on phone—searchable, collapsible, and print‑friendly.</p>
+      </section>
+
+      <!-- Basics -->
+      <section class="card" id="basics">
+        <h2>Basics & Speeds <span class="badge">Performance</span></h2>
+        <div class="kv">
+          <div>
+            <h3>Reference Power Settings</h3>
+            <table>
+              <thead><tr><th>Phase</th><th>Guide</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>Normal Cruise</td><td><strong>PWR65%</strong></td><td>≈ 125 KIAS.</td></tr>
+                <tr><td>Slow Cruise</td><td><strong>PWR50%</strong></td><td></td></tr>
+                <tr><td>Fast Cruise</td><td><strong>PWR75-85%</strong></td><td></td></tr>
+                <tr><td>PWR 50% + T/O Flap</td><td>~<strong>pitch +2.5°</strong></td><td>CCT Downwind</td></tr>
+                <tr><td>PWR20% + T/O Flap</td><td>~<strong>pitch -5°</strong></td><td>CCT Base Turn</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h3>Speeds</h3>
+            <table>
+              <thead><tr><th>Item</th><th>IAS (kt)</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Vy (TO flap)</strong></td><td><strong>72</strong></td><td></td></tr>
+                <tr><td><strong>Vy (Flap UP)</strong></td><td><strong>88</strong></td><td></td></tr>
+                <tr><td><strong>Cruise climb</strong></td><td><strong>90</strong></td><td></td></tr>
+                <tr><td><strong>Best glide (UP)</strong></td><td><strong>88</strong></td><td></td></tr>
+                <tr><td><strong>V<sub>ref</sub> / EMRG APP</strong></td><td>LDG <strong>77</strong> • TO <strong>78</strong> • UP <strong>83</strong></td><td>Target approach speeds</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- S&L / Climb / Descend / Turns -->
+      <section class="card" id="sl">
+        <h2>Straight & Level (S&amp;L) <span class="badge">Handling</span></h2>
+        <ul class="check">
+          <li><strong>PWR + attitude = Performance</strong></li>
+          <li> — don't chase performance, maintain attitude</li>
+          <li><strong>Learn to trim</strong></li>
+          <li> — rough trim to release pressure on elevator</li>
+          <li> — after Speed stabilizes, precise trim.</li>
+          <li> — Common mistake reminder: Never use trim to change your pitch! Always set your attitude using your elevator first, then use the trim to release the pressure on elevator.</li>
+          <li><strong>Use small, smooth, deliberate control inputs.</strong></li>
+          <li><strong>Don't focus too much on Instruments.</strong></li>
+        </ul>
+      </section>
+
+      <section class="card" id="climb">
+        <h2>Climb <span class="badge">Handling</span></h2>
+        <ul class="check">
+          <li>Into Climb: Lookout above; <strong>PAST</strong>.</li>
+          <li>During Climb: <strong>ALAP</strong> scan. Limit bank in climb (guide: ≤<strong>15°</strong> AOB).every 1000' — clear nose; </li>
+          <li>Level off: prior to <strong>10% VS</strong>'s height start lowering attitude; <strong>ASPT</strong>; after Speed stabilizes, precise trim.</li>
+        </ul>
+      </section>
+
+      <section class="card" id="descend">
+        <h2>Descend <span class="badge">Handling</span></h2>
+        <ul class="check">
+          <li>Into Descent: Lookout below; <strong>PAST</strong>.</li>
+          <li>During Descent: <strong>ALAP</strong> scan. If long descent — check PWR still available; </li>
+          <li>Level off: prior to <strong>10% VS</strong>'s height start increasing PWR; <strong>PAST</strong>; after Speed stabilizes, precise trim.</li>
+        </ul>
+        <ul class="check">
+          <li>If Glide: wait for planned IAS (e.g., best glide <strong>88 kt</strong> when required), then lowering attitude</li>
+        </ul>
+      </section>
+
+      <section class="card" id="turns">
+        <h2>Turns <span class="badge">Handling</span></h2>
+        <ul class="check">
+          <li>Flow: <strong>B&amp;B, B → ALAP → anticipate 1/3 AOB's HDG → B&amp;B, B</strong>.</li>
+          <li>Climbing turn: over‑bank tendency — limit ~<strong>15°</strong> AOB. Descending turn: neutral/under‑bank tendency.</li>
+          <li class="muted">AOB guides: Climb ≤<strong>15°</strong>; <strong>CCT/AWK ≤ 20°</strong>; Normal ≤ Rate‑1 unless briefed.</li>
+          <li>Rate‑1 Turn: <strong> AOB = TAS/10 + 7</strong> — 360° in 2 min; 180°/1 min; 90°/30 s; 30°/10 s.</li>
+          <li>Slow down for tight turn/orbit.</li>
+        </ul>
+        <details>
+          <summary>Bank & Load Factor</summary>
+          <table>
+            <thead><tr><th>AOB</th><th>LF (×1g)</th><th>Vs<sub>maneuver</sub> ≈ Vs×√LF</th></tr></thead>
+            <tbody>
+              <tr><td>30°</td><td>~1.1</td><td>~1.05×Vs</td></tr>
+              <tr><td>45°</td><td>~1.4</td><td>~1.18×Vs</td></tr>
+              <tr><td>60°</td><td>~2.0</td><td>~1.41×Vs</td></tr>
+              <tr><td>75°</td><td>~3.9</td><td>~1.97×Vs</td></tr>
+            </tbody>
+          </table>
+        </details>
+      </section>
+
+      <!-- Stall -->
+      <section class="card" id="stall">
+        <h2>Stall <span class="badge">HASELL</span></h2>
+        <details id="hasell">
+          <summary>HASELL Check — pre‑stall/airwork</summary>
+          <ul class="check">
+            <li><strong>H – Height:</strong> Sufficient to recover with a suitable safety margin — recover by <strong>3000' AGL minimum</strong>.</li>
+            <li><strong>A – Airframe:</strong> Flaps & undercarriage set (as required for the exercise).</li>
+            <li><strong>S – Security:</strong> Doors <strong>closed & locked</strong>, harnesses secure; fire extinguisher secure; no loose articles in cockpit.</li>
+            <li><strong>E – Engine:</strong> Engine temps & pressures in the green; <strong>fuel pumps ON</strong>.</li>
+            <li><strong>L – Location:</strong> Clear of built‑up areas; suitable forced‑landing area selected; clear of cloud horizontally & vertically.</li>
+            <li><strong>L – Lookout:</strong> Clear the airspace laterally & vertically.</li>
+          </ul>
+        </details>
+        <div class="kv">
+          <div>
+            <h3>Vs (guide)</h3>
+            <table>
+              <thead><tr><th>Config</th><th>Vs (kt)</th></tr></thead>
+              <tbody>
+                <tr><td>Flap UP</td><td><strong>66</strong></td></tr>
+                <tr><td>Flap TO</td><td><strong>62</strong></td></tr>
+                <tr><td>Flap LDG</td><td><strong>60</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h3>Recover — on first sign</h3>
+            <ul class="check" data-type="flow">
+              <li>Ailerons <strong>neutral</strong>, opposite rudder if required.</li>
+              <li><strong>FULL PWR</strong>, reduce AoA, set climb attitude.</li>
+              <li>Above Vs: climb at <strong>Vy</strong>. <em>Reconfigure</em> once stable.</li>
+            </ul>
+          </div>
+        </div>
+        <details>
+          <summary>Scenarios</summary>
+          <ul class="check">
+            <li><strong>Normal stall</strong>: PWR idle; Flap UP.</li>
+            <li><strong>Approach stall</strong>: PWR ~15%; Flap TO. Recover: PWR UP → <strong>G UP</strong> → Flap UP.</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- CCT -->
+      <section class="card" id="cct">
+        <h2>CCT <span class="badge">Circuit</span></h2>
+        <ul class="check">
+          <li><strong>Crosswind</strong>: assess wind. Tailwind on base: consider <em>continuous</em> turn; keep lookout.</li>
+          <li><strong>ABEAM THR</strong>: Speed check ≤110 → <strong>Flap TO</strong> (indicator TO). <span class="muted">NVFR: pitch ~−2.5°</span> <span class="muted">(Option: report abeam to CFS TWR per local SOP)</span></li>
+          <li><strong>Flapless</strong>: DW <strong>PWR 40%</strong> (no flap indication — <em>visual check</em>).</li>
+          <li><strong>APP @45°</strong> (first third light/hill): lookout, radio; set <strong>PWR ~20%</strong> (flapless ~<strong>10%</strong>) and start descending turn.</li>
+          <li><strong>Mid‑base</strong>: half sky/half ground; <strong>ROD 500 fpm</strong>; <strong>85–90 kt</strong>. <span class="muted">NVFR: pitch ~−5°</span></li>
+          <li><strong>Flapless</strong>: just below S&amp;L, <strong>90–95 kt</strong>. Consider wind — headwind: slower turn; tailwind: turn early.</li>
+        </ul>
+        <details id="cct-flows">
+          <summary>Flows &amp; Calls — BUMFISH‑W / RPUFF</summary>
+          <div class="kv">
+            <div>
+              <h4 class="tag">BUMFISH‑W</h4>
+              <ul class="check">
+                <li><strong>B</strong>rakes — firm; park brake <strong>OFF</strong>.</li>
+                <li><strong>U</strong>ndercarriage — (fixed).</li>
+                <li><strong>M</strong>asters — <strong>ON</strong>.</li>
+                <li><strong>F</strong>uel — sufficient/balance; <strong>PUMP ON</strong> as req.</li>
+                <li><strong>I</strong>nstruments — check (T&amp;Ps, Alerts).</li>
+                <li><strong>S</strong>witches — landing/strobe as req.</li>
+                <li><strong>H</strong>arness — secure; <strong>W</strong>ind sock.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="tag">Final — RPUFF</h4>
+              <ul class="check">
+                <li><strong>R</strong>WY clear / cleared to land.</li>
+                <li><strong>P</strong>rofile, alignment, performance — v<sub>ref</sub> guidance:
+                  <ul>
+                    <li>Short‑field: aim <strong>77</strong> (do not go below <strong>77</strong>).</li>
+                    <li>LDG flap: <strong>80–85</strong> (v<sub>ref</sub> ~77).</li>
+                    <li>Flapless: <strong>85–90</strong> (v<sub>ref</sub> ~82).</li>
+                  </ul>
+                </li>
+                <li><strong>U</strong>ndercarriage — (fixed).</li>
+                <li><strong>F</strong>uel XFR / <strong>F</strong>uel pump — as required.</li>
+                <li><strong>F</strong>lap — indicator confirms setting.</li>
+              </ul>
+            </div>
+          </div>
+          <ul class="check">
+            <li class="warn">Adjust IAS with <strong>pitch</strong>; if IAS is low, expect to need <strong>more power</strong> (adverse command zone).</li>
+            <li class="danger">Stabilised by <strong>300'</strong> AGL — otherwise <strong>Go Around</strong>.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Crosswind — flare & roll‑out</summary>
+          <ul class="check">
+            <li>Nose straight with <strong>rudder</strong> on centreline.</li>
+            <li>Use <strong>aileron</strong> to stay on centreline during roll‑out (and keep it in after touchdown).</li>
+          </ul>
+        </details>
+
+        <h3>Touch‑and‑Go / Short‑field / Flapless</h3>
+        <ul class="check">
+          <li><strong>T&amp;G</strong>: hold back‑pressure; smoothly to <strong>FULL PWR within ~3 s</strong>.</li>
+          <li><strong>Flapless T&amp;G</strong>: hold back‑pressure; easy “bloom”; select <strong>TO flap</strong> — expect easy lift‑off.</li>
+          <li><strong>Short‑field landing</strong>: aim for threshold; PWR <strong>IDLE</strong> over gable marker; gentle braking.</li>
+        </ul>
+      </section>
+
+      <!-- AWK -->
+      <section class="card" id="awk">
+        <h2>AWK <span class="badge">Airwork</span></h2>
+        <p class="muted">General handling references.</p>
+      </section>
+
+      <section class="card" id="steep">
+        <h2>Steep Turns <span class="badge">Airwork</span></h2>
+        <ul class="check">
+          <li>Choose reference & lead ref; lookout: Right → Center → Up → Left → Left‑back.</li>
+          <li><strong>45°</strong> / <strong>60°</strong> AOB options.</li>
+          <li><strong>PWR ~65%</strong> for 45°; flow: <strong>B&amp;B → 30° AOB → add back‑pressure</strong> → <strong>ALAP</strong>.</li>
+          <li>Recovery: <strong>B&amp;B → 30° AOB → release back‑pressure</strong>; for 60° consider <strong>PWR ~75%</strong>.</li>
+        </ul>
+      </section>
+
+      <section class="card" id="compass">
+        <h2>Compass Turns <span class="badge">Airwork</span></h2>
+        <ul class="check">
+          <li>S. Hemisphere：ONUS - Overshoot North. Undershoot South</li>
+          <li>North: roll out 30° after; South: roll out 30° before.</li>
+          <li>East/West: roll out on heading.</li>
+        </ul>
+        <figure>
+          <img src="Flight Training/compass turn.jpg" alt="ONUS Compass Turns Diagram" style="max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--radius);">
+          <figcaption style="text-align: center; color: var(--muted); font-size: 0.9em;">ONUS Compass Turns Diagram</figcaption>
+        </figure>
+      </section>
+
+      <!-- PFL -->
+      <section class="card" id="pfl">
+        <h2>PFL — Forced Landing <span class="badge">Emergencies</span></h2>
+        <p><strong>Glide ratio:</strong> ~<strong>1:9.7</strong>. <span class="muted">Training ratio often uses ~<strong>1:7</strong> to allow for turns/inefficiencies.</span></p>
+        <ul class="check">
+          <li class="warn"><strong>Step1. Use glide range to select touchdown zone (TDZ). Neither too close nor too far!
+          </strong></li>
+          <li class="warn"><strong>Step2. Plan a Final into wind!</strong></li>
+          <li class="warn"><strong>Step3.Track to the final and MODIFY the CCT on the way (keep thinking: do you have enough height for a base leg? down wind leg? more legs?)</strong></li>
+          </strong></li>
+          <li class="warn"><strong>Step4. Always Wings LEVEL to check spacing. If getting closer/further, adjust the legs. Its recommonded to adjust your base leg's length by undershoot or overshoot final.</strong></li>
+          <li>small tailwind (≤ ~5 kt) acceptable if improves field choice.</li>
+          <li>Aviate first. Make sure you are able to reach the TDZ.</li>
+        </ul>
+        <details>
+          <summary>Field Selection — BIG & SMALL aspects</summary>
+          <div class="kv">
+            <div>
+              <h4 class="tag">BIG</h4>
+              <ul class="check">
+                <li><strong>Size</strong>, <strong>Shape</strong>, <strong>Surrounding</strong>, <strong>Service</strong> (houses/boats), <strong>Sun</strong>.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="tag">SMALL</h4>
+              <ul class="check">
+                <li><strong>Surface</strong>, <strong>Slope</strong>.</li>
+              </ul>
+            </div>
+          </div>
+          <ul class="check">
+            <li>TDZ ~<strong>1/3</strong> into field. Plan backwards from TDZ. Low‑key (turn base) ~<strong>1200–1500'</strong> AGL.</li>
+            <li>Rough guide: ~<strong>1.5 nm / 1000'</strong> (short RWY: closer).</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Simulated Checks</summary>
+          <ul class="check">
+            <li data-type="flow"><strong>Phase 1 (Aviate)</strong>: Fuel <strong>ON</strong>; PWR <strong>MAX</strong>; Alt Air <strong>ON</strong>; Fuel Pump <strong>ON</strong>; Voter <strong>AUTO</strong>; ENG Master <strong>ON</strong>.</li>
+            <li><strong>Trouble check</strong>: Speed <strong>88</strong>; ECU caution? Fuel EMRG? PWR idle (confirm)? Alt Air <strong>ON</strong>; CCT breakers; ENG instruments (T&amp;Ps/Volts/Amps/Fuel); Electric Master <strong>ON</strong>; ENG Master <strong>ON</strong>; Fuel Pump <strong>ON</strong>; Voter: <strong>A → AUTO → B → AUTO</strong>.</li>
+            <li><strong>Sim MAYDAY</strong>: “MAYDAY (×3), <em>callsign</em>, engine failure, <em>xx nm</em> <em>xx</em> of PMQ, 2 POB, attempting forced landing.”</li>
+            <li><strong>ELT ON</strong>; XPDR <strong>7700</strong>.</li>
+            <li><strong>PAX brief</strong> (see section).</li>
+            <li><strong>Secure engine</strong> (when committed): ENG Master <strong>OFF</strong>; Fuel Pump <strong>OFF</strong>; Fuel XFR Pump <strong>OFF</strong>; Throttle <strong>IDLE</strong>; Fuel Tank <strong>OFF</strong>; <em>Before landing</em>: Electric Master <strong>OFF</strong>.</li>
+            <li>Re‑check PWR availability each <strong>1000'</strong>.</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- PSL -->
+      <section class="card" id="psl">
+        <h2>PSL — Precautionary Search &amp; Landing <span class="badge">Emergencies</span></h2>
+        <ul class="check">
+          <li>Assess Field Length: T/O Flap + PWR 50% -> GS 90 kt/ /45 meters per second</li>
+        </ul>
+      </section>
+
+      <!-- Emergencies -->
+      <section class="card" id="emergencies">
+        <h2>Emergency Procedures <span class="badge">Abnormal</span></h2>
+        <details>
+          <summary>Engine Smoke &amp; Fire</summary>
+          <div class="kv">
+            <div>
+              <h4 class="tag">On Ground</h4>
+              <ul class="check">
+                <li>Fuel Tank <strong>OFF</strong>; Fuel XFR Pump <strong>OFF</strong>; ENG Master <strong>OFF</strong>; Fuel Pump <strong>OFF</strong>; Cabin Heat <strong>OFF</strong>.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="tag">In Flight</h4>
+              <ul class="check">
+                <li>Fuel Tank <strong>OFF</strong>; <strong>PWR MAX</strong> (expedite); pitch down for ~<strong>1000 fpm</strong> (≈<strong>−5°</strong> flap UP); ENG Master <strong>OFF</strong>; Fuel Pump <strong>OFF</strong>; <em>Before landing</em> Electric Master <strong>OFF</strong>.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+        <details>
+          <summary>Electrical Fire (with Smoke)</summary>
+          <div class="kv">
+            <div>
+              <h4 class="tag">On Ground</h4>
+              <ul class="check">
+                <li>Electric Master <strong>OFF</strong>; Throttle <strong>IDLE</strong>; ENG Master <strong>OFF</strong>; Fuel Pump <strong>OFF</strong>.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="tag">In Flight</h4>
+              <ul class="check">
+                <li>Electric Master <strong>OFF</strong>; Secure engine before landing.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+        <details>
+          <summary>Communication Failure</summary>
+          <ul class="check">
+            <li>Maintain terrain clearance; remain <strong>VMC</strong> if possible.</li>
+            <li>Indications: In‑flight — HJ: rocking wings; HN: on/off landing/nav lights. On ground — HJ: waggling ailerons/rudder; HN: on/off landing/nav lights.</li>
+            <li><strong>VFR Class G</strong> / CTA/RA/IFR: remain VFR in Class G; land at <strong>nearest</strong> AD; report arrival to ATS via <strong>SAR telephone</strong>.</li>
+            <li>Squawk <strong>7600</strong>; listen to ATIS or voice‑mod Navaids; transmit blind (<strong>PAI</strong>).</li>
+            <li>If in IMC: proceed per latest ATC route clearance & planned level; hold to give ATS/traffic time to respond, then proceed.</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- PAX Brief -->
+      <section class="card" id="pax">
+        <h2>PAX Brief <span class="badge">Safety</span></h2>
+        <details>
+          <summary>Apron</summary>
+          <ul class="check">
+            <li>No smoking; follow escort (<strong>ASIC</strong>) at all times.</li>
+            <li>Parking clearance lines — do not cross without instruction.</li>
+            <li>Propeller danger area — stay clear.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Aircraft</summary>
+          <ul class="check">
+            <li><strong>DA40NG</strong>. Exits: Front canopy (external/internal handles), Rear door (external handle & push button; internal handle & safety latch), Emergency: axe & jettison handle.</li>
+            <li>Baggage: rear cargo under net; side bags; obey loading instructions.</li>
+            <li>Emergency equipment: fire extinguisher; first aid; ELT.</li>
+            <li>Emergency actions: activate ELT; brace; <strong>meet 20 m left</strong> of A/C after landing.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Seats, Belts, Other</summary>
+          <ul class="check">
+            <li>Seats upright; attachments stowed; do not obstruct rear door or manipulate pilot seat.</li>
+            <li>Seat belts: single sash + lap belt — demonstrate fastening.</li>
+            <li>Boarding: foot on pad → on wing → step inside → swing.</li>
+            <li>In flight: no smoking; no toilet; use intercom for speaking; radios by pilot.</li>
+            <li>Comfort check; questions welcome.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>EMRG PAX Brief (PFL)</summary>
+          <p>“I’m conducting a forced landing now. Please remove glasses, secure loose objects, and <strong>brace</strong> for impact. After landing we will gather <strong>20 m to the left</strong> of the aircraft.”</p>
+        </details>
+      </section>
+
+      <!-- Navigation -->
+      <section class="card" id="nav">
+        <h2>PPL Navigation <span class="badge">VFR Nav</span></h2>
+        <p class="muted">Mnemonics & quick rules for planning and airborne nav.</p>
+      </section>
+
+      <section class="card" id="normal-nav">
+        <h2>Normal Nav <span class="badge">TMG / CBTTT</span></h2>
+        <ul class="check">
+          <li><strong>TMG</strong>: <strong>Time</strong> — <strong>Map</strong> — <strong>Ground</strong>.</li>
+          <li><strong>CBTTT</strong>: <strong>Course</strong> — <strong>HDG Bug</strong> — <strong>Time</strong> — <strong>Track</strong> — <strong>Trim</strong>.</li>
+          <li>Map Scale cues (rule‑of‑thumb): 1‑finger ≈ VTC 2.5 nm / VNC 5 nm / WAC 10 nm. 4‑finger ≈ ×4.</li>
+          <li>Small Divert (dog leg): due small cloud or terrain, ETA changes as follows:</li>
+          <table>
+            <thead>
+              <tr>
+              <th>HDG Change</th>
+              <th>Correction Factor</th>
+              <th>Explanation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+              <td>60°</td>
+              <td>+1×</td>
+              <td>Add 1× the time flying the new leg to the total ETA.</td>
+              </tr>
+              <tr>
+              <td>45°</td>
+              <td>+2/3×</td>
+              <td>Add 2/3× the time flying the new leg to the total ETA.</td>
+              </tr>
+              <tr>
+              <td>30°</td>
+              <td>+1/4×</td>
+              <td>Add 1/4× the time flying the new leg to the total ETA.</td>
+              </tr>
+            </tbody>
+            </table>
+        </ul>
+      </section>
+
+      <section class="card" id="lost-divert">
+        <h2>Lost &amp; Divert <span class="badge">Procedures</span></h2>
+        <div class="kv">
+          <div>
+            <h3 id="divert">Divert</h3>
+            <ul class="check">
+              <li><strong>T</strong>: Time — Record current time.</li>
+              <li><strong>R</strong>: Rough track</li> 
+              <li>— precise track (⚠ consider <strong>T → M</strong> conversion)</li>
+              <li>— re‑plan distance & ETA.</li>
+              <li>— <strong>Re‑config</strong> as required.</li>
+              <li><strong>E</strong>: Endurance — fuel remaining vs options.</li>
+              <li><strong>A</strong>: Airspace — clearance / hemispherical levels / terrain / VMC.</li>
+              <li><strong>N</strong>: <strong>FPL amend</strong> (DIV from, <strong>DCT</strong> to, SAR).</li>
+            </ul>
+          </div>
+          <div>
+            <h3 id="lost">Lost Procedure</h3>
+            <ul class="check">
+              <li><strong>TAHAGMD</strong>(Yohann’s mnemonic):</li>
+              <li><strong>T — Time</strong>: note current time; recall the last known position time.</li>
+              <li><strong>A — Anchor</strong>: <strong>Timer 1 min</strong>, make a gentle <strong>left turn</strong> (stabilise and think).</li>
+              <li><strong>H — Holding Config</strong>: set a safe hold: <strong>PWR 65%</strong>, <strong>T/O flap</strong>; maintain safe altitude.</li>
+              <li><strong>A — AoP</strong>: estimate Area of Probability: <strong>r = 20% of leg distance + 5 nm</strong>.</li>
+              <li><strong>G → M</strong>: match <strong>Ground to Map</strong>, go <strong>Big → Small</strong>: confirm <strong>3 Big</strong> features with <strong>1–3 Small</strong> clues.</li>
+              <li><strong>D — Divert</strong>: once fixed or feasible, divert with safe heading, track/distance/ETA, fuel/endurance & alternates, airspace/hemispherical levels, and file any <strong>FPL amendments</strong> (DIV from, <strong>DCT</strong> to, SAR) as required.</li>
+            </ul>
+
+            <details>
+              <summary>When TAHAGMD not work — <em>for awareness only</em> (Not required in our training)</summary>
+              <ul class="check">
+                <li><em>Yohann’s mnemonic</em>: <strong>“Climb higher to aid ATC prominently.”</strong></li>
+                <li><strong>Climb</strong> to see further / improve comms, but <strong>do not climb above possible CTA</strong>.</li>
+                <li><strong>Use Navaid</strong>/GNSS to assist fixing.</li>
+                <li><strong>Seek ATC / FIS</strong> for help; be ready to squawk <strong>IDENT</strong>.</li>
+                <li><strong>Fly toward prominent features</strong>: coastline / railway / large river / mountain.</li>
+              </ul>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Tips</h2>
+        <ul class="check">
+          <li>Tap any section title to collapse/expand content.</li>
+          <li>Use the Search box to filter & highlight (type to see matches).</li>
+          <li>If any question, please contact me by Email. Thank you!</li>
+        </ul>
+      </section>
+
+      <footer>
+        Last updated: 2025-10-03 • © Yohann Aviation Note
+      </footer>
+    </main>
+  </div>
+
+  <button class="topbtn" id="topbtn" title="Back to top" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script>
+    (function(){
+      const q = document.getElementById('q');
+      const sections = Array.from(document.querySelectorAll('main section.card'));
+      const sectionIndex = sections.map(sec => ({
+        el: sec,
+        text: (sec.innerText || sec.textContent || '').toLowerCase().replace(/\s+/g,' ')
+      }));
+
+      // ---- Non-destructive highlight helpers ----
+      function unwrapMarks(root) {
+        root.querySelectorAll('mark.hl').forEach(m => {
+          const t = document.createTextNode(m.textContent);
+          m.replaceWith(t);
+        });
+        root.normalize();
+      }
+      function escapeRx(s){ return s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); }
+      function highlightTerm(root, term) {
+        if (!term) return;
+        const rx = new RegExp(escapeRx(term), 'gi');
+        const walker = document.createTreeWalker(
+          root,
+          NodeFilter.SHOW_TEXT,
+          { acceptNode(node) {
+              if (!node || !node.parentNode) return NodeFilter.FILTER_REJECT;
+              if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+              const tag = node.parentNode.nodeName.toLowerCase();
+              if (tag === 'script' || tag === 'style' || tag === 'mark') return NodeFilter.FILTER_REJECT; // FIXED: proper tag checks
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+
+        for (const node of nodes) {
+          const text = node.nodeValue;
+          rx.lastIndex = 0;
+          let m, last = 0;
+          const frag = document.createDocumentFragment();
+          let matched = false;
+          while ((m = rx.exec(text))) {
+            matched = true;
+            const start = m.index; const end = start + m[0].length;
+            if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
+            const mark = document.createElement('mark');
+            mark.className = 'hl';
+            mark.textContent = text.slice(start, end);
+            frag.appendChild(mark);
+            last = end;
+            if (frag.childNodes.length > 400) break;
+          }
+          if (matched) {
+            if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+            node.parentNode.replaceChild(frag, node);
+          }
+        }
+      }
+      function expandDetailsIfHighlighted(root) {
+        root.querySelectorAll('details').forEach(d => {
+          if (d.querySelector('mark.hl')) d.open = true;
+        });
+      }
+
+      const appbar = document.querySelector('header.appbar');
+      function setAppbarVar(){
+        const h = appbar ? appbar.getBoundingClientRect().height : 72;
+        document.documentElement.style.setProperty('--appbarH', (h + 12) + 'px');
+      }
+      setAppbarVar();
+      window.addEventListener('resize', setAppbarVar);
+
+      // Build collapsible TOC groups
+      (function(){
+        const navEl = document.querySelector('nav.toc');
+        if (!navEl) { window._tocState = { idToGroup:{} }; return; }
+
+        const links = Array.from(navEl.querySelectorAll('a[href^="#"]'));
+        const container = document.createElement('div');
+        let currentDetails = null;
+        const idToGroup = {};
+
+        links.forEach(a => {
+          const isSub = a.classList.contains('sub');
+          const isSub2 = a.classList.contains('sub2');
+          const id = a.getAttribute('href').slice(1);
+          if (!isSub) {
+            currentDetails = document.createElement('details');
+            const sum = document.createElement('summary');
+            const caret = document.createElement('span');
+            caret.textContent = '▸'; caret.style.opacity = '.6'; caret.style.marginLeft = '8px';
+            sum.appendChild(a); sum.appendChild(caret);
+            currentDetails.appendChild(sum);
+            container.appendChild(currentDetails);
+          } else if (currentDetails) {
+            const item = document.createElement('div');
+            item.style.marginLeft = isSub2 ? '22px' : '8px';
+            item.appendChild(a);
+            currentDetails.appendChild(item);
+          }
+          if (currentDetails && id) idToGroup[id] = currentDetails;
+        });
+
+        // Replace loose links with grouped details
+        navEl.querySelectorAll('a[href^="#"]').forEach(x => x.remove());
+        navEl.appendChild(container);
+
+        const groups = Array.from(container.querySelectorAll('details'));
+        groups[0]?.setAttribute('open','');
+        groups[1]?.setAttribute('open','');
+
+        // Manual pin logic — keep user-opened groups open
+        container.addEventListener('toggle', (e)=>{
+          if (e.target.nodeName.toLowerCase() !== 'details') return;
+          const sumCaret = e.target.querySelector('summary span:last-child');
+          if (sumCaret) sumCaret.textContent = e.target.open ? '▾' : '▸';
+          if (e.isTrusted) {
+            if (e.target.open) {
+              e.target.dataset.pinned = '1';
+            } else {
+              delete e.target.dataset.pinned;
+            }
+          }
+        }, true);
+
+        function autoOpenGroupForId(id){
+          const grp = idToGroup[id];
+          if (!grp) return;
+          if (!grp.open) grp.setAttribute('open','');
+          groups.forEach(g => {
+            if (g === grp) return;
+            if (g.dataset.pinned === '1') return;
+            if (g.open) g.removeAttribute('open');
+          });
+        }
+
+        function scrollToAnchor(id){
+          const target = document.getElementById(id);
+          if(!target) return;
+          const h = appbar ? appbar.getBoundingClientRect().height : 72;
+          const y = target.getBoundingClientRect().top + window.scrollY - h - 8;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+
+        // Intercept clicks in TOC
+        navEl.addEventListener('click', (ev) => {
+          const a = ev.target.closest('a[href^="#"]');
+          if(!a) return;
+          ev.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          autoOpenGroupForId(id);
+          scrollToAnchor(id);
+          history.replaceState(null, '', '#' + id);
+        });
+
+        // Populate mobile TOC select (FIX: previously empty)
+        const tocSelect = document.getElementById('toc-select');
+        if (tocSelect) {
+          // Reset options
+          tocSelect.innerHTML = '';
+          const opt = document.createElement('option');
+          opt.value = ''; opt.textContent = 'Contents'; opt.selected = true; opt.disabled = true;
+          tocSelect.appendChild(opt);
+          const tocLinks = Array.from(document.querySelectorAll('nav.toc a[href^="#"]'));
+          tocLinks.forEach(a => {
+            const o = document.createElement('option');
+            const isSub = a.classList.contains('sub');
+            const isSub2 = a.classList.contains('sub2');
+            o.value = a.getAttribute('href').replace('#','');
+            o.textContent = (isSub ? (isSub2 ? '— — ' : '— ') : '') + a.textContent.trim();
+            tocSelect.appendChild(o);
+          });
+          tocSelect.addEventListener('change', (e)=>{
+            const id = e.target.value; if (!id) return;
+            autoOpenGroupForId(id);
+            const target = document.getElementById(id);
+            if (target) {
+              const h = appbar ? appbar.getBoundingClientRect().height : 72;
+              const y = target.getBoundingClientRect().top + window.scrollY - h - 8;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+            history.replaceState(null, '', '#' + id);
+            tocSelect.selectedIndex = 0;
+          });
+        }
+
+        // Align TOC state with hash on load
+        if (location.hash && location.hash.length > 1) {
+          const id = location.hash.slice(1);
+          autoOpenGroupForId(id);
+        }
+
+        // Expose mapping
+        window._tocState = { idToGroup, groups };
+      })();
+
+      let composing = false; let raf = 0;
+      const runSearch = () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const term = (q.value || '').trim().toLowerCase();
+          const main = document.querySelector('main');
+          unwrapMarks(main);
+          if (!term) { sections.forEach(s => s.style.display = ''); return; }
+          sectionIndex.forEach(({el, text}) => { el.style.display = text.includes(term) ? '' : 'none'; });
+          sections.forEach(sec => { if (sec.style.display !== 'none') highlightTerm(sec, term); });
+          sections.forEach(sec => { if (sec.style.display !== 'none') expandDetailsIfHighlighted(sec); });
+        });
+      };
+
+      q && q.addEventListener('compositionstart', () => composing = true);
+      q && q.addEventListener('compositionend', () => { composing = false; runSearch(); });
+      q && q.addEventListener('input', () => { if (!composing) runSearch(); });
+      q && q.addEventListener('keydown', (e) => { if (e.key === 'Escape') { q.value = ''; runSearch(); } });
+
+      document.getElementById('go-back')?.addEventListener('click', () => {
+        const userLang = navigator.language || navigator.userLanguage;
+        if (userLang && userLang.startsWith('zh')) {
+          window.location.href = 'flight-training.html';
+        } else {
+          window.location.href = 'flight-training_en.html';
+        }
+      });
+
+      document.getElementById('topbtn')?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+  <!-- Content reorganized from VFR DA40NG Training Note.docx; UI adapted from MEA IR DA42 Training Note template. -->
+</body>
+</html>
