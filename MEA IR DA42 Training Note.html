@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MEA IR DA42 Training Note | Yohann Aviation Note</title>
+  <meta name="author" content="Yohann Aviation Note" />
+  <meta name="description" content="Compact, responsive, and print-friendly flight notes for MEA IR on DA42: VFR/IFR procedures, flows, AWK, OEI, ILS/RNP, YPMQ–YSTW routing, and more." />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-G3TQJTQ67B');
+    </script>
+  
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #12182b;
+      --text: #e6e8ef;
+      --muted: #a9b0c7;
+      --brand: #6ea8fe;     /* primary blue */
+      --brand-2: #9cc7ff;   /* softer blue */
+      --warn: #ffcb6b;
+      --danger: #ff6b6b;
+      --ok: #6ea8fe;
+      --mark: #ffee88;
+      --card: #0f1526;
+      --border: rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 15px;
+      --fs-base: 16px;
+      --maxw: 980px;
+    }
+
+    :root { --appbarH: 84px; }
+    [id]{ scroll-margin-top: var(--appbarH, 84px); }
+
+    html { font-size: var(--fs-base); }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, var(--bg), #0a0f1e 60%);
+      color: var(--text);
+    }
+
+    header.appbar {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: saturate(150%) blur(10px);
+      background: linear-gradient(90deg, rgba(14,18,34,.85), rgba(14,18,34,.6));
+      border-bottom: 1px solid var(--border);
+    }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 10px 16px; }
+    .appbar .row { display: grid; grid-template-columns: 1fr; gap: 8px; align-items: center; }
+
+    /* Title + Author */
+    h1.title{
+      font-size: clamp(17px, 1.1rem + 0.4vw, 22px);
+      margin: 0; letter-spacing: .2px; line-height: 1.1;
+      display: inline-flex; align-items: baseline; gap: 10px; flex-wrap: nowrap;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; justify-self: start;
+    }
+    h1.title .author{
+      font-size: 0.8em; color: var(--muted); font-weight: 700;
+      border: 1px solid var(--border); padding: 2px 8px; border-radius: 999px;
+      background: rgba(255,255,255,.04); white-space: nowrap;
+    }
+
+    /* Controls: robust anti-overlap grid */
+    .controls {
+      isolation: isolate; display: grid;
+      grid-template-columns: auto 1fr auto; /* GoBack | Search | TOC */
+      align-items: center; gap: 10px; width: 100%;
+    }
+    .controls > * { position: relative; z-index: 1; }
+    .search { z-index: 0; position: relative; min-width: 0; }
+    .search input {
+      width: 100%; background: var(--panel); color: var(--text);
+      border: 1px solid var(--border); outline: none;
+      padding: 10px 12px 10px 36px; border-radius: 999px; box-shadow: var(--shadow);
+      background-clip: padding-box;
+    }
+    .search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: .65; pointer-events: none; }
+    .chip, button, .toggle, select {
+      background: var(--panel); color: var(--text);
+      border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow);
+      font-weight: 600; cursor: pointer;
+    }
+
+    /* TOC dropdown sizing to avoid collision */
+    #toc-select {
+      min-width: 112px; width: max-content; max-width: 34vw;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      position: relative; z-index: 2; appearance: none; padding-right: 28px;
+    }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 18px; padding: 16px; }
+    @media (min-width: 920px) {
+      .appbar .row { grid-template-columns: 1fr auto; }
+      h1.title { justify-self: start; }
+      .grid { grid-template-columns: 260px 1fr; align-items: start; }
+    }
+
+    /* TOC */
+    nav.toc { position: sticky; top: 68px; align-self: start; background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px; box-shadow: var(--shadow); }
+    nav.toc h2 { margin: 6px 8px 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; }
+    nav.toc a { display: block; padding: 8px 10px; margin: 4px 0; text-decoration: none; color: var(--text); border-radius: 10px; border: 1px dashed transparent; }
+    nav.toc a:hover { background: linear-gradient(90deg, rgba(111,168,255,.12), transparent); border-color: var(--border); }
+    nav.toc .sub { margin-left: 10px; font-size: .94em; color: var(--muted); }
+
+    /* Mobile */
+    #toc-select { display: none; }
+    @media (max-width: 919px) {
+      header.appbar .wrap{ padding: 6px 12px; }
+      h1.title{ font-size: 18px; gap: 8px; justify-self: center; text-align: center; }
+      h1.title .author{ font-size: 0.74em; padding: 1px 6px; }
+      nav.toc { display: none !important; }
+      #toc-select { display: inline-flex; font-size: 14px; }
+      .controls { gap: 8px; grid-template-columns: auto minmax(120px, 1fr) minmax(96px, max-content); }
+      #toc-select { max-width: 30vw; }
+      .search input { padding: 8px 10px 8px 30px; }
+      button#go-back{ padding: 6px 10px; font-size: 14px; }
+    }
+    @media (max-width: 420px) {
+      .controls { grid-template-columns: auto minmax(110px, 1fr) minmax(92px, max-content); gap: 6px; }
+      #toc-select { max-width: 28vw; }
+    }
+
+    /* Cards / Sections */
+    section.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+    section.card h2 { margin-top: 0; display: flex; align-items: center; gap: 10px; }
+    section.card h3 { margin-top: 1.2em; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,.06); font-size: .85em; color: var(--brand); }
+    .tag { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: .78em; letter-spacing: .12em; }
+    .warn { color: var(--warn); font-weight: 700; }
+    .danger { color: var(--danger); font-weight: 700; }
+    .ok { color: var(--ok); font-weight: 700; }
+    .kv { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    @media (min-width: 720px) { .kv { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+    ul.check { list-style: none; padding: 0; margin: .25rem 0 1rem; }
+    ul.check li { padding: 6px 8px; border-left: 3px solid transparent; }
+    ul.check li + li { border-top: 1px dashed var(--border); }
+    ul.check li[data-type="flow"] { border-left-color: var(--brand); }
+    ul.check li[data-type="callout"] { border-left-color: var(--warn); background: linear-gradient(90deg, rgba(255,203,107,.12), transparent); }
+
+    details { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; background: linear-gradient(180deg, rgba(255,255,255,.02), transparent); }
+    details > summary { cursor: pointer; font-weight: 700; list-style: none; }
+    details[open] { background: linear-gradient(180deg, rgba(110,168,254,.08), transparent); }
+
+    footer { color: var(--muted); text-align: center; padding: 24px; }
+
+    /* Non-destructive highlight style */
+    mark.hl { background: rgba(110,168,254,.35); color: #fff; padding: 0 .15em; border-radius: .2em; box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset; }
+
+    .topbtn { position: fixed; bottom: 18px; right: 18px; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; box-shadow: var(--shadow); background: var(--panel); border: 1px solid var(--border); cursor: pointer; opacity: .9; }
+
+    /* Collapsible TOC + viewport fit */
+    nav.toc { max-height: calc(100vh - 96px); overflow: auto; }
+    nav.toc details { margin: 6px 0; border: 1px dashed var(--border); border-radius: 10px; padding: 4px; background: rgba(255,255,255,.02); }
+    nav.toc summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; }
+    nav.toc summary::-webkit-details-marker { display: none; }
+    nav.toc summary a { flex: 1; text-decoration: none; color: var(--text); }
+    nav.toc details[open] { background: linear-gradient(180deg, rgba(110,168,254,.08), transparent); }
+
+    @media print {
+      header.appbar, nav.toc, .topbtn { display: none !important; }
+      body { background: #fff; color: #000; }
+      section.card { break-inside: avoid; box-shadow: none; border-color: #ddd; }
+      a { color: #000; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="wrap">
+      <div class="row">
+        <h1 class="title">
+          MEA IR DA42 Training Note
+          <small class="author">Yohann Aviation Note</small>
+        </h1>
+        <div class="controls">
+          <button id="go-back" class="chip" title="Go Back">← Go Back</button>
+          <div class="search" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input id="q" placeholder="Search calls, flows, acronyms… (e.g. BUMFISH, OEI, ILS)" aria-label="Search all content" />
+          </div>
+          <select id="toc-select" aria-label="Contents"></select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid wrap">
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+      <a href="#vfr">VFR CCT AWK</a>
+      <a href="#normal" class="sub">Normal CCT</a>
+      <a href="#flapless" class="sub">Flapless CCT</a>
+      <a href="#go-around" class="sub">Go Around</a>
+      <a href="#oei" class="sub">OEI</a>
+      <a href="#oei-cct" class="sub">OEI CCT</a>
+      <a href="#shortfield" class="sub">Short Field T/O</a>
+      <a href="#vmca" class="sub">Vmca Recover</a>
+      <a href="#rto" class="sub">Rejected T/O</a>
+      <a href="#ta-awk">TA AWK</a>
+      <a href="#ifr-nav">IFR NAV</a>
+      <a href="#flow" class="sub">Flow</a>
+      <a href="#radio" class="sub">Radio</a>
+      <a href="#tem" class="sub">TEM</a>
+      <a href="#dep-brief" class="sub">Departure Brief</a>
+      <a href="#before-lineup" class="sub">Before Line UP</a>
+      <a href="#efato" class="sub">EFATO</a>
+      <a href="#airborne" class="sub">Airborne</a>
+      <a href="#cruise" class="sub">Cruise</a>
+      <a href="#enroute" class="sub">Enroute</a>
+      <a href="#tod-calc" class="sub">Calculate Enroute–TOD</a>
+      <a href="#awk-detail" class="sub">AWK detail (pre-TOD)</a>
+      <a href="#tit" class="sub">T-I-T Navaids</a>
+      <a href="#dravir" class="sub">DRAVIR</a>
+      <a href="#tod-flow" class="sub">TOD Flow (simple)</a>
+      <a href="#ohpt" class="sub">OHPT</a>
+      <a href="#gear" class="sub">Gear DN</a>
+      <a href="#faf" class="sub">FAF</a>
+      <a href="#visual" class="sub">Visual</a>
+      <a href="#ils" class="sub">ILS</a>
+      <a href="#ga" class="sub">Missed/GA</a>
+      <a href="#ypmq-ystw">YPMQ–YSTW</a>
+      <a href="#pmq-tw" class="sub">PMQ → TW</a>
+      <a href="#tw-pmq" class="sub">TW → PMQ</a>
+    </nav>
+
+    <main>
+      <!-- VFR -->
+      <section class="card" id="vfr">
+        <h2>VFR CCT AWK <span class="badge" title="Visual circuits & airwork">VFR / Circuits</span></h2>
+
+        <h3 id="normal">Normal CCT</h3>
+        <ul class="check">
+          <li>Approaching <strong>Vr 76</strong> — rotate <strong>5°</strong>.</li>
+          <li>Positive climb → <strong>ABV 85</strong>; Brakes <strong>OFF</strong>, Gear <strong>UP</strong> (Pitch <strong>10–12°</strong>).</li>
+          <li><strong>300'</strong> — set <strong>trim</strong>; target <strong>100 kt</strong>.</li>
+          <li>"<strong>G UP Flap UP</strong>"; RPM / Load stable; <strong>600'</strong> — Performance check <strong>PWR ~92%</strong>.</li>
+          <li><strong>1000'</strong> — <strong>A-S-P(50)-T</strong>; consider early downwind.</li>
+        </ul>
+        <details>
+          <summary>BUMFISH</summary>
+          <ul class="check">
+            <li><strong>B</strong>: Brakes firm; Park brake <strong>OFF</strong>.</li>
+            <li><strong>U</strong>: Undercarriage — BLW 188, Gear <strong>DN</strong>. Hold & scan. <strong>3 green</strong>, hand off.</li>
+            <li><strong>M</strong>: Masters <strong>ON</strong>.</li>
+            <li><strong>F</strong>: Fuel sufficient & balance; Fuel Pump <strong>L ON</strong>, <strong>R ON</strong>; scan.</li>
+            <li><strong>I</strong>: Instruments (Alerts & EIS) — scan.</li>
+            <li><strong>S</strong>: Landing light, Strobe light, Voter switch.</li>
+            <li><strong>H</strong>: Canopy secure; seat belts secure — scan.</li>
+            <li><strong>W</strong>: Wind sock.</li>
+          </ul>
+        </details>
+        <ul class="check">
+          <li>ABEAM Threshold → <strong>Flap APP</strong>; <strong>95–100 kt</strong> for Gear <strong>DN</strong> + Flap APP.</li>
+          <li><em>Mid-Base check</em>: <strong>95–100 kt</strong>, <strong>850</strong> (ROD), <strong>500</strong> fpm; <strong>PWR 30–35%</strong>; continue to <strong>FI</strong>.</li>
+          <li><strong>Final</strong> — <strong>R</strong>wy clear, cleared to land; <strong>P</strong>rofile/align/perf <strong>95–100</strong>; <strong>U</strong>ndercarriage 3 green; <strong>F</strong>uel pumps ON; <strong>F</strong>lap BLW 113 → <strong>Flap LDG</strong>; set <strong>PWR 25–30%</strong> to hold <strong>90 kt</strong>.</li>
+          <li><strong>Threshold</strong> ~84 kt; both PWR <strong>IDLE</strong>; capture ROD; hold back-pressure; after landing: <strong>Flap identify → UP</strong>, Instrument check, Lights/Pumps as required, trim back a bit, rudder trim neutral.</li>
+        </ul>
+
+        <h3 id="go-around">Go Around</h3>
+        <ul class="check" data-type="flow">
+          <li>Pitch <strong>UP</strong>, Power <strong>UP</strong> — <strong>F G F</strong> (Flap / Gear / Flap staged).</li>
+          <li>Pitch <strong>7.5°</strong> to <strong>Vyse</strong>; scan: speed/heading/altitude; bank & balance; stabilise at <strong>100 kt</strong>.</li>
+        </ul>
+
+        <h3 id="flapless">Flapless CCT</h3>
+        <ul class="check">
+          <li>Downwind <strong>PWR 35–40%</strong>, <strong>120 kt</strong> (guide).</li>
+          <li>ABEAM threshold: <strong>Gear DN</strong> ≤110 kt.</li>
+          <li>Base: <strong>PWR 25–30%</strong>, <strong>95–100 kt</strong>.</li>
+          <li>Final: <strong>PWR 20–25%</strong>, <strong>90 kt</strong>. Threshold ~<strong>86 kt</strong>.</li>
+        </ul>
+
+        <h3 id="oei">OEI</h3>
+        <ul class="check">
+          <li><strong>Maintain Direction</strong>(turn to HDG bug), Maintain<strong>Blue line &ge;85 (Aim 88, </strong>initial pitch ~<strong>5°</strong> prior to feather.)</li>
+          <li><strong>PWR UP (Rudder ↑), Gear UP, Flaps UP</strong>;</li>
+          <li> <strong>Dead leg, dead engine, confirm with power lever (no yaw/sound).</strong></li>
+        </ul>
+        <details>
+          <summary>Fix or Feather</summary>
+          <div class="kv">
+            <div>
+              <h4 class="tag">Fix</h4>
+              <ul class="check">
+                <li>Fuel gauges / Fuel pumps —<strong> scan.</strong></li>
+                <li>Fuel selector / AUX pumps — <strong> scan.</strong>.</li>
+                <li>Alerts / Masters — <strong> scan.</strong>.</li>
+                <li>Alternate air / Circuit breakers (ENG & pumps) — <strong> scan.</strong>.</li>
+                <li>Voter / Alternator — <strong> scan.</strong>.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="tag">Feather</h4>
+              <ul class="check">
+                <li>Dead leg, confirm power lever — <strong>FEATHER</strong> (Rudder ↓). pitch ~<strong>7.5°</strong>.</li>
+              </ul>
+              <h4 class="tag">Protect the Good</h4>
+              <ul class="check">
+                <li><strong>Performance check </strong>, set PWR <strong>92% for climb/70% for level/60% for descent, Rudder ↓</strong>, Alternate air as required.</li>
+              </ul>
+              <h4 class="tag">Secure the Dead</h4>
+              <ul class="check">
+                <li>Fuel selector/pump <strong>OFF</strong> —<strong> scan.</strong>; </li>
+                <li>Master/Alternator <strong>OFF</strong> —<strong> scan.</strong>.</li>
+                <li>Plan: CCT or PMQ NDB-A; climb <strong>3000'</strong> WI circling; config <strong>G/F</strong> as required; <strong>PAN-PAN</strong>.</li>
+              </ul>
+              <h4 class="tag">Plan</h4>
+              <ul class="check">
+                <li>VMC: CCT to land </li>
+                <li>IMC: IAP; e.g. PMQ NDB-A; climb <strong>3000'</strong> WI circling area; config <strong>G/F</strong> when needed.</li>
+                <li>Simulate PAN-PAN call</li>.
+              </ul>
+            </div>
+          </div>
+          <p class="muted"><em>Note:</em> TRK: set new HDG for wind; rudder trim as required.</p>
+        </details>
+
+        <h3 id="oei-cct">OEI CCT</h3>
+        <ul class="check">
+          <li>Downwind: <strong>PWR 70–75%</strong>, <strong>120 kt</strong>.</li>
+          <li>Mid-DW: <strong>Gear DN</strong>, ≤110 kt.</li>
+          <li>Base: <strong>PWR 60–65%</strong>, <strong>Flap APP</strong>, <strong>95–100 kt</strong>; watch bank angle.</li>
+          <li>Final: Committal height <strong>400'</strong> → <strong>Flap LDG</strong>, <strong>PWR 55–60%</strong>, <strong>90 kt</strong>. Threshold ~<strong>84</strong>; live engine to idle during flare.</li>
+          <li>OEI GA: pitch <strong>7.5°</strong> (feathered), <strong>85 kt</strong>.</li>
+        </ul>
+
+        <h3 id="shortfield">Short Field T/O</h3>
+        <ul class="check">
+          <li><strong>APP Flap</strong>; rotate; climb at <strong>Vy 85</strong> (aim 90).</li>
+          <li>Clear of obstacle (~600'): Flap <strong>UP</strong>, accelerate <strong>100 kt</strong>, set <strong>PWR 92%</strong>.</li>
+        </ul>
+
+        <h3 id="vmca">Vmca Recover</h3>
+        <ul class="check" data-type="callout">
+          <li>Pitch <strong>DOWN</strong>, live engine <strong>IDLE</strong> to regain rudder authority.</li>
+          <li>Then <strong>PWR UP</strong>, pitch up, re-establish.</li>
+        </ul>
+
+        <h3 id="rto">Rejected T/O</h3>
+        <ul class="check">
+          <li>Maintain direction; Throttles <strong>IDLE</strong>.</li>
+          <li><strong>BRAKE</strong> (push & release as required); hold elevator.</li>
+        </ul>
+      </section>
+
+      <!-- TA AWK -->
+      <section class="card" id="ta-awk">
+        <h2>TA AWK <span class="badge" title="General airwork">Airwork</span></h2>
+        <details>
+          <summary>IFR TX Call for AWK</summary>
+          <ul class="check">
+            <li><strong>IFR TX</strong>: BN AI9, DA42 POB2, TX PMQ for PMQ RWY 21; conducting AWK within 15 nm radius of PMQ, <strong>5300 ft and BLW</strong>. <span class="tag">Ops</span></li>
+            <li><strong>IFR DEP</strong>: BN AI9 departed PMQ <em>time</em>, TRK <em>NE</em>, passing <em>---</em>, climbing, AWK ops normal <em>time</em>.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Steep Turns / Stalls</summary>
+          <ul class="check">
+            <li><strong>Ref.&Lookout</strong>: set ref point (& HDG bug). Lookout(for left turn): right → Center → UP → Left → Left Back.</li>
+            <li><strong>PWR ~65%</strong></li>
+            <li><strong>Hold AP DISC</strong>, AOB increase beyond 30° back-pressure → 45° AOB as briefed.</li>
+            
+          </ul>
+        </details>
+        <details>
+          <summary>Stalls</summary>
+          <ul class="check">
+            <li><strong>HASELL</strong> check for stalls. </li>
+            <li>At stall warning → <strong>AP DISC</strong>, release back-pressure, ailerons centred, PWR UP. </li>
+            <li>For approach stall: AP DISC → PWR UP → <strong>G UP</strong> → Flap <strong>UP</strong>.</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- IFR NAV -->
+      <section class="card" id="ifr-nav">
+        <h2>IFR NAV <span class="badge" title="IFR tracking & approaches">IFR</span></h2>
+
+        <h3 id="flow">Pre-flight FPL</h3>
+        <ul class="check">
+          <li>GAF -> FPL level -> GPWT Wind -> NavLog</li>
+          <li>TAF & NOTAMs-> Fuel Log</li>
+          <li>RAIM check, RA Check</li>
+          <li>ACFT folder -> Check ACFT -> FOB -> Weight & Balance; Edit Flight Notification</li>
+          <li>Submit Flight Notification</li>
+          <li>Prepare EFB, plates, charts, IAP brief</li>
+          <li>Instructor Briefing: Route, Altitudes, Airspace, Navaids, Approaches, Alternates, Weather minima...</li>
+        </ul>
+
+        <h3 id="radio">Radio</h3>
+        <ul class="check">
+          <li>Comm1 ~<strong>70%</strong>, Comm2 ~<strong>90%</strong>; listen and avoid stepping on transmissions.</li>
+        </ul>
+
+        <h3 id="tem">TEM</h3>
+        <ul class="check">
+          <li><strong>Man</strong>: I feel safe — how about you?</li>
+          <li><strong>Machine</strong> / <strong>Environment</strong>: Active RWY/side; <strong>TRC</strong>; <strong>MSA 3000'</strong> (10 nm); Circling area <strong>2.59 nm</strong>.</li>
+        </ul>
+
+        <h3 id="dep-brief">Departure Brief</h3>
+        <ul class="check">
+          <li>ENT & Line-up/Back-track RWY; Departure: tracking N/S/E/W to intercept …, climb …</li>
+          <li>OEI in VMC: OEI CCT. OEI in IMC: climb <strong>3000'</strong>, PMQ NDB-A (unless WX very bad; check pre-flight).</li>
+        </ul>
+
+        <h3 id="before-lineup">Before Line UP</h3>
+        <ul class="check">
+          <li><strong>C</strong>: IFR TX Call.</li>
+          <li><strong>P</strong>: PAL & windsock favouring RWY; no flashing.</li>
+          <li><strong>N</strong>: NRST page <strong>2.59 nm</strong>.</li>
+          <li><strong>N</strong>: Nav & Fuel logs (ETA, fuel).</li>
+        </ul>
+
+        <h3 id="efato">EFATO</h3>
+        <ul class="check" data-type="flow">
+          <li>Direction — set HDG bug; pitch for <strong>Blue line</strong> (~<strong>5°</strong>).</li>
+          <li><strong>PWR UP</strong>, Gear <strong>UP</strong>, Flap <strong>UP</strong>.</li>
+          <li>Dead leg / dead engine (L/R) — confirm with power lever → <strong>Fix or Feather</strong>.</li>
+          <li>Feather: pitch <strong>7.5°</strong>; Protect live (PWR 92, alt air), Secure dead (Fuel/Elec off).</li>
+          <li>Plan — don’t change config; state the plan.</li>
+        </ul>
+
+        <h3 id="airborne">Airborne</h3>
+        <ul class="check">
+          <li>After T/O checks; NRST <strong>2.59 nm</strong>; CTAF / CEN calls as applicable.</li>
+        </ul>
+
+        <h3 id="cruise">Cruise — CLEAROFFS</h3>
+        <ul class="check">
+          <li><strong>C</strong>: Cruise PWR ~<strong>65%</strong>; Flap <strong>UP</strong>; Fuel pumps <strong>OFF</strong>.</li>
+          <li><strong>L</strong>: Lights as required; update Fuel & Nav logs.</li>
+          <li><strong>E</strong>: E-inst check.</li>
+          <li><strong>A</strong>: Airspace / Assigned ALT / Clearance / QNH.</li>
+          <li><strong>R</strong>: Radios & Navaids — Nav1 tuned/identified; XPDR <strong>3000 ALT</strong>.</li>
+          <li><strong>O</strong>: Orientation & OAT.</li>
+          <li><strong>F</strong>: Fuel sufficient / balance; pumps <strong>OFF</strong>.</li>
+          <li><strong>F</strong>: Forced landing area (N/R IFR).</li>
+          <li><strong>S</strong>: SAR active.</li>
+        </ul>
+
+        <h3 id="enroute">Enroute</h3>
+        <ul class="check">
+          <li>QNH: climb above FL100 set <strong>1013</strong>; descend below FL100 per Area/AD QNH (AD QNH within 50 nm; valid 15 min; add <strong>+50'</strong> if necessary).</li>
+          <li>Off-track tolerance: <strong>2 nm</strong>. Request track changes up to <strong>10 nm</strong> due WX; request level changes as needed.</li>
+        </ul>
+
+        <h3 id="tod-calc">Calculate Enroute–TOD</h3>
+        <ul class="check">
+          <li>Use MSA/Grid LSALT/Route LSALT.</li>
+          <li>Time ≈ <strong>ΔH / 500 fpm</strong> (min). Distance ≈ time×GS or (min/60)×GS.</li>
+          <li>Rules of thumb: <strong>120 kt → 2 nm/min</strong>; <strong>150 kt → 2.5</strong>; <strong>180 kt → 3</strong>.</li>
+        </ul>
+
+        <h3 id="awk-detail">AWK detail (≈5 nm pre-TOD)</h3>
+        <ul class="check">
+          <li><strong>1 IAP</strong>: “Conducting …, … feet and BLW, ops normal time …” (ETA +30; speak e.g., “0830”).</li>
+          <li><strong>&gt;1 IAP</strong>: state radius / ALT / ops normal (ETA +45).</li>
+        </ul>
+
+        <h3 id="tit">T-I-T Navaids (once appear)</h3>
+        <ul class="check">
+          <li>ILS: Nav1 & Nav2 <strong>T-I-T</strong>. Adjust ID volume. Set Nav1 ILS; audio <strong>ON</strong> on arc (or when "ITW" appears).</li>
+        </ul>
+
+        <h3 id="dravir">DRAVIR (after ATIS)</h3>
+        <ul class="check">
+          <li>Note radial (passing) and update.</li>
+        </ul>
+
+        <h3 id="tod-flow">TOD Flow (simple)</h3>
+        <ul class="check">
+          <li>Don’t start too early. Lights (LNG/TX) ON; Nav/Comm/ALT (cleared?); DI; Gear/Flap; XPDR; Tim/Ref; Audio panel; Fuel.</li>
+        </ul>
+
+        <h3 id="ohpt">OHPT</h3>
+        <ul class="check">
+          <li>At ~5 nm from sector entry / arc: <strong>O</strong>BS, <strong>H</strong>DG bug/mode, <strong>P</strong>ower as required, <strong>T</strong>rim.</li>
+        </ul>
+
+        <h3 id="gear">Gear DN (⚠)</h3>
+        <ul class="check">
+          <li>Include in <strong>BUMFISH</strong>; verify indications.</li>
+        </ul>
+
+        <h3 id="faf">FAF (⚠)</h3>
+        <ul class="check">
+          <li><strong>VEMBI</strong>: discrepancy check; confirm BUMFISH done.</li>
+          <li><strong>NF/SF</strong>: ~2 nm to FAF LNAV; confirm BUMFISH done.</li>
+        </ul>
+
+        <h3 id="visual">Visual</h3>
+        <ul class="check">
+          <li>FD <strong>OFF</strong>; Flaps as required.</li>
+          <li>Normal LDG: <strong>Flap LDG</strong> (ILS DA +500). OEI: <strong>Flap APP</strong>. If far, delay flap.</li>
+        </ul>
+
+        <h3 id="ils">ILS (workflow)</h3>
+        <ul class="check">
+          <li>Load before IAF via <strong>PROC</strong> (after IAF → <em>Activate next leg</em>); verify fixes vs plate.</li>
+          <li>Navaids: Nav1 <strong>LOC/GS</strong> & ID (audio ON when within 10–30° of course); Nav2 <strong>VOR</strong> on BRG2.</li>
+          <li>OHPT; <strong>DITTAGR</strong> (Data/ID/Tuning/Timing/Altimeters/GPS/RAIM).</li>
+          <li>Cleared for approach → <strong>Activate</strong>; set Nav2 VOR. <strong>TOD Flap APP</strong>.</li>
+          <li><strong>45° intercept</strong> to LOC; arm APR mode; capture LOC then GS: when GS diamond touches → <strong>Gear DN</strong>; run <strong>BUMFISH</strong>.</li>
+          <li>At FAP: check; Report as required. At <strong>DA+500</strong>: Flap <strong>LDG</strong>; <strong>RPUFF</strong>.</li>
+          <li>At <strong>DA+50</strong>: GA if required.</li>
+        </ul>
+
+        <h3 id="ga">Missed/Go-Around (MAP)</h3>
+        <ul class="check" data-type="flow">
+          <li>Pitch up, <strong>PWR UP</strong> — <strong>F G F</strong>.</li>
+          <li>Automatic switch to GNSS if configured; use VOR or GNSS as per MAP.</li>
+          <li>Set HDG bug/mode; FLC <strong>100 kt</strong> (OEI: <strong>85</strong>). PWR 92; Fuel pumps.</li>
+          <li>Make <strong>MAP</strong> call; once identified: track, altitude; request clearance/track; intercept …</li>
+          <li>Passing MAP ALT: invert FPL as needed; track GPS.</li>
+        </ul>
+      </section>
+
+      <!-- Route YPMQ–YSTW -->
+      <section class="card" id="ypmq-ystw">
+        <h2>YPMQ–YSTW <span class="badge" title="Port Macquarie ↔ Tamworth">Route</span></h2>
+
+        <h3 id="pmq-tw">PMQ → TW</h3>
+        <ul class="check">
+          <li>Clearoffs; load approach; brief plate.</li>
+          <li>Route LSALT: <strong>6200'</strong>; Grid LSALT: <strong>6600'</strong>; 25 nm MSA: <strong>5600'</strong>; 10 nm MSA: <strong>5000'</strong>.</li>
+          <li>50–60 nm to TW: request TRC to intercept <strong>TW R-060</strong> at <strong>8000'</strong> (where do you plan to intercept: ~<strong>30 nm</strong> from TW).</li>
+          <li>T-I-T nav aids: Nav1 & Nav2 <strong>TW 116.0</strong> both TIT; Nav1 to ITW when available; CID Nav2 VOR.</li>
+          <li>TW TWR: request <strong>ILS-Z RWY 30R</strong> via <strong>VETAK</strong> / Northern Arc; followed by <strong>VOR</strong> via <strong>OH</strong>.</li>
+          <li>Initial descent to <strong>7000'</strong>; via Arc — clearance limit <strong>15 nm / R-090</strong>. Establish on arc ±<strong>2 nm</strong> (12–13 best). Nav2 set TW TRK <strong>301</strong>; CDI Nav1 ITW.</li>
+          <li>Cleared ILS-Z — <strong>Activate</strong> (DCT IAF); Nav2 manually TW. DITTAGR.</li>
+          <li>R-085 IAF; Flap APP. R-095: <strong>TOD ↓4500'</strong>. LR-112 ↓4000. LR-115: <strong>45° intercept</strong>, arm APR.</li>
+          <li>Via VETAK: request DCT VETAK on 125.75; method 1: 1 nm before VETAK, change to LOC; method 2: keep GNSS, dotted LOC in background; at half-scale, turn right. Abeam VETAK: 15 TW; report established SE; <strong>DITTAGR</strong>.
+          </li>
+          <li>Start turn ≤ <strong>19 nm</strong>; Flap APP; 45° intercept; arm APR mode. Verbalise GNSS waypoints.</li>
+          <li>LOC captured; GS diamond touches → <strong>Gear DN</strong>; GS captured → assign MAP ALT <strong>4000'</strong>; run <strong>BUMFISH</strong>.</li>
+          <li><strong>VEMBI</strong>: discrepancy check <strong>3070'</strong>; report; update MAP ALT. At <strong>DA+500 (2140')</strong> → Flap LDG; <strong>RPUFF</strong>. <strong>DA..DA+50</strong> → GA (PWR UP / Pitch UP / F G F …).</li>
+          <li>Finish VOR: request intercept <strong>TW–PMQ</strong> track, <strong>8000'</strong>.</li>
+        </ul>
+
+        <h3 id="tw-pmq">TW → PMQ</h3>
+        <ul class="check">
+          <li>Level: <strong>A090</strong>. 60 nm: request <strong>DCT PMQ NDB</strong>. 30 nm: AWK detail. At TOD: request leave CTA on descent.</li>
+          <li>Route LSALT: <strong>6200'</strong>. Grid LSALT: beyond 45 nm FM <strong>6600'</strong>; 45 nm PMQ <strong>5500'</strong>; 25 nm MSA <strong>5300'</strong>; 10 nm MSA <strong>3000'</strong>.</li>
+          <li>RNP: <strong>ND TOD 6.4 → NI</strong>; set MDA; use vertical guidance; RAIM check ~2 nm to NF LNAV.</li>
+          <li>GA: PWR up, Pitch up, (F) G F; UN-OBS; HDG bug/mode; FLC 100 (OEI 85); PWR as briefed.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Tips</h2>
+        <ul class="check">
+          <li>Tap any section title to collapse/expand content.</li>
+          <li>Use the Search box to filter & highlight (type to see matches).</li>
+          <li>If any question, please contact me by Email. Thank you!</li>
+        </ul>
+      </section>
+
+      <footer>
+        Last updated: 2025-10-03 • © Yohann Aviation Note
+      </footer>
+    </main>
+  </div>
+
+  <button class="topbtn" id="topbtn" title="Back to top" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script>
+    (function(){
+      // Build index once
+      const q = document.getElementById('q');
+      const sections = Array.from(document.querySelectorAll('main section.card'));
+      const sectionIndex = sections.map(sec => ({
+        el: sec,
+        text: (sec.innerText || sec.textContent || '').toLowerCase().replace(/\s+/g,' ')
+      }));
+
+      // ---- Non-destructive highlight helpers ----
+      function unwrapMarks(root) {
+        root.querySelectorAll('mark.hl').forEach(m => {
+          const t = document.createTextNode(m.textContent);
+          m.replaceWith(t);
+        });
+        root.normalize();
+      }
+      function escapeRx(s){ return s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); }
+      function highlightTerm(root, term) {
+        if (!term) return;
+        const rx = new RegExp(escapeRx(term), 'gi');
+        const walker = document.createTreeWalker(
+          root,
+          NodeFilter.SHOW_TEXT,
+          { acceptNode(node) {
+              if (!node || !node.parentNode) return NodeFilter.FILTER_REJECT;
+              if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+              const tag = node.parentNode.nodeName.toLowerCase();
+              if (tag === 'script' || 'style' || 'mark') return NodeFilter.FILTER_REJECT;
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+
+        for (const node of nodes) {
+          const text = node.nodeValue;
+          rx.lastIndex = 0;
+          let m, last = 0;
+          const frag = document.createDocumentFragment();
+          let matched = false;
+          while ((m = rx.exec(text))) {
+            matched = true;
+            const start = m.index; const end = start + m[0].length;
+            if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
+            const mark = document.createElement('mark');
+            mark.className = 'hl';
+            mark.textContent = text.slice(start, end);
+            frag.appendChild(mark);
+            last = end;
+            if (frag.childNodes.length > 400) break;
+          }
+          if (matched) {
+            if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+            node.parentNode.replaceChild(frag, node);
+          }
+        }
+      }
+      function expandDetailsIfHighlighted(root) {
+        root.querySelectorAll('details').forEach(d => {
+          if (d.querySelector('mark.hl')) d.open = true;
+        });
+      }
+
+      // Sticky header offset + collapsible TOC
+      const appbar = document.querySelector('header.appbar');
+      function setAppbarVar(){
+        const h = appbar ? appbar.getBoundingClientRect().height : 72;
+        document.documentElement.style.setProperty('--appbarH', (h + 12) + 'px');
+      }
+      setAppbarVar();
+      window.addEventListener('resize', setAppbarVar);
+
+      // Build collapsible TOC and precise anchor scrolling
+      (function(){
+        const navEl = document.querySelector('nav.toc');
+        if (!navEl) { window._tocState = { idToGroup:{} }; return; }
+
+        // 1) Collect original links
+        const links = Array.from(navEl.querySelectorAll('a[href^="#"]'));
+        const container = document.createElement('div');
+        let currentDetails = null;
+        const idToGroup = {};
+
+        links.forEach(a => {
+          const isSub = a.classList.contains('sub');
+          const id = a.getAttribute('href').slice(1);
+          if (!isSub) {
+            currentDetails = document.createElement('details');
+            const sum = document.createElement('summary');
+            const caret = document.createElement('span');
+            caret.textContent = '▸'; caret.style.opacity = '.6'; caret.style.marginLeft = '8px';
+            sum.appendChild(a); sum.appendChild(caret);
+            currentDetails.appendChild(sum);
+            container.appendChild(currentDetails);
+          } else if (currentDetails) {
+            const item = document.createElement('div');
+            item.style.marginLeft = '8px';
+            item.appendChild(a);
+            currentDetails.appendChild(item);
+          }
+          if (currentDetails && id) idToGroup[id] = currentDetails;
+        });
+
+        // Replace loose links with grouped details
+        navEl.querySelectorAll('a[href^="#"]').forEach(x => x.remove());
+        navEl.appendChild(container);
+
+        const groups = Array.from(container.querySelectorAll('details'));
+        // Open first two groups by default (not pinned)
+        groups[0]?.setAttribute('open','');
+        groups[1]?.setAttribute('open','');
+
+        // 2) Manual pin logic — if user toggles a group open, keep it open until manually closed
+        container.addEventListener('toggle', (e)=>{
+          if (e.target.nodeName.toLowerCase() !== 'details') return;
+          const sumCaret = e.target.querySelector('summary span:last-child');
+          if (sumCaret) sumCaret.textContent = e.target.open ? '▾' : '▸';
+          // Mark manual pin only for trusted (user) events
+          if (e.isTrusted) {
+            if (e.target.open) {
+              e.target.dataset.pinned = '1';
+            } else {
+              delete e.target.dataset.pinned;
+            }
+          }
+        }, true);
+
+        function autoOpenGroupForId(id){
+          const grp = idToGroup[id];
+          if (!grp) return;
+          if (!grp.open) grp.setAttribute('open','');
+          // Auto-close other groups unless they are manually pinned
+          groups.forEach(g => {
+            if (g === grp) return;
+            if (g.dataset.pinned === '1') return; // respect manual pin
+            if (g.open) g.removeAttribute('open');
+          });
+        }
+
+        function scrollToAnchor(id){
+          const target = document.getElementById(id);
+          if(!target) return;
+          const h = appbar ? appbar.getBoundingClientRect().height : 72;
+          const y = target.getBoundingClientRect().top + window.scrollY - h - 8;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+
+        // 3) Intercept clicks in TOC for exact offset + auto open
+        navEl.addEventListener('click', (ev) => {
+          const a = ev.target.closest('a[href^="#"]');
+          if(!a) return;
+          ev.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          autoOpenGroupForId(id);
+          scrollToAnchor(id);
+          history.replaceState(null, '', '#' + id);
+        });
+
+        // 4) Teach mobile select to use the same behaviour
+        const tocSelect = document.getElementById('toc-select');
+        if (tocSelect) {
+          tocSelect.addEventListener('change', (e)=>{
+            const id = e.target.value; if (!id) return;
+            autoOpenGroupForId(id);
+            scrollToAnchor(id);
+            history.replaceState(null, '', '#' + id);
+            tocSelect.selectedIndex = 0;
+          });
+        }
+
+        // 5) If page loads with a hash, align TOC state accordingly
+        if (location.hash && location.hash.length > 1) {
+          const id = location.hash.slice(1);
+          autoOpenGroupForId(id);
+        }
+
+        // Expose mapping for potential future features
+        window._tocState = { idToGroup, groups };
+      })();
+
+      let composing = false; let raf = 0;
+      const runSearch = () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const term = (q.value || '').trim().toLowerCase();
+          const main = document.querySelector('main');
+          unwrapMarks(main);
+          if (!term) { sections.forEach(s => s.style.display = ''); return; }
+          sectionIndex.forEach(({el, text}) => { el.style.display = text.includes(term) ? '' : 'none'; });
+          sections.forEach(sec => { if (sec.style.display !== 'none') highlightTerm(sec, term); });
+          sections.forEach(sec => { if (sec.style.display !== 'none') expandDetailsIfHighlighted(sec); });
+        });
+      };
+
+      q && q.addEventListener('compositionstart', () => composing = true);
+      q && q.addEventListener('compositionend', () => { composing = false; runSearch(); });
+      q && q.addEventListener('input', () => { if (!composing) runSearch(); });
+      q && q.addEventListener('keydown', (e) => { if (e.key === 'Escape') { q.value = ''; runSearch(); } });
+
+      // Mobile TOC dropdown
+      const tocSelect = document.getElementById('toc-select');
+      const tocLinks = Array.from(document.querySelectorAll('nav.toc a[href^="#"]'));
+      if (tocSelect) {
+        const opt = document.createElement('option');
+        opt.value = ''; opt.textContent = 'Contents'; opt.selected = true; opt.disabled = true;
+        tocSelect.appendChild(opt);
+        tocLinks.forEach(a => {
+          const o = document.createElement('option');
+          const isSub = a.classList.contains('sub');
+          o.value = a.getAttribute('href').replace('#','');
+          o.textContent = (isSub ? '— ' : '') + a.textContent.trim();
+          tocSelect.appendChild(o);
+        });
+        tocSelect.addEventListener('change', e => {
+          const id = e.target.value; const target = document.getElementById(id);
+          if (target) { history.replaceState(null, '', '#' + id); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+          tocSelect.selectedIndex = 0;
+        });
+      }
+
+      // Go Back
+      document.getElementById('go-back')?.addEventListener('click', () => {
+        const userLang = navigator.language || navigator.userLanguage;
+        if (userLang.startsWith('zh')) {
+          window.location.href = 'flight-training.html';
+        } else {
+          window.location.href = 'flight-training_en.html';
+        }
+      });
+
+      // Back to top
+      document.getElementById('topbtn')?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+  <!-- Content derived from MEA IR DA42 Flight Notes.docx; structure & UI adapted from all_template.html. -->
+</body>
+</html>
