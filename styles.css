@@ -549,6 +549,16 @@ footer::before {
     max-width: 100%; /* 限制最大宽度为父容器的宽度 */
     height: auto; /* 高度自动调整，保持比例 */
     margin-bottom: 1rem;
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+
+.subject-detail img.fade-out {
+    opacity: 0;
+}
+
+.subject-detail img.fade-in {
+    opacity: 1;
 }
 
 .detail {
