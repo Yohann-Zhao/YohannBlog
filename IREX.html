@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IREX Theory (CASA) | Yohann Aviation Note</title>
+  <meta name="author" content="Yohann Aviation Note" />
+  <meta name="description" content="Compact, searchable, and print-friendly IREX theory notes: CASA/AIP references, alternates, visual approach, IAP, circling, MAP, fuel, airspace, TAF/HOLDING/LIGHTING, instruments." />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('js', new Date());
+  gtag('config', 'G-G3TQJTQ67B');
+  </script>
+
+  <style>
+    /* ===== Light Blue Theme (Modern, unified) ===== */
+    :root{
+      --bg: #f5f9ff;               /* page background */
+      --bg-1: #eef5ff;             /* subtle gradient stop */
+      --panel: #ffffff;            /* controls/cards base */
+      --card: #ffffff;
+      --text: #1f2a44;             /* primary text */
+      --muted: #5b6b80;            /* secondary text */
+      --brand: #1976d2;            /* primary blue */
+      --brand-2: #64b5f6;          /* softer blue for accents */
+      --warn: #f59e0b;             /* amber */
+      --danger: #ef4444;           /* red */
+      --ok: #0ea5e9;               /* cyan/ok */
+
+      /* UI tokens */
+      --border: #e6eef8;           /* light borders */
+      --border-dashed: #d7e5fb;    /* dashed variant */
+      --shadow: 0 8px 28px rgba(25, 118, 210, .12), 0 2px 10px rgba(15, 23, 42, .06);
+      --radius: 16px;
+      --fs-base: 16px;
+      --maxw: 980px;
+
+      /* Appbar offset */
+      --appbarH: 84px;
+
+      /* Scrollbar (TOC) */
+      --scrollbar-track: #f1f6ff;
+      --scrollbar-thumb: #c9ddfb;
+      --scrollbar-thumb-hover: #aaceff;
+    }
+    [id]{ scroll-margin-top: var(--appbarH, 84px); }
+    html { font-size: var(--fs-base); }
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #eaf3ff 0%, rgba(234,243,255,0) 60%),
+        radial-gradient(800px 520px at 95% -10%, #f0f7ff 0%, rgba(240,247,255,0) 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-1) 60%, #f7fbff 100%);
+    }
+
+    /* App Bar */
+    header.appbar{
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: saturate(150%) blur(10px);
+      background: rgba(255,255,255,.86);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 18px rgba(30, 64, 175, .08);
+    }
+    .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 10px 16px; }
+    .appbar .row{ display: grid; grid-template-columns: 1fr; gap: 8px; align-items: center; }
+
+    /* Title */
+    h1.title{
+      font-size: clamp(18px, 1.1rem + 0.4vw, 22px);
+      margin: 0; letter-spacing: .2px; line-height: 1.1;
+      display: inline-flex; align-items: baseline; gap: 10px; flex-wrap: nowrap;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; justify-self: start;
+    }
+    h1.title .author{
+      font-size: 0.8em; color: var(--muted); font-weight: 700;
+      border: 1px solid var(--border); padding: 2px 10px; border-radius: 999px;
+      background: #f8fbff;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: box-shadow .15s ease, border-color .15s ease, transform .02s ease;
+    }
+    h1.title .author:hover{
+      border-color: #cfe0fb;
+      box-shadow: 0 6px 16px rgba(25,118,210,.12);
+    }
+    h1.title .author:active{ transform: translateY(1px); }
+
+    /* Controls */
+    .controls{
+      isolation: isolate; display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center; gap: 10px; width: 100%;
+    }
+    .controls > * { position: relative; z-index: 1; }
+    .chip, button, .toggle, select{
+      background: var(--panel); color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 999px; padding: 8px 12px;
+      box-shadow: var(--shadow); font-weight: 600; cursor: pointer;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .02s ease;
+    }
+    .chip:hover, button:hover, select:hover{ border-color: #cfe0fb; }
+    .chip:active, button:active{ transform: translateY(1px); }
+    .chip:focus-visible, button:focus-visible, select:focus-visible{
+      outline: 3px solid rgba(25,118,210,.25); outline-offset: 2px;
+    }
+
+    /* Search */
+    .search{ z-index: 0; position: relative; min-width: 0; }
+    .search input{
+      width: 100%; background: var(--panel); color: var(--text);
+      border: 1px solid var(--border); outline: none;
+      padding: 10px 12px 10px 36px; border-radius: 999px; box-shadow: var(--shadow);
+      background-clip: padding-box;
+    }
+    .search input::placeholder{ color: #7d8aa4; }
+    .search svg{ position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: .7; pointer-events: none; color: #5d90da; }
+
+    /* TOC / Layout */
+    #toc-select{
+      min-width: 112px; width: max-content; max-width: 34vw;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      position: relative; z-index: 2; appearance: none; padding-right: 28px;
+    }
+    .grid{ display: grid; grid-template-columns: 1fr; gap: 18px; padding: 16px; }
+    @media (min-width: 920px){
+      .appbar .row{ grid-template-columns: 1fr auto; }
+      h1.title{ justify-self: start; }
+      .grid{ grid-template-columns: 260px 1fr; align-items: start; }
+    }
+
+    nav.toc{
+      position: sticky; top: 68px; align-self: start;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px; box-shadow: var(--shadow);
+      max-height: calc(100vh - 96px); overflow: auto;
+
+      /* Scrollbar theming */
+      scrollbar-gutter: stable; /* avoid layout shift when scrollbar shows */
+      scrollbar-width: thin;    /* Firefox */
+      scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Firefox */
+    }
+    /* Chrome/Edge/WebKit */
+    nav.toc::-webkit-scrollbar{ width: 10px; }
+    nav.toc::-webkit-scrollbar-track{
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+    nav.toc::-webkit-scrollbar-thumb{
+      background: linear-gradient(180deg, var(--scrollbar-thumb), #b7d2ff);
+      border-radius: 10px;
+      border: 2px solid var(--scrollbar-track);
+    }
+    nav.toc::-webkit-scrollbar-thumb:hover{
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    nav.toc h2{ margin: 6px 8px 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; }
+    nav.toc a{
+      display: block; padding: 8px 10px; margin: 4px 0; text-decoration: none; color: var(--text);
+      border-radius: 10px; border: 1px dashed transparent;
+    }
+    nav.toc a:hover{
+      background: linear-gradient(90deg, rgba(25,118,210,.10), rgba(25,118,210,0) 85%);
+      border-color: var(--border-dashed);
+    }
+    nav.toc .sub { margin-left: 10px; font-size: .94em; color: var(--muted); }
+    nav.toc .sub2{ margin-left: 22px; font-size: .90em; color: var(--muted); }
+
+    /* Mobile TOC */
+    #toc-select{ display: none; }
+    @media (max-width: 919px){
+      header.appbar .wrap{ padding: 6px 12px; }
+      h1.title{ font-size: 18px; gap: 8px; justify-self: center; text-align: center; }
+      h1.title .author{ font-size: 0.74em; padding: 1px 6px; }
+      nav.toc{ display: none !important; }
+      #toc-select{ display: inline-flex; font-size: 14px; }
+      .controls{ gap: 8px; grid-template-columns: auto minmax(120px, 1fr) minmax(96px, max-content); }
+      #toc-select{ max-width: 30vw; }
+      .search input{ padding: 8px 10px 8px 30px; }
+      button#go-back{ padding: 6px 10px; font-size: 14px; }
+    }
+    @media (max-width: 420px){
+      .controls{ grid-template-columns: auto minmax(110px, 1fr) minmax(92px, max-content); gap: 6px; }
+      #toc-select{ max-width: 28vw; }
+    }
+
+    /* Cards / Content */
+    section.card{
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
+    }
+    section.card h2{ margin-top: 0; display: flex; align-items: center; gap: 10px; }
+    section.card h3{ margin-top: 1.1em; }
+    .badge{
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: #f4f9ff; font-size: .85em; color: var(--brand); font-weight: 700;
+    }
+    .tag{ color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: .78em; letter-spacing: .12em; }
+    .warn{ color: var(--warn); font-weight: 700; }
+    .danger{ color: var(--danger); font-weight: 700; }
+    .ok{ color: var(--ok); font-weight: 700; }
+    .muted{ color: var(--muted); }
+
+    .kv{ display: grid; grid-template-columns: 1fr; gap: 8px; }
+    @media (min-width: 720px){ .kv{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+    ul.check{ list-style: none; padding: 0; margin: .25rem 0 1rem; }
+    ul.check li{ padding: 6px 8px; border-left: 3px solid transparent; }
+    ul.check li + li{ border-top: 1px dashed var(--border); }
+    ul.check li[data-type="flow"]{ border-left-color: var(--brand); background: linear-gradient(90deg, rgba(25,118,210,.08), transparent); }
+    ul.check li[data-type="callout"]{ border-left-color: var(--warn); background: linear-gradient(90deg, rgba(245,158,11,.14), transparent); }
+
+    details{
+      border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px;
+      background: linear-gradient(180deg, rgba(25,118,210,.04), rgba(255,255,255,0));
+    }
+    details > summary{ cursor: pointer; font-weight: 700; list-style: none; }
+    details[open]{ background: linear-gradient(180deg, rgba(100,181,246,.16), rgba(255,255,255,0)); }
+
+    /* Tables */
+    table{ width: 100%; border-collapse: collapse; margin: .5rem 0 1rem; }
+    th, td{ border: 1px dashed var(--border-dashed); padding: 8px 10px; text-align: left; }
+    th{ color: var(--muted); font-weight: 700; background: #f7fbff; }
+    td strong{ white-space: nowrap; }
+
+    /* Links & marks (GLOBAL) */
+    a{ color: var(--brand); }
+    mark.hl{
+      background: rgba(25,118,210,.22);
+      color: inherit; padding: 0 .15em; border-radius: .2em;
+      box-shadow: 0 0 0 1px rgba(25,118,210,.18) inset;
+    }
+
+    /* ==== STRONGER HOVER FOR ALL CLICKABLES IN MAIN ==== */
+    /* 1) Links */
+    main a[href]{
+      position: relative;
+      text-decoration: underline;
+      text-decoration-thickness: 0.06em;
+      text-underline-offset: 0.18em;
+      text-decoration-color: rgba(25,118,210,.35);
+      border-radius: .35em;
+      padding: 0 2px;
+      transition: color .15s ease, text-decoration-color .15s ease, text-decoration-thickness .15s ease, box-shadow .15s ease, transform .06s ease, background-color .15s ease;
+    }
+    main a[href]:hover{
+      color: #0f5fb3;
+      text-decoration-thickness: .14em;
+      text-decoration-color: rgba(25,118,210,.9);
+      background: linear-gradient(transparent 60%, rgba(25,118,210,.18) 0);
+      box-shadow: 0 4px 0 rgba(25,118,210,.35) inset;
+    }
+    main a[href]:active{
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 rgba(25,118,210,.45) inset;
+    }
+
+    /* 2) Collapsible summaries */
+    main details > summary{
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+      transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    main details > summary:hover{
+      background: linear-gradient(180deg, rgba(25,118,210,.14), rgba(255,255,255,0));
+      border-color: #bcd6fb;
+      box-shadow: 0 6px 16px rgba(25,118,210,.12);
+    }
+    main details[open] > summary{
+      background: linear-gradient(180deg, rgba(100,181,246,.24), rgba(255,255,255,0));
+      border-color: #a9ccfb;
+    }
+    main details > summary::after{
+      content: '▸';
+      float: right;
+      opacity: .65;
+      transition: transform .15s ease;
+    }
+    main details[open] > summary::after{
+      transform: rotate(90deg);
+    }
+
+    /* 3) Generic focus ring for keyboard users */
+    main a[href]:focus-visible,
+    main details > summary:focus-visible,
+    main [role="button"]:focus-visible,
+    main button:focus-visible{
+      outline: 3px solid rgba(25,118,210,.35);
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
+
+    /* Back to top */
+    .topbtn{
+      position: fixed; bottom: 18px; right: 18px; width: 44px; height: 44px;
+      border-radius: 50%; display: grid; place-items: center; box-shadow: var(--shadow);
+      background: var(--panel); border: 1px solid var(--border); cursor: pointer; opacity: .95;
+      transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .topbtn:hover{
+      border-color: #cfe0fb;
+      box-shadow: 0 10px 24px rgba(25,118,210,.18);
+    }
+    .topbtn:active{ transform: translateY(1px); }
+
+    footer{ color: var(--muted); text-align: center; padding: 24px; }
+
+    /* Print */
+    @media print{
+      header.appbar, nav.toc, .topbtn{ display: none !important; }
+      body{ background: #fff; color: #000; }
+      section.card{ break-inside: avoid; box-shadow: none; border-color: #ddd; }
+      a{ color: #000; text-decoration: none; }
+      th, td{ border-color: #bbb; }
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="wrap">
+      <div class="row">
+        <h1 class="title">
+          IREX Theory (CASA)
+          <a id="brand-link" class="author" href="#" role="link" title="Home · Yohann Aviation Note">Yohann Aviation Note</a>
+        </h1>
+        <div class="controls">
+          <button id="go-back" class="chip" title="Go Back">← Go Back</button>
+          <div class="search" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input id="q" placeholder="Search (e.g. RAIM, LSALT, ALTN, ENR 1.5, TAF3, PAL)" aria-label="Search all content" />
+          </div>
+          <select id="toc-select" aria-label="Contents"></select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid wrap">
+    <nav class="toc" aria-label="Table of contents">
+      
+      <h2>Contents</h2>
+      <a href="#document">Document</a>
+      <a href="#ifr-acft" class="sub">IFR ACFT</a>
+      <a href="#flight-instrument" class="sub sub2">Flight Instrument</a>
+      <a href="#navigation-instrument" class="sub sub2">Navigation Instrument</a>
+      <a href="#automatic-pilot" class="sub sub2">Automatic Pilot</a>
+      <a href="#alerting-and-warning-system" class="sub sub2">Alerting and warning System</a>
+      <a href="#altimeter-serviceability-checks" class="sub sub2">Altimeter serviceability checks</a>
+      <a href="#positive-radio-fix" class="sub">Positive Radio Fix</a>
+      <a href="#pre-flight-consideration" class="sub">Pre Flight consideration</a>
+      <a href="#flight-notification" class="sub sub2">Flight Notification</a>
+      <a href="#forecast" class="sub sub2">Forecast</a>
+      <a href="#ifr-pilot" class="sub">IFR Pilot</a>
+      <a href="#visual-approach" class="sub">Visual Approach</a>
+      <a href="#iap" class="sub">IAP</a>
+      <a href="#some-references" class="sub sub2">Some references</a>
+      <a href="#circling-area" class="sub sub2">Circling Area</a>
+      <a href="#descend-blw-si-mda-da" class="sub sub2">Descend BLW SI MDA/DA</a>
+      <a href="#alignment-with-rwy-clcircling" class="sub sub2">Alignment with RWY C.L.(circling)</a>
+      <a href="#map" class="sub sub2">MAP:</a>
+      <a href="#alternate" class="sub">Alternate</a>
+      <a href="#aids" class="sub sub2">Aids</a>
+      <a href="#clouds-amp-vis" class="sub sub2">Clouds &amp;amp; VIS</a>
+      <a href="#wind" class="sub sub2">Wind</a>
+      <a href="#prob" class="sub sub2">PROB</a>
+      <a href="#ligt" class="sub sub2">LIGT</a>
+      <a href="#holding" class="sub sub2">Holding</a>
+      <a href="#taf3-first-3-hours" class="sub sub2">TAF3 first 3 hours</a>
+      <a href="#fuel" class="sub">Fuel</a>
+      <a href="#airspace" class="sub">Airspace</a>
+      <a href="#fpl-route-selection" class="sub">FPL Route Selection</a>
+    
+    </nav>
+
+    <main>
+      
+      <section class="card" id="document">
+        <h2>Document <span class="badge">IREX</span></h2>
+        <p>Foreword（important）</p>
+        <p>For IREX exam, it’s more about the law. As you find and understand the rules, the next thing you need to do is just practice the questions. But unfortunately the IREX textbook talked too much into it.</p>
+        <p>This note is to help you save the time needed to collect all the references on the law &amp; AIP etc., mainly provides you with the references you need for the IREX theory exam. You need to find, highlight and understand the subsequent sections by yourself. After that, just do the practice questions, and go back to the law, AIP! That’s all about the IREX exam.</p>
+        <p><br/></p>
+        <p><br/></p>
+        <h3 id="ifr-acft">IFR ACFT</h3>
+        <h3 id="flight-instrument">Flight Instrument</h3>
+        <p>91 MOS Ch26</p>
+        <p>VFR: IAS, P.H., MH, time.</p>
+        <p>AWK: turn&amp;slip, OAT</p>
+        <p>NVFR: AH, VSI, stabilized heading, minitor PWR source to gyro</p>
+        <p>IFR: alternate static, pitot heat</p>
+        <p>135 MOS Ch 11.07</p>
+        <p>Dual ALT &amp; AH</p>
+        <h3 id="navigation-instrument">Navigation Instrument</h3>
+        <p>91 MOS Ch14 14.02 / ENR 1.1 4.5</p>
+        <p>Navigate by:</p>
+        <p>Area Nav(GNSS)</p>
+        <p>GND Aid: +-9° of next aid rated range, pos fix max 2h</p>
+        <p>Day VMC VFR pos fix 30min</p>
+        <p>135 MOS ch11 11.09</p>
+        <p>NVFR: 1 nav aid</p>
+        <p>IFR: 2 GNSS(no C129) or 1 GNSS+ ADF/VOR</p>
+        <p>Failure of any aid still able to fly according to FPL at any phase</p>
+        <h3 id="automatic-pilot">Automatic Pilot</h3>
+        <p>135 MOS Ch11 11.10</p>
+        <p>Single pilot: NVFR, IFR</p>
+        <p>Mode: ALT, HDG</p>
+        <p>AP inop: Day VMC</p>
+        <h3 id="alerting-and-warning-system">Alerting and warning System</h3>
+        <p>91 MOS Ch26 26.25</p>
+        <h3 id="altimeter-serviceability-checks">Altimeter serviceability checks</h3>
+        <p>91 MOS ch10 10.4</p>
+        <p>IFR: +- 60 ft</p>
+        <p>inop +-75 ft</p>
+        <p>60-75 ft: to first AD check again, still not WI 60 inop</p>
+        <h3 id="positive-radio-fix">Positive Radio Fix</h3>
+        <p>ENR 1.1 4.5</p>
+        <p><br/></p>
+        <h3 id="pre-flight-consideration">Pre Flight consideration</h3>
+        <h3 id="flight-notification">Flight Notification</h3>
+        <p>ENR 1.10</p>
+        <p>IFR must submit</p>
+        <h3 id="forecast">Forecast</h3>
+        <p>ENR 1.10</p>
+        <p>30 min – ETA – 60 min</p>
+        <p>91 MOS ch7 7.02</p>
+        <p>Forecast for DEP, ARR, ALTN</p>
+        <p>LSALT</p>
+        <p>GEN 3.3 4.1 to 4.7</p>
+        <p>91.305 Minimum heights</p>
+        <p><br/></p>
+        <h3 id="ifr-pilot">IFR Pilot</h3>
+        <p>61.885</p>
+        <p>61.860</p>
+        <p>61.865</p>
+        <p>61.870</p>
+        <p>61.880</p>
+        <p>61.890</p>
+        <p>61.910</p>
+        <p><br/></p>
+        <h3 id="visual-approach">Visual Approach</h3>
+        <p>ENR 1.5 1.14</p>
+        <p>Discontinue IAP when:</p>
+        <p>Day WI 30 nm not BLW LSALT/MSA/DME steps, established:</p>
+        <p>Clear of Cloud</p>
+        <p>In sight of ground or water</p>
+        <p>V5km</p>
+        <p>Night not BLW….., Until:</p>
+        <p>IAP Circling Area</p>
+        <p>Non IAP: 3 NM ARP</p>
+        <p>5nm RWY C.L. not BLW PAPI(7nm ILS/GS)</p>
+        <p>10 nm ILS not BLW glide path, <strong>less than half scale CDI&amp;GS??</strong></p>
+        <p>14 nm YSSY RWY 16 L 34L</p>
+        <h3 id="iap">IAP</h3>
+        <h3 id="some-references">Some references</h3>
+        <p>ENR 1.5 1.2.1</p>
+        <p>ENR 1.5 1.6.6</p>
+        <p>ENR 1.5 2.4.4</p>
+        <p>ENR 1.5 2.8</p>
+        <p>ENR 1.5 4.4</p>
+        <p>ENR 1.6.6</p>
+        <p>ENR 1.7</p>
+        <p>etc.</p>
+        <h3 id="circling-area">Circling Area</h3>
+        <p>ENR 1.5 para 1.6.6</p>
+        <p>Circling minima: Min obstacle clearance CAT B 300’</p>
+        <h3 id="descend-blw-si-mda-da">Descend BLW SI MDA/DA</h3>
+        <p>Visual reference</p>
+        <p>C&amp;V minima</p>
+        <p>ACFT normal position</p>
+        <h3 id="alignment-with-rwy-clcircling">Alignment with RWY C.L.(circling)</h3>
+        <p>Circling area</p>
+        <p>Visual reference</p>
+        <p>In sight ground or water</p>
+        <h3 id="map">MAP:</h3>
+        <p>Must MAP<strong>(</strong><strong>5 conditions)</strong>:</p>
+        <p>Aid out of tolerance/suspicious</p>
+        <p>Cant/lost visual</p>
+        <p>SI Landing not possible, unless better WX for circling</p>
+        <p>MAP IAP min 100ft clearance, 2.5% gradient</p>
+        <p>MAP prior to MAPt, fly to MAPT and follow MAP procedure</p>
+        <p>Lost Visual while Circling: climbing turn towards RWY and OH AD</p>
+        <p>RAIM:</p>
+        <p>After IAF: RAIM Loss/Warning</p>
+        <p>MAP, no warning, may continue guide for MAP</p>
+        <h3 id="alternate">Alternate</h3>
+        <h3 id="aids">Aids</h3>
+        <p>91 MOS Ch8</p>
+        <p>8.08 8.05</p>
+        <p>Day IFR IAP or +500’ V8km for VAP</p>
+        <p>Night IFP must IAP</p>
+        <p>NVFR enroute 1 aid, otherwise ALTN WI 1h</p>
+        <table><tr><td><p>Day IFR</p></td><td><p>Fly to AD without IAP/IAP that can’t use</p><p>GAF LSALT for final route +500ft; <strong>V</strong><strong>8km</strong></p><p>(It’s more strict than Day VFR, because Visual Approach Need to descend from LSALT, that’s why it’s IFR procedure, not VFR)</p></td></tr><tr><td><p>Night IFR</p></td><td><p>Fly to AD without IAP/IAP that can’t use</p></td></tr><tr><td><p>Night VFR</p></td><td><p>If ground aids/GNSS can’t be used to nav enroute to it: Nominate alternate within 1 h.</p></td></tr></table>
+        <p>C129 can’t use for alternate</p>
+        <p>135 MOS Ch11 11.09</p>
+        <p>135 IFR must 2 GNSS or GNSS+ADF/VOR; 135 NVFR must 1 Aid</p>
+        <p>Failure of any aid must able to continue, possible to IMC AD</p>
+        <table><tr><td><p>Night VFR</p></td><td><p>Must have GNSS; or ADF/VOR</p></td><td><p>Barometric aiding must be connected if provided</p></td></tr><tr><td><p>IFR</p></td><td><p>2 approved GNSS[not C129]</p><p>1 approved GNSS and ADF/VOR</p><p>[not C129 unless AC,GNSS installed before Feb 6, 2014]</p></td><td></td></tr><tr><td><p><strong>Failure of any aid</strong></p></td><td><p>Failure of any aid:</p><p>can nav remained flight plan</p><p>Can meet ATC, Airspace requirement</p></td><td></td></tr><tr><td><p>Possible to Land in IMC AD</p></td><td><p>Possible to Land in IMC AD:</p><p>Nav to a point that can do Visual APP/IAP landing</p></td><td></td></tr></table>
+        <h3 id="clouds-amp-vis">Clouds &amp; VIS</h3>
+        <p>ENR1.1 10.7.2.1</p>
+        <p><strong>DAY VFR WI 50 nm</strong><strong> no need for ALTN</strong></p>
+        <table><tr><td><p>Cloud</p></td><td><p>More than SCT below ALTN minimum</p></td></tr><tr><td><p>VIS</p></td><td><p>BLW ALTN minimum</p></td></tr><tr><td><p>TS or SEV TURB from TS</p></td><td></td></tr><tr><td><p>Wind</p></td><td></td></tr></table>
+        <p>30 min buffer</p>
+        <p>TAF3 first 3 h no 30 min buffer, no PRO 30,40</p>
+        <p>TEMPO2201/2203, ETA 0320, only need 10 min (cessation)</p>
+        <p>IFR: check approach plate, Cloud and VIS, ENR 1.5 6.1.1 (If no, by DAY LSALT+500ft, 8km ENR 1.1 10.7.2.10)</p>
+        <p><strong>Performance CAT ENR 1.5 1.2.1</strong></p>
+        <p>Check TAF</p>
+        <p>Actual QNH -100ft, <strong>Area forecast QNH +50 ft</strong>; QNH Sources ENR 1.5. 5.3</p>
+        <p>Special Alternate Weather Minima ENR 1.5 6.2.1  91 MOS ch8 8.08</p>
+        <p>2 ILS and 2VOR; 2 dist(either 2 DME/GNSS or DME&amp; GNSS)</p>
+        <p>On IAP **</p>
+        <p>Unless No MET or ATS<br/></p>
+        <h3 id="wind">Wind</h3>
+        <p>Max crosswind for ACFT</p>
+        <h3 id="prob">PROB</h3>
+        <p>ENR 1.1 10.7.2</p>
+        <h3 id="ligt">LIGT</h3>
+        <p>ENR 1.1 10.7.4</p>
+        <table><tr><td><p>Portable LIGT</p></td><td><p>Unless attendance</p></td></tr><tr><td><p>No SDBY PWR</p></td><td><p>Unless attendance</p></td></tr><tr><td><p>PAL and SDBY PWR</p></td><td><p>Unless attendance</p></td></tr><tr><td><p>PAL as Alternate</p></td><td><p><strong>2VHF or </strong></p><p><strong>VHF&amp;HF</strong><strong> + </strong><strong>30min </strong><strong>holding </strong><strong>fuel</strong></p></td></tr></table>
+        <p><strong>P</strong><strong>e</strong><strong>riod </strong><strong>before and after ETA </strong><strong>10.8.1.1</strong></p>
+        <table><tr><td><p><strong>DEP</strong></p></td><td><p><strong>10min - 30min</strong></p></td></tr><tr><td><p><strong>ARR</strong></p></td><td><p><strong>30min - Taxing finish</strong></p></td></tr></table>
+        <p>(WX forecast 30 – 60 min)</p>
+        <h3 id="holding">Holding</h3>
+        <p>ENR 1.1 10.7.2</p>
+        <p>INTER 30 min</p>
+        <p>TEMP 60 min</p>
+        <p>Not accumulative</p>
+        <p>No need after 30 min cessation of period</p>
+        <p>Change: 30 min buffer</p>
+        <p>FM or BECMG: 30 min buffer</p>
+        <h3 id="taf3-first-3-hours">TAF3 first 3 hours</h3>
+        <p>30 min buffer not Apply</p>
+        <p>PROB not apply</p>
+        <p><br/></p>
+        <h3 id="fuel">Fuel</h3>
+        <p>91 MOS ch19 19.02</p>
+        <p>IFR: final reserve fuel <strong>45 min</strong></p>
+        <p>135 MOS ch7 7.02</p>
+        <table><tr><td></td><td><p>Piston(exam OZY)</p></td><td><p>turbine</p></td></tr><tr><td><p>Final Reserve</p></td><td><p><strong>45 min</strong></p></td><td><p>30 min</p></td></tr><tr><td><p>Contigency</p></td><td><p><strong>10% or 5 min(greatest)</strong></p></td><td><p>5% or 5 min(greatest)</p></td></tr></table>
+        <p>Exam only in minutes:</p>
+        <p>Trip fuel(x1.1 if contigency) + final reserve + holding/alternate</p>
+        <h3 id="airspace">Airspace</h3>
+        <p>91 MOS 21.05</p>
+        <p>ENR 1.1 2.9</p>
+        <p>ENR 1.1 2.8</p>
+        <p>ENR 1.4 to 4.2</p>
+        <p>Two basic:</p>
+        <p>CTA</p>
+        <p>OCTA</p>
+        <p>Controlled Airspace：</p>
+        <p>Controlled Traffic Areas:</p>
+        <p>Controlled Traffic Regions: FM SFC, AD</p>
+        <p>Class D: radar not available, procedural methods</p>
+        <p>IFR separated from IFR, SVFR; info. About VFR</p>
+        <p>VFR receive info. About all other traffic</p>
+        <p>Must give standard departure report: <strong>Time, TRK, Height</strong><strong> </strong></p>
+        <p>Class C: radar avail</p>
+        <p>IFR separated from IFR, SVFR, VFR</p>
+        <p>VFR separated from IFR, info about other VFR.</p>
+        <p>Airborne report to departure controller</p>
+        <h3 id="fpl-route-selection">FPL Route Selection</h3>
+        <p>ERSA GEN-FPR</p>
+        <p>Check for departures</p>
+        <p>ERSA GEN-FPR Flight Planning Option</p>
+        <p>(can find Port Macquarie to Sydney)</p>
+        <p>Check for recommended route</p>
+        <p>ERC &amp; TAC</p>
+        <p>Check Airspaces</p>
+        <p><br/></p>
+      </section>
+      <footer>
+        Last updated: 2025-10-06 • © Yohann Aviation Note
+      </footer>
+
+    
+    </main>
+  </div>
+
+  <button class="topbtn" id="topbtn" title="Back to top" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script>
+    (function(){
+      const q = document.getElementById('q');
+      const sections = Array.from(document.querySelectorAll('main section.card'));
+      const sectionIndex = sections.map(sec => ({
+        el: sec,
+        text: (sec.innerText || sec.textContent || '').toLowerCase().replace(/\s+/g,' ')
+      }));
+
+      // ---- Non-destructive highlight helpers ----
+      function unwrapMarks(root) {
+        root.querySelectorAll('mark.hl').forEach(m => {
+          const t = document.createTextNode(m.textContent);
+          m.replaceWith(t);
+        });
+        root.normalize();
+      }
+      function escapeRx(s){ return s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); }
+      function highlightTerm(root, term) {
+        if (!term) return;
+        const rx = new RegExp(escapeRx(term), 'gi');
+        const walker = document.createTreeWalker(
+          root,
+          NodeFilter.SHOW_TEXT,
+          { acceptNode(node) {
+              if (!node || !node.parentNode) return NodeFilter.FILTER_REJECT;
+              if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+              const tag = node.parentNode.nodeName.toLowerCase();
+              if (tag === 'script' || tag === 'style' || tag === 'mark') return NodeFilter.FILTER_REJECT;
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+
+        for (const node of nodes) {
+          const text = node.nodeValue;
+          rx.lastIndex = 0;
+          let m, last = 0;
+          const frag = document.createDocumentFragment();
+          let matched = false;
+          while ((m = rx.exec(text))) {
+            matched = true;
+            const start = m.index; const end = start + m[0].length;
+            if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
+            const mark = document.createElement('mark');
+            mark.className = 'hl';
+            mark.textContent = text.slice(start, end);
+            frag.appendChild(mark);
+            last = end;
+            if (frag.childNodes.length > 400) break;
+          }
+          if (matched) {
+            if (last < text.length) frag.appendChild(document.createTextNode(text.slice[last]));
+            node.parentNode.replaceChild(frag, node);
+          }
+        }
+      }
+      function expandDetailsIfHighlighted(root) {
+        root.querySelectorAll('details').forEach(d => {
+          if (d.querySelector('mark.hl')) d.open = true;
+        });
+      }
+
+      const appbar = document.querySelector('header.appbar');
+      function setAppbarVar(){
+        const h = appbar ? appbar.getBoundingClientRect().height : 72;
+        document.documentElement.style.setProperty('--appbarH', (h + 12) + 'px');
+      }
+      setAppbarVar();
+      window.addEventListener('resize', setAppbarVar);
+
+      // Build collapsible TOC groups
+      (function(){
+        const navEl = document.querySelector('nav.toc');
+        if (!navEl) { window._tocState = { idToGroup:{} }; return; }
+
+        const links = Array.from(navEl.querySelectorAll('a[href^="#"]'));
+        const container = document.createElement('div');
+        let currentDetails = null;
+        const idToGroup = {};
+
+        links.forEach(a => {
+          const isSub = a.classList.contains('sub');
+          const isSub2 = a.classList.contains('sub2');
+          const id = a.getAttribute('href').slice(1);
+          if (!isSub) {
+            currentDetails = document.createElement('details');
+            const sum = document.createElement('summary');
+            const caret = document.createElement('span');
+            caret.textContent = '▸'; caret.style.opacity = '.6'; caret.style.marginLeft = '8px';
+            sum.appendChild(a); sum.appendChild(caret);
+            currentDetails.appendChild(sum);
+            container.appendChild(currentDetails);
+          } else if (currentDetails) {
+            const item = document.createElement('div');
+            item.style.marginLeft = isSub2 ? '22px' : '8px';
+            item.appendChild(a);
+            currentDetails.appendChild(item);
+          }
+          if (currentDetails && id) idToGroup[id] = currentDetails;
+        });
+
+        // Replace loose links with grouped details
+        navEl.querySelectorAll('a[href^="#"]').forEach(x => x.remove());
+        navEl.appendChild(container);
+
+        const groups = Array.from(container.querySelectorAll('details'));
+        groups[0]?.setAttribute('open','');
+        groups[1]?.setAttribute('open','');
+
+        // Manual pin logic — keep user-opened groups open
+        container.addEventListener('toggle', (e)=>{
+          if (e.target.nodeName.toLowerCase() !== 'details') return;
+          const sumCaret = e.target.querySelector('summary span:last-child');
+          if (sumCaret) sumCaret.textContent = e.target.open ? '▾' : '▸';
+          if (e.isTrusted) {
+            if (e.target.open) {
+              e.target.dataset.pinned = '1';
+            } else {
+              delete e.target.dataset.pinned;
+            }
+          }
+        }, true);
+
+        function autoOpenGroupForId(id){
+          const grp = idToGroup[id];
+          if (!grp) return;
+          if (!grp.open) grp.setAttribute('open','');
+          groups.forEach(g => {
+            if (g === grp) return;
+            if (g.dataset.pinned === '1') return;
+            if (g.open) g.removeAttribute('open');
+          });
+        }
+
+        function scrollToAnchor(id){
+          const target = document.getElementById(id);
+          if(!target) return;
+          const h = appbar ? appbar.getBoundingClientRect().height : 72;
+          const y = target.getBoundingClientRect().top + window.scrollY - h - 8;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+
+        // Intercept clicks in TOC
+        navEl.addEventListener('click', (ev) => {
+          const a = ev.target.closest('a[href^="#"]');
+          if(!a) return;
+          ev.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          autoOpenGroupForId(id);
+          scrollToAnchor(id);
+          history.replaceState(null, '', '#' + id);
+        });
+
+        // Populate mobile TOC select
+        const tocSelect = document.getElementById('toc-select');
+        if (tocSelect) {
+          tocSelect.innerHTML = '';
+          const opt = document.createElement('option');
+          opt.value = ''; opt.textContent = 'Contents'; opt.selected = true; opt.disabled = true;
+          tocSelect.appendChild(opt);
+          const tocLinks = Array.from(document.querySelectorAll('nav.toc a[href^="#"]'));
+          tocLinks.forEach(a => {
+            const o = document.createElement('option');
+            const isSub = a.classList.contains('sub');
+            const isSub2 = a.classList.contains('sub2');
+            o.value = a.getAttribute('href').replace('#','');
+            o.textContent = (isSub ? (isSub2 ? '— — ' : '— ') : '') + a.textContent.trim();
+            tocSelect.appendChild(o);
+          });
+          tocSelect.addEventListener('change', (e)=>{
+            const id = e.target.value; if (!id) return;
+            autoOpenGroupForId(id);
+            const target = document.getElementById(id);
+            if (target) {
+              const h = appbar ? appbar.getBoundingClientRect().height : 72;
+              const y = target.getBoundingClientRect().top + window.scrollY - h - 8;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+            history.replaceState(null, '', '#' + id);
+            tocSelect.selectedIndex = 0;
+          });
+        }
+
+        // Align TOC state with hash on load
+        if (location.hash && location.hash.length > 1) {
+          const id = location.hash.slice(1);
+          autoOpenGroupForId(id);
+        }
+
+        // Expose mapping
+        window._tocState = { idToGroup, groups };
+      })();
+
+      let composing = false; let raf = 0;
+      const runSearch = () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const term = (q.value || '').trim().toLowerCase();
+          const main = document.querySelector('main');
+          unwrapMarks(main);
+          if (!term) { sections.forEach(s => s.style.display = ''); return; }
+          sectionIndex.forEach(({el, text}) => { el.style.display = text.includes(term) ? '' : 'none'; });
+          sections.forEach(sec => { if (sec.style.display !== 'none') highlightTerm(sec, term); });
+          sections.forEach(sec => { if (sec.style.display !== 'none') expandDetailsIfHighlighted(sec); });
+        });
+      };
+
+      q && q.addEventListener('compositionstart', () => composing = true);
+      q && q.addEventListener('compositionend', () => { composing = false; runSearch(); });
+      q && q.addEventListener('input', () => { if (!composing) runSearch(); });
+      q && q.addEventListener('keydown', (e) => { if (e.key === 'Escape') { q.value = ''; runSearch(); } });
+
+      document.getElementById('go-back')?.addEventListener('click', () => {
+        const userLang = navigator.language || navigator.userLanguage;
+        if (userLang && userLang.startsWith('zh')) {
+          window.location.href = 'theory.html';
+        } else {
+          window.location.href = 'theory_en.html';
+        }
+      });
+
+      document.getElementById('topbtn')?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      // Go Back
+      document.getElementById('go-back')?.addEventListener('click', () => {
+        const userLang = navigator.language || navigator.userLanguage;
+        if (userLang && userLang.startsWith('zh')) {
+          window.location.href = 'theory.html';
+        } else {
+          window.location.href = 'theory_en.html';
+        }
+      });
+      // Brand link: zh → index.html; else → index_en.html
+      (function(){
+        const brand = document.getElementById('brand-link');
+        if(!brand) return;
+
+        function resolveLang(){
+          const lang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+          return (lang || '').toLowerCase();
+        }
+        function goHome(ev){
+          ev && ev.preventDefault();
+          const lang = resolveLang();
+          const url = lang.startsWith('zh') ? 'index.html' : 'index_en.html';
+          window.location.href = url;
+        }
+
+        brand.addEventListener('click', goHome);
+        brand.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' '){
+            goHome(e);
+          }
+        });
+      })();
+    })();
+  </script>
+  <!-- Content reorganized from IREX Theory.docx; UI adapted from VFR DA40NG Training Note.html. -->
+</body>
+</html>

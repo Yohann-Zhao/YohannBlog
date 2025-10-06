@@ -472,13 +472,26 @@ footer::before {
 
 /* 侧边栏样式 */
 .sidebar {
-    position: -webkit-sticky; /* Safari */
-    position: sticky;
-    /*left: 20%;*/
+    /* position: -webkit-sticky;  Safari */
+    /* position: sticky; */
     margin-left: 8%;
-    top: 60px; /* 根据nav和breadcrumb的高度调整 */
-    max-height: calc(100vh - 60px); /* 确保侧边栏不会超出视口 */
-    overflow: visible; 
+    /* top: 60px; */
+    /* max-height: calc(100vh - 60px); */
+    /* overflow: visible; */
+}
+
+/* Theory页面分组标题样式 */
+.sidebar .subjects h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    text-align: left;
+}
+
+/* Theory页面分组之间间距 */
+.sidebar .subjects + .subjects {
+    margin-top: 2rem;
 }
 
 /* 学科卡片容器，去掉卡片间隙并自适应高度 */
@@ -516,6 +529,7 @@ footer::before {
     position: relative;
     /* left: 16%; /* 左端对齐主容器的左边 */
     margin-left: 3%;
+    margin-top: 2rem; /* 新增：向下移动，与左侧CPLA分组顶部对齐 */
     width: 50%; /* 宽度 */
     height: 50%;
     padding: 2rem;
@@ -555,4 +569,18 @@ table {
     color: #333;
     padding: 10px;
     text-align: center;
+}
+
+.irex-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 4rem; /* 让IREX配图与说明整体向下，与CPLA分组底部对齐 */
+}
+
+.irex-detail img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
 }
