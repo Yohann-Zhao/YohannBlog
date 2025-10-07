@@ -1,616 +1,608 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSYA | Yohann飞行笔记</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CPLA Aircraft General Knowledge | Yohann Aviation Note</title>
+  <meta name="author" content="Yohann Aviation Note" />
+  <meta name="description" content="Compact, searchable, and print‑friendly CPLA Systems notes (CSYA1–CSYA4): power plants, aircraft systems, instruments, propellers/CSU. Test‑oriented." />
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
-<script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+  <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){dataLayer.push(arguments);} 
   gtag('js', new Date());
-
   gtag('config', 'G-G3TQJTQ67B');
-</script>
-
-</head>
-
-    <style>
-        /* 翻译按钮样式 */
-        #translate-btn {
-            position: absolute;
-            padding: 4px 12px;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            display: none;
-            z-index: 9999;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        #translate-btn:hover {
-            background: #19e6e6;
-        }
-        .translation-container {
-            position: absolute;
-            margin: 10px 0;
-            padding: 10px;
-            border-left: 3px solid var(--primary-color);
-            background: #f8f9fa;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 10000;
-            max-width: 300px;
-            color: #333;
-            font-size: 14px;
-        }
-    
-        #original-btn {
-            display: block;
-            margin-top: 10px;
-            padding: 5px 10px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            text-align: center;
-        }
-
-        #original-btn:hover {
-            background: #19e6e6;
-        }
-    </style>
-
-    <!--翻译-->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let selectedText = '';
-            let translationVisible = false;
-
-            // 文本选择监听
-            document.addEventListener('mouseup', function(e) {
-                const selection = window.getSelection();
-                if (!selection.isCollapsed) {
-                    const range = selection.getRangeAt(0);
-                    const rect = range.getBoundingClientRect();
-                    
-                    const btn = document.getElementById('translate-btn');
-                    btn.style.display = 'block';
-                    btn.style.top = `${rect.top + window.scrollY - 25}px`;
-                    btn.style.left = `${rect.left + window.scrollX + rect.width - 60}px`;
-                    
-                    selectedText = selection.toString();
-                }
-            });
-
-            // 翻译按钮点击事件
-            document.getElementById('translate-btn').addEventListener('click', async function() {
-                if (!selectedText) return;
-                
-                try {
-                    const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=AIzaSyAcoIyHMH3QZ96wXfOMq27_vyafFSyesBo`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            q: selectedText,
-                            target: 'zh-CN' // 目标语言设置为简体中文
-                        })
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.error.message}`);
-                    }
-
-                    const data = await response.json();
-                    if (!data.data || !data.data.translations || !data.data.translations[0]) {
-                        throw new Error('Invalid response format');
-                    }
-
-                    const translatedText = data.data.translations[0].translatedText;
-
-                    // 创建翻译容器
-                    const translationDiv = document.createElement('div');
-                    translationDiv.className = 'translation-container';
-                    translationDiv.innerHTML = `
-                        <div>${translatedText}</div>
-                        <button id="original-btn">关闭</button>
-                    `;
-
-                    // 获取选中文本的位置
-                    const range = window.getSelection().getRangeAt(0);
-                    const rect = range.getBoundingClientRect();
-
-                    // 设置翻译容器的位置
-                    translationDiv.style.top = `${rect.bottom + window.scrollY}px`;
-                    translationDiv.style.left = `${rect.left + window.scrollX}px`;
-
-                    // 添加翻译容器到页面
-                    document.body.appendChild(translationDiv);
-
-                    // 隐藏翻译按钮
-                    this.style.display = 'none';
-                    translationVisible = true;
-
-                } catch (error) {
-                    console.error('翻译失败:', error);
-                    showCustomAlert('翻译错误', `翻译服务暂时不可用，请稍后再试。错误信息: ${error.message}`);
-                }
-            });
-
-            // 原文按钮事件委托
-            document.addEventListener('click', function(e) {
-                if (e.target && e.target.id === 'original-btn') {
-                    e.target.parentElement.remove();
-                    translationVisible = false;
-                }
-            });
-
-            // 点击其他地方隐藏翻译按钮
-            document.addEventListener('mousedown', function(e) {
-                if (!translationVisible && !e.target.closest('#translate-btn')) {
-                    document.getElementById('translate-btn').style.display = 'none';
-                }
-            });
-        });
-
-        // 显示自定义提示框
-        function showCustomAlert(title, message) {
-            // 创建提示框元素
-            const alertBox = document.createElement('div');
-            alertBox.className = 'custom-alert';
-            alertBox.innerHTML = `
-                <h2>${title}</h2>
-                <p>${message}</p>
-                <button onclick="closeCustomAlert(this)">确定</button>
-            `;
-
-            // 添加提示框到页面
-            document.body.appendChild(alertBox);
-        }
-
-        // 关闭自定义提示框
-        function closeCustomAlert(button) {
-            const alertBox = button.parentElement;
-            document.body.removeChild(alertBox);
-        }
-    </script>
-    
-    <style>
-        /* 自定义提示框样式 */
-        .custom-alert {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(100%);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .custom-alert.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .custom-alert h2 {
-            margin-top: 0;
-            font-size: 1.5rem;
-            color: #333;
-        }
-
-        .custom-alert p {
-            margin: 10px 0;
-            font-size: 1rem;
-            color: #666;
-        }
-
-        .custom-alert button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            border: none;
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .custom-alert button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-
-    <script>
-        // 禁用复制操作并显示自定义提示
-        document.addEventListener('copy', function(e) {
-            /*e.preventDefault();*/
-            showCustomAlert('温馨提示', '若您需要引用或参考本项目内容，请通过<a href="index.html">版权声明</a>了解使用权利，为您提供规范的使用指引。</br>感谢您为尊重内容版权及开源精神所做的努力！');
-        });
-
-        // 显示自定义提示框
-        function showCustomAlert(title, message) {
-            // 创建提示框元素
-            const alertBox = document.createElement('div');
-            alertBox.className = 'custom-alert';
-            alertBox.innerHTML = `
-                <h2>${title}</h2>
-                <p>${message}</p>
-                <button onclick="closeCustomAlert(this)">确定</button>
-            `;
-
-            // 添加提示框到页面
-            document.body.appendChild(alertBox);
-
-            // 渐变显示提示框
-            setTimeout(() => {
-                alertBox.classList.add('show');
-            }, 10);
-
-            // 5秒后渐变隐藏提示框
-            setTimeout(() => {
-                alertBox.classList.remove('show');
-                setTimeout(() => {
-                    document.body.removeChild(alertBox);
-                }, 500);
-            }, 5000);
-        }
-
-        // 关闭自定义提示框
-        function closeCustomAlert(button) {
-            const alertBox = button.parentElement;
-            alertBox.classList.remove('show');
-            setTimeout(() => {
-                document.body.removeChild(alertBox);
-            }, 500);
-        }
-    </script>
-
-    <style>
-        #translate-button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #28a745;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-
-        #translate-button:hover {
-            background-color: #218838;
-        }
-
-        #translation-result {
-            z-index: 1000;
-            font-size: 18px;
-        }
-    </style>
-
-    <script>
-        // 动态加载章节内容（优化版）
-        async function loadChapter(chapterUrl, element) {
-            try {
-                // 显示加载提示
-                document.getElementById("content-area").innerHTML = '<div class="loading">Loading 加载中...</div>';
-
-                // 移除所有章节的选中状态
-                document.querySelectorAll('.chapter_sidebar a').forEach(a => a.classList.remove('active'));
-
-                // 添加选中状态
-                element.classList.add('active');
-
-                // 更新下拉菜单的值
-                document.getElementById('chapter-dropdown').value = chapterUrl;
-
-                // 使用 Fetch API 加载对应的 HTML 文件
-                const response = await fetch(chapterUrl);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP 错误! 状态码: ${response.status}`);
-                }
-
-                const data = await response.text();
-                document.getElementById("content-area").innerHTML = data;
-
-            } catch (error) {
-                // 显示详细的错误信息（调试用）
-                console.error('加载失败:', error);
-                document.getElementById("content-area").innerHTML = `
-                    <div class="error">
-                        <p>加载失败！原因：${error.message}</p>
-                        <p>请检查：</p>
-                        <ul>
-                            <li>文件路径是否正确</li>
-                            <li>服务器是否启动</li>
-                        </ul>
-                    </div>
-                `;
-            }
-        }
-    </script>
-
-    <style>
-        /* 新增加载提示和错误提示样式 */
-        .loading, .error {
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .loading {
-            background: #f8f9fa;
-            color: #666;
-        }
-
-        .error {
-            background: #fff3f3;
-            color: #dc3545;
-            border: 1px solid #ffc9c9;
-        }
-
-            .error ul {
-                text-align: left;
-                margin: 10px 0;
-            }
-    </style>
-
-    <style>
-
-        /*需要并排两个组件，所以这里container重新用了style*/
-        .container {
-            position: relative;
-            width: 100%;
-            display: flex; /* 布局 */
-            padding: 2rem;
-            gap: 1rem;
-        }
-
-        .chapter_sidebar {
-            position: sticky;
-            top: 8rem; /* 保持在nav-breadcrumb-container下方 */
-            width: 20%;
-            background-color: var(--background-color);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: var(--shadow-md);
-            max-height: calc(100vh - 4rem); /* 限制最大高度 */
-        }
-
-            .chapter_sidebar h2 {
-                color: var(--primary-color);
-                margin-bottom: 1rem;
-            }
-
-            .chapter_sidebar ul {
-                list-style: none;
-                padding: 0;
-            }
-
-            .chapter_sidebar li {
-                margin-bottom: 0.75rem;
-            }
-
-            .chapter_sidebar a {
-                text-decoration: none;
-                font-size: 1rem;
-                color: var(--text-color);
-                transition: var(--transition);
-                display: block;
-                padding: 0.5rem;
-                border-radius: 0.5rem;
-            }
-
-                .chapter_sidebar a:hover,
-                .chapter_sidebar a.active {
-                    color: var(--primary-color);
-                    background: rgba(13, 71, 161, 0.1);
-                }
-
-            .content {
-                position: relative;
-                flex-grow: 1; /* 填充剩余空间 */
-                padding: 2rem; /* 让内部的文字与边缘保持距离 */
-                background: var(--background-color);
-                border-radius: 1rem;
-                box-shadow: var(--shadow-md);
-            }
-
-            nav a.active {
-                color: var(--accent-color);
-                background: rgba(255, 255, 255, 0.05);
-            }
-
-            /* 新增样式：导航路径样式 */
-            .breadcrumb {
-                padding: 1rem;
-                padding-left: 10%;
-                background: var(--background-color);
-                box-shadow: var(--shadow-sm);
-            }
-
-            .breadcrumb a {
-                text-decoration: none;
-                color: var(--text-color);
-                font-size: 1rem;
-                transition: var(--transition);
-            }
-
-                .breadcrumb a:hover {
-                    color: var(--primary-color);
-                }
-
-            .breadcrumb span {
-                color: var(--text-color);
-                font-size: 0.9rem;
-                margin: 0 0.5rem;
-            }
-    </style>
-
-    <style>
-        .nav-breadcrumb-container {
-            position: -webkit-sticky; /* Safari */
-            position: sticky;
-            top: 0;
-            background-color:; /* 可选：设置背景颜色 */
-            z-index: 1000; /* 确保它在其他内容之上 */
-        }
-
-    </style>
-
-    <style>
-        /* 使用媒体查询检测设备类型 */
-        @media (max-width: 1000px) {
-            .chapter_sidebar {
-                display: none; /* 隐藏侧边栏 */
-            }
-            .chapter-dropdown-container {
-                display: inline-block; /* 显示下拉菜单和标签 */
-            }
-            .chapter-dropdown-container select {
-                padding: 0.5rem;
-                border-radius: 0.5rem;
-                border: 1px solid var(--border-color);
-                background: var(--background-color);
-                color: var(--text-color);
-                font-size: 1rem;
-            }
-            .content {
-                width: 100%; /* 占满宽度 */
-            }
-        }
-
-        @media (min-width: 1001px) and (max-width: 1400px) {
-            .chapter_sidebar {
-                width: 30%;
-            }
-            .chapter-dropdown-container {
-                display: inline-block; /* 显示下拉菜单和标签 */
-            }
-            .chapter-dropdown-container select {
-                padding: 0.5rem;
-                border-radius: 0.5rem;
-                border: 1px solid var(--border-color);
-                background: var(--background-color);
-                color: var(--text-color);
-                font-size: 1rem;
-            }
-            .content {
-                width: 70%; /* 占满宽度 */
-            }
-        }
-
-        @media (min-width: 1401px) {
-            .chapter-dropdown-container {
-                display: inline-block; /* 显示下拉菜单和标签 */
-            }
-            .chapter-dropdown-container select {
-                padding: 0.5rem;
-                border-radius: 0.5rem;
-                border: 1px solid var(--border-color);
-                background: var(--background-color);
-                color: var(--text-color);
-                font-size: 1rem;
-            }
-            .content {
-                width: 80%; /* 占80%宽度 */
-            }
-        }
-    </style>
-
+  </script>
+
+  <style>
+    /* ===== Light Blue Theme (unified with CADA/IREX) ===== */
+    :root{
+      --bg:#f5f9ff; --bg-1:#eef5ff; --panel:#fff; --card:#fff;
+      --text:#1f2a44; --muted:#5b6b80; --brand:#1976d2; --brand-2:#64b5f6;
+      --warn:#f59e0b; --danger:#ef4444; --ok:#0ea5e9;
+      --border:#e6eef8; --border-dashed:#d7e5fb;
+      --shadow:0 8px 28px rgba(25,118,210,.12), 0 2px 10px rgba(15,23,42,.06);
+      --radius:16px; --fs-base:16px; --maxw:980px; --appbarH:84px;
+      --scrollbar-track:#f1f6ff; --scrollbar-thumb:#c9ddfb; --scrollbar-thumb-hover:#aaceff;
+    }
+    [id]{ scroll-margin-top: var(--appbarH, 84px); }
+    html{ font-size:var(--fs-base); }
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #eaf3ff 0%, rgba(234,243,255,0) 60%),
+        radial-gradient(800px 520px at 95% -10%, #f0f7ff 0%, rgba(240,247,255,0) 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-1) 60%, #f7fbff 100%);
+    }
+
+    /* Appbar */
+    header.appbar{
+      position:sticky; top:0; z-index:100;
+      backdrop-filter:saturate(150%) blur(10px);
+      background:rgba(255,255,255,.86);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 4px 18px rgba(30,64,175,.08);
+    }
+    .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 16px; }
+    .appbar .row{ display:grid; grid-template-columns:1fr; gap:8px; align-items:center; }
+
+    /* Title */
+    h1.title{
+      font-size:clamp(18px, 1.1rem + 0.4vw, 22px);
+      margin:0; letter-spacing:.2px; line-height:1.1;
+      display:inline-flex; align-items:baseline; gap:10px; flex-wrap:nowrap;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; justify-self:start;
+    }
+    h1.title .author{
+      font-size:.8em; color:var(--muted); font-weight:700;
+      border:1px solid var(--border); padding:2px 10px; border-radius:999px;
+      background:#f8fbff; cursor:pointer; text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px;
+      transition:box-shadow .15s ease, border-color .15s ease, transform .02s ease;
+    }
+    h1.title .author:hover{ border-color:#cfe0fb; box-shadow:0 6px 16px rgba(25,118,210,.12); }
+    h1.title .author:active{ transform:translateY(1px); }
+
+    /* Controls */
+    .controls{
+      isolation:isolate; display:grid;
+      grid-template-columns:auto 1fr auto; align-items:center; gap:10px; width:100%;
+    }
+    .controls > *{ position:relative; z-index:1; }
+    .chip, button, select{
+      background:var(--panel); color:var(--text); border:1px solid var(--border);
+      border-radius:999px; padding:8px 12px; box-shadow:var(--shadow);
+      font-weight:600; cursor:pointer; transition:border-color .15s ease, box-shadow .15s ease, transform .02s ease;
+    }
+    .chip:hover, button:hover, select:hover{ border-color:#cfe0fb; }
+    .chip:active, button:active{ transform:translateY(1px); }
+    .chip:focus-visible, button:focus-visible, select:focus-visible{ outline:3px solid rgba(25,118,210,.25); outline-offset:2px; }
+
+    /* Search */
+    .search{ z-index:0; position:relative; min-width:0; }
+    .search input{
+      width:100%; background:var(--panel); color:var(--text);
+      border:1px solid var(--border); outline:none;
+      padding:10px 12px 10px 36px; border-radius:999px; box-shadow:var(--shadow);
+      background-clip:padding-box;
+    }
+    .search input::placeholder{ color:#7d8aa4; }
+    .search svg{ position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:.7; pointer-events:none; color:#5d90da; }
+
+    /* Layout / TOC */
+    #toc-select{ min-width:112px; width:max-content; max-width:34vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; appearance:none; padding-right:28px; }
+    .grid{ display:grid; grid-template-columns:1fr; gap:18px; padding:16px; }
+    @media (min-width:920px){
+      .appbar .row{ grid-template-columns:1fr auto; }
+      .grid{ grid-template-columns:260px 1fr; align-items:start; }
+    }
+    nav.toc{
+      position:sticky; top:68px; align-self:start; background:var(--panel);
+      border:1px solid var(--border); border-radius:var(--radius); padding:12px; box-shadow:var(--shadow);
+      max-height:calc(100vh - 96px); overflow:auto; scrollbar-gutter:stable; scrollbar-width:thin;
+      scrollbar-color:var(--scrollbar-thumb) var(--scrollbar-track);
+    }
+    nav.toc::-webkit-scrollbar{ width:10px; }
+    nav.toc::-webkit-scrollbar-track{ background:var(--scrollbar-track); border-radius:10px; }
+    nav.toc::-webkit-scrollbar-thumb{ background:linear-gradient(180deg, var(--scrollbar-thumb), #b7d2ff); border-radius:10px; border:2px solid var(--scrollbar-track); }
+    nav.toc::-webkit-scrollbar-thumb:hover{ background:var(--scrollbar-thumb-hover); }
+    nav.toc h2{ margin:6px 8px 8px; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; }
+    nav.toc a{ display:block; padding:8px 10px; margin:4px 0; text-decoration:none; color:var(--text); border-radius:10px; border:1px dashed transparent; }
+    nav.toc a:hover{ background:linear-gradient(90deg, rgba(25,118,210,.10), rgba(25,118,210,0) 85%); border-color:var(--border-dashed); }
+    nav.toc a.active{ background:linear-gradient(90deg, rgba(25,118,210,.16), rgba(25,118,210,0) 85%); }
+    nav.toc .sub{ margin-left:10px; font-size:.94em; color:var(--muted); }
+    nav.toc .sub2{ margin-left:22px; font-size:.90em; color:var(--muted); }
+    #toc-select{ display:none; }
+    @media (max-width:919px){
+      header.appbar .wrap{ padding:6px 12px; }
+      h1.title{ font-size:18px; gap:8px; justify-self:center; text-align:center; }
+      h1.title .author{ font-size:.74em; padding:1px 6px; }
+      nav.toc{ display:none !important; }
+      #toc-select{ display:inline-flex; font-size:14px; max-width:30vw; }
+      .controls{ gap:8px; grid-template-columns:auto minmax(120px,1fr) minmax(96px,max-content); }
+      .search input{ padding:8px 10px 8px 30px; }
+      button#go-back{ padding:6px 10px; font-size:14px; }
+    }
+
+    /* Cards / Content */
+    section.card{
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      padding:16px; box-shadow:var(--shadow);
+    }
+    section.card h2{ margin-top:0; display:flex; align-items:center; gap:10px; }
+    section.card h3{ margin-top:1.1em; }
+    .badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; border:1px solid var(--border); background:#f4f9ff; font-size:.85em; color:var(--brand); font-weight:700; }
+    .tag{ color:var(--muted); font-weight:600; text-transform:uppercase; font-size:.78em; letter-spacing:.12em; }
+    .warn{ color:var(--warn); font-weight:700; }
+    .danger{ color:var(--danger); font-weight:700; }
+    .ok{ color:var(--ok); font-weight:700; }
+    .muted{ color:var(--muted); }
+    .kv{ display:grid; grid-template-columns:1fr; gap:8px; }
+    @media (min-width:720px){ .kv{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    ul.check{ list-style:none; padding:0; margin:.25rem 0 1rem; }
+    ul.check li{ padding:6px 8px; border-left:3px solid transparent; }
+    ul.check li + li{ border-top:1px dashed var(--border); }
+    ul.check li[data-type="flow"]{ border-left-color:var(--brand); background:linear-gradient(90deg, rgba(25,118,210,.08), transparent); }
+    ul.check li[data-type="callout"]{ border-left-color:var(--warn); background:linear-gradient(90deg, rgba(245,158,11,.14), transparent); }
+
+    /* Links / marks (stronger hover) */
+    main a[href]{
+      position:relative; text-decoration:underline; text-decoration-thickness:.06em; text-underline-offset:.18em;
+      text-decoration-color:rgba(25,118,210,.35); border-radius:.35em; padding:0 2px;
+      transition:color .15s ease, text-decoration-color .15s ease, text-decoration-thickness .15s ease, box-shadow .15s ease, transform .06s ease, background-color .15s ease;
+    }
+    main a[href]:hover{ color:#0f5fb3; text-decoration-thickness:.14em; text-decoration-color:rgba(25,118,210,.9); background:linear-gradient(transparent 60%, rgba(25,118,210,.18) 0); box-shadow:0 4px 0 rgba(25,118,210,.35) inset; }
+    main a[href]:active{ transform:translateY(1px); box-shadow:0 2px 0 rgba(25,118,210,.45) inset; }
+    mark.hl{ background:rgba(25,118,210,.22); color:inherit; padding:0 .15em; border-radius:.2em; box-shadow:0 0 0 1px rgba(25,118,210,.18) inset; }
+
+    /* Top button & footer */
+    .topbtn{
+      position:fixed; bottom:18px; right:18px; width:44px; height:44px; border-radius:50%; display:grid; place-items:center; box-shadow:var(--shadow);
+      background:var(--panel); border:1px solid var(--border); cursor:pointer; opacity:.95;
+      transition:transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .topbtn:hover{ border-color:#cfe0fb; box-shadow:0 10px 24px rgba(25,118,210,.18); }
+    .topbtn:active{ transform:translateY(1px); }
+    footer{ color:var(--muted); text-align:center; padding:24px; }
+
+    /* Print */
+    @media print{
+      header.appbar, nav.toc, .topbtn{ display:none !important; }
+      body{ background:#fff; color:#000; }
+      section.card{ break-inside:avoid; box-shadow:none; border-color:#ddd; }
+      a{ color:#000; text-decoration:none; }
+      th,td{ border-color:#bbb; }
+    }
+  </style>
 </head>
 <body>
-
-    <div id="translate-btn">翻译</div>
-
-    <header>
-        <div class="language-switcher">
-            <a href="CSYA.html">中文</a> | <a href="CSYA_en.html">English</a>
+  <header class="appbar">
+    <div class="wrap">
+      <div class="row">
+        <h1 class="title">
+          CPLA Aircraft General Knowledge 
+          <a id="brand-link" class="author" href="#" role="link" title="Home · Yohann Aviation Note">Yohann Aviation Note</a>
+        </h1>
+        <div class="controls">
+          <button id="go-back" class="chip" title="Go Back">← Go Back</button>
+          <div class="search" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input id="q" placeholder="Search (e.g. wastegate, accumulator, DI drift, CTM vs ATM)" aria-label="Search all content" />
+          </div>
+          <select id="toc-select" aria-label="Contents"></select>
         </div>
-        <div class="header-content">
-            <h1>Aircraft General Knowledge (CSYA)</h1>
-        </div>
-    </header>
-
-    <div class="nav-breadcrumb-container">
-        <nav>
-            <ul>
-                <li><a href="index.html">主页</a></li>
-                <li><a href="theory.html" class="active">理论考试</a></li>
-                <li><a href="flight-training.html">飞行训练</a></li>
-                <li><a href="aviation-english.html">航空英语</a></li>
-                <li><a href="about.html">关于我</a></li>
-            </ul>
-        </nav>
-
-        <!-- 导航路径 -->
-        <div class="breadcrumb">
-            <a href="theory.html">所有学科</a>
-            <span>></span>
-            <a id="subject-name">Aircraft General Knowledge (CSYA)</a>
-            <div class="chapter-dropdown-container">
-            <label for="chapter-dropdown"> > </label>
-            <select id="chapter-dropdown" onchange="loadChapter(this.value, this)">
-                    <option value="CSYA/CSYA_Part1.html">Part 1 Engine</option>
-                    <option value="CSYA/CSYA_Part2.html">Part 2 Fuel</option>
-                    <option value="CSYA/CSYA_Part3.html">Part 3 Oil</option>
-                    <option value="CSYA/CSYA_Part4.html">Part 4 Super/Turbocharging</option>
-                    <option value="CSYA/CSYA_Part5.html">Part 5 Electrics</option>
-                    <option value="CSYA/CSYA_Part6.html">Part 6 Flight Instruments</option>
-                    <option value="CSYA/CSYA_Part7.html">Part 7 Hydralics & others</option>
-                </select>
-            </div>
-        </div>
-        
+      </div>
     </div>
+  </header>
 
-    <div class="container">
-        <aside class="chapter_sidebar">
-            <h2>章节</h2>
-            <ul>
-                <li><a href="#" onclick="loadChapter('CSYA/CSYA_Part1.html', this)" class="active">Part 1 Engine</a></li>
-                <li><a href="#" onclick="loadChapter('CSYA/CSYA_Part2.html', this)">Part 2 Fuel</a></li>
-                <li><a href="#" onclick="loadChapter('CSYA/CSYA_Part3.html', this)">Part 3 Oil</a></li>
-                <li><a href="#" onclick="loadChapter('CSYA/CSYA_Part4.html', this)">Part 4 Super/Turbocharging</a></li>
-                <li><a href="#" onclick="loadChapter('CSYA/CSYA_Part5.html', this)">Part 5 Electrics</a></li>
-                <li><a href="#" onclick="loadChapter('CSYA/CSYA_Part6.html', this)">Part 6 Flight Instruments</a></li>
-                <li><a href="#" onclick="loadChapter('CSYA/CSYA_Part7.html', this)">Part 7 Hydralics & Others</a></li>
-            </ul>
-        </aside>
+  <div class="grid wrap">
+    <!-- ====================== FIXED TOC STRUCTURE ====================== -->
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
 
-        <main class="content" id="content-area">
-            <script>
-                // 默认显示第一章内容
-                loadChapter('CSYA/CSYA_Part1.html', document.querySelector('.chapter_sidebar a'));
-            
-                // 初始化翻译按钮隐藏状态
-                document.addEventListener('DOMContentLoaded', function() {
-                    document.getElementById('translate-btn').style.display = 'none';
-                });
-            </script>
-        </main>
-    </div>
+      <a href="#how-to-use">How to Use</a>
+      <a href="#mos-map">Quick Map to Part 61 MOS Outcomes</a>
 
-    <footer>
-        <div class="footer-content">
-          <p>© 2025 Yohann飞行笔记 保留所有权利。</p>
-          <p>
-            本项目基于 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 许可证</a> ，
-            仅供非商业用途。引用内容已标注来源，版权信息请联系 <a href="yuhan_zhao@nuaa.edu.cn">Email</a>。
-          </p>
-        </div>
-      </footer>
+      <a href="#csya1">CSYA 1 — Power Plants</a>
+      <a href="#csya1-check" class="sub">What you must know</a>
+      <a href="#csya1-rules" class="sub">Key rules & definitions</a>
+      <a href="#csya1-traps" class="sub">Exam traps</a>
+      <a href="#csya1-refresh" class="sub">Final 60‑second refresh</a>
+      <a href="#csya1-drills" class="sub">Micro‑drills</a>
+
+      <a href="#csya2">CSYA 2 — Aircraft Systems</a>
+      <a href="#csya2-check" class="sub">What you must know</a>
+      <a href="#csya2-rules" class="sub">Key rules & behaviours</a>
+      <a href="#csya2-traps" class="sub">Exam traps</a>
+      <a href="#csya2-refresh" class="sub">Final 60‑second refresh</a>
+      <a href="#csya2-drills" class="sub">Micro‑drills</a>
+
+      <a href="#csya3">CSYA 3 — Instruments</a>
+      <a href="#csya3-check" class="sub">What you must know</a>
+      <a href="#csya3-rules" class="sub">Key rules & signatures</a>
+      <a href="#csya3-traps" class="sub">Exam traps</a>
+      <a href="#csya3-refresh" class="sub">Final 60‑second refresh</a>
+      <a href="#csya3-drills" class="sub">Micro‑drills</a>
+
+      <a href="#csya4">CSYA 4 — Propellers & CSU</a>
+      <a href="#csya4-check" class="sub">What you must know</a>
+      <a href="#csya4-rules" class="sub">Key rules & behaviours</a>
+      <a href="#csya4-traps" class="sub">Exam traps</a>
+      <a href="#csya4-refresh" class="sub">Final 60‑second refresh</a>
+      <a href="#csya4-drills" class="sub">Micro‑drills</a>
+
+      <a href="#qa10">10 Quick Practice Q&A</a>
+      <a href="#final-check" class="sub">Final Exam Day Checklist</a>
+    </nav>
+
+    <main>
+      <!-- HOW TO USE -->
+      <section class="card" id="how-to-use">
+        <h2>How to Use <span class="badge">Exam Strategy</span></h2>
+        <ul class="check">
+          <li>Skim each module’s <em>What you must know</em> first.</li>
+          <li>Memorise rules, limits, definitions, and the “if blocked then …” instrument signatures.</li>
+          <li>Practice micro‑drills (1–2 line answers). Say them out loud.</li>
+          <li>Before the exam, rehearse each module’s <em>Final 60‑sec refresh</em>.</li>
+        </ul>
+      </section>
+
+      <!-- MOS MAP -->
+      <section class="card" id="mos-map">
+        <h2>Quick Map to Part 61 MOS Outcomes <span class="badge">Scope</span></h2>
+        <ul class="check">
+          <li><strong>CSYA 1 – Power Plants:</strong> carburettor (idle/main/accelerator), detonation vs pre‑ignition, super/turbocharging, wastegates & handling.</li>
+          <li><strong>CSYA 2 – Aircraft Systems:</strong> fuel, lubrication, electrical & ignition, hydraulics, fire detection/extinguishers, cooling, retractable gear.</li>
+          <li><strong>CSYA 3 – Instruments:</strong> IAS/CAS/TAS/EAS, pitot‑static (ASI/ALT/VSI) and errors, gyros (rigidity/precession), DI drift, flux valve, compass & dip errors.</li>
+          <li><strong>CSYA 4 – Propellers:</strong> blade/helix angle, pitch, torque; fixed vs variable; CSU governor states; CTM/ATM; oil‑pressure loss behaviour; power management; carb heat with CSU.</li>
+        </ul>
+      </section>
+
+      <!-- CSYA 1 -->
+      <section class="card" id="csya1">
+        <h2>CSYA 1 — Power Plants <span class="badge">Engines</span></h2>
+
+        <h3 id="csya1-check">What you must know</h3>
+        <ul class="check">
+          <li>Carburettor circuits: idle (bypass), main (venturi ΔP), accelerator pump (transient enrichment).</li>
+          <li>Mixture vs altitude: density ↓ → mixture rich unless leaned.</li>
+          <li>Detonation vs Pre‑ignition: causes, symptoms, consequences.</li>
+          <li>Supercharger (engine‑driven) vs Turbocharger (exhaust‑driven): impeller/diffuser/wastegate types.</li>
+          <li>Rated boost / Critical altitude (full‑throttle height).</li>
+          <li>Handling: avoid over‑boost; smooth throttle; cooldown after high power.</li>
+        </ul>
+
+        <h3 id="csya1-rules">Key rules & definitions</h3>
+        <ul class="check">
+          <li>Main jet flow: float‑chamber static pressure minus venturi low pressure; avoid over‑enrichment at low IAS.</li>
+          <li>Idling jet bypasses the venturi downstream of closed throttle; transitions off as throttle opens.</li>
+          <li>Accelerator pump prevents lean‑cut on rapid throttle advance.</li>
+          <li>Detonation = explosive end‑gas burn (↑CHT/pressure); drivers: low octane, over‑boost/high MP at low RPM, lean mixture, overheating.</li>
+          <li>Pre‑ignition = ignition before spark (hot spots) → kick‑back/“dieseling”.</li>
+          <li>SC vs Turbo: impeller ↑velocity → diffuser ↑pressure; turbo uses turbine & wastegate to meter exhaust energy.</li>
+        </ul>
+
+        <h3 id="csya1-traps">Exam traps</h3>
+        <ul class="check">
+          <li>Mixing up detonation (fast burn) vs pre‑ignition (early start).</li>
+          <li>Leaving mixture full‑rich at altitude (over‑rich, power loss, fouling).</li>
+          <li>Assigning wastegates to geared superchargers (they’re turbo hardware).</li>
+          <li>Rapid throttle movements on turbos → over‑boost risk.</li>
+        </ul>
+
+        <h3 id="csya1-refresh">Final 60‑second refresh</h3>
+        <ul class="check" data-type="flow">
+          <li>Idle = bypass; Main = venturi ΔP; Accel = transient spurt.</li>
+          <li>Over‑boost + low RPM → detonation risk. Lean with altitude. Cooldown after high power.</li>
+        </ul>
+
+        <h3 id="csya1-drills">Micro‑drills</h3>
+        <ul class="check">
+          <li><strong>Critical altitude</strong> = highest altitude where rated boost/MP can be held at full throttle.</li>
+          <li><strong>Wastegate:</strong> open → bypass turbine (low boost); closed → drive turbine (high boost).</li>
+          <li>Two cockpit drivers of detonation you control: mixture/MP/RPM combination; temperature management.</li>
+        </ul>
+      </section>
+
+      <!-- CSYA 2 -->
+      <section class="card" id="csya2">
+        <h2>CSYA 2 — Aircraft Systems <span class="badge">Systems</span></h2>
+
+        <h3 id="csya2-check">What you must know</h3>
+        <ul class="check">
+          <li>Fuel: aux/boost pump roles, drains (water), pressure/flow indications, check valves.</li>
+          <li>Lubrication: wet‑sump path, bypass logic, oil cooling & temperature control; dip‑stick use.</li>
+          <li>Electrical: battery (Ah), alternator/regulator, over‑voltage relay, bus bars, ammeter/loadmeter, CBs vs fuses, starter/relay, dual mags.</li>
+          <li>Hydraulics: reservoir, pump, accumulator, actuator, check valve; brakes; fluid type; ‘spongy’ with air.</li>
+          <li>Fire detection: thermal switch, thermocouple (rate‑of‑rise), UV/IR; master warning & test.</li>
+          <li>Cooling: fins, baffles, cowl flaps (open for high power/low speed).</li>
+          <li>Retractable gear: up/down‑locks, squat switch, aural/visual warnings, emergency free‑fall/alternate drives.</li>
+        </ul>
+
+        <h3 id="csya2-rules">Key rules & behaviours</h3>
+        <ul class="check">
+          <li>Fuel drains at low points; water subtler in Jet A (consider chemical test).</li>
+          <li>Oil filter bypass opens if clogged/viscous → unfiltered oil protects against starvation (wear risk).</li>
+          <li>Battery vs alternator: alternator sets higher bus V (14/28 V) and charges battery; low volts pre‑start/post‑shutdown → suspect battery.</li>
+          <li>Loadmeter shows alternator load; ammeter (centre‑zero) shows charge/discharge (negative → alternator offline).</li>
+          <li>CB is protection, not a switch; one reset max if essential.</li>
+          <li>Hydraulic accumulator = “pressure battery” (smooths demand & supplies emergency pressure).</li>
+          <li>Squat switch: prevents gear retraction on ground; gear warning horn with low power + gear not down.</li>
+        </ul>
+
+        <h3 id="csya2-traps">Exam traps</h3>
+        <ul class="check">
+          <li>Hydraulic fluid is <em>incompressible</em>.</li>
+          <li>Do <em>not</em> keep resetting a hot CB (fire risk).</li>
+          <li>Loadmeter ≠ battery state of charge.</li>
+          <li>Checking oil level immediately after shutdown can mislead (drain‑down delay).</li>
+        </ul>
+
+        <h3 id="csya2-refresh">Final 60‑second refresh</h3>
+        <ul class="check" data-type="flow">
+          <li>Oil bypass saves engine from starvation (expect unfiltered oil).</li>
+          <li>Ammeter negative = alternator failed → shed load.</li>
+          <li>Squat switch locks gear on ground; use free‑fall if main system fails.</li>
+        </ul>
+
+        <h3 id="csya2-drills">Micro‑drills</h3>
+        <ul class="check">
+          <li>Three fire detector types: thermal switch; thermocouple (rate‑of‑rise); UV/IR flame.</li>
+          <li>‘Spongy’ brakes indicate: air in hydraulic lines (compressible).</li>
+          <li>Why baffles? Seal/direct high‑pressure cowl air through fins for cooling.</li>
+        </ul>
+      </section>
+
+      <!-- CSYA 3 -->
+      <section class="card" id="csya3">
+        <h2>CSYA 3 — Instruments <span class="badge">Pitot‑static & Gyros</span></h2>
+
+        <h3 id="csya3-check">What you must know</h3>
+        <ul class="check">
+          <li>Airspeeds: IAS, CAS (position/config), EAS (compressibility), TAS (density).</li>
+          <li>Pitot‑static: ASI, ALT, VSI; markings (white/green/yellow arcs; red line).</li>
+          <li>Blockage signatures: pitot vs static; VSI lag; alternate static effects.</li>
+          <li>Gyros: rigidity & precession; air vs electric gyro pros/cons; DI apparent/transport wander; flux‑valve slaving.</li>
+          <li>Compass: construction, fluid damping, dip/pendulous errors, accel/decel errors; hemisphere mnemonics.</li>
+        </ul>
+
+        <h3 id="csya3-rules">Key rules & signatures</h3>
+        <ul class="check">
+          <li>TAS ↑ with altitude for the same IAS (lower density).</li>
+          <li><strong>Pitot blocked, static OK:</strong> ASI behaves like an altimeter (climb ↑, descent ↓).</li>
+          <li><strong>Static blocked:</strong> ASI under‑reads in climb/over‑reads in descent; ALT & VSI freeze after equalisation.</li>
+          <li>VSI is laggy; IVSI uses an acceleration pump to reduce lag.</li>
+          <li>DI drift ≈ 15°/hr at poles, ~0 at equator; reset unless flux‑valve slaved.</li>
+          <li>Precession response occurs 90° in direction of rotation.</li>
+          <li>Compass near poles unreliable; lead/lag in turns; accel/decel errors (use mnemonics).</li>
+        </ul>
+
+        <h3 id="csya3-traps">Exam traps</h3>
+        <ul class="check">
+          <li>ASI is <em>pitot‑static</em>, not gyroscopic.</li>
+          <li>VSI does <em>not</em> show instant ROC/ROD.</li>
+          <li>Alternate static (cabin) changes indications per POH—don’t forget.</li>
+        </ul>
+
+        <h3 id="csya3-refresh">Final 60‑second refresh</h3>
+        <ul class="check" data-type="flow">
+          <li>Pitot blocked → ASI ‘altimeters’ behaviour; Static blocked → ALT/VSI freeze; ASI misreads with altitude change.</li>
+          <li>Gyro: rigidity holds plane; precession at 90°. DI drift: reset or use flux‑valve.</li>
+        </ul>
+
+        <h3 id="csya3-drills">Micro‑drills</h3>
+        <ul class="check">
+          <li>EAS vs CAS: EAS = CAS corrected for compressibility (≈ same &lt;200 kt &amp; &lt;10,000 ft).</li>
+          <li>Two DI error sources (besides friction): apparent (earth rotation) and transport wander.</li>
+          <li>VNE red radial: ‘never exceed’ — structural failure risk.</li>
+        </ul>
+      </section>
+
+      <!-- CSYA 4 -->
+      <section class="card" id="csya4">
+        <h2>CSYA 4 — Propellers & CSU <span class="badge">Props</span></h2>
+
+        <h3 id="csya4-check">What you must know</h3>
+        <ul class="check">
+          <li>Terms: blade angle, helix angle (pitch), thrust vs torque, BHP vs THP, prop efficiency.</li>
+          <li>Fixed vs variable pitch; ground‑adjustable; CSU governor internals.</li>
+          <li>CSU states: on‑speed, over‑speed (go coarse), under‑speed (go fine).</li>
+          <li>CTM vs ATM; oil‑pressure loss behaviour: single‑engine vs multi‑engine (counterweights).</li>
+          <li>MP vs RPM handling order; over‑boost avoidance.</li>
+          <li>Carb heat effects with CSU; carb‑ice indications FP vs CSU (RPM vs MP drop).</li>
+        </ul>
+
+        <h3 id="csya4-rules">Key rules & behaviours</h3>
+        <ul class="check">
+          <li>Prop = aerofoil; AoA changes with TAS → fixed pitch is a compromise.</li>
+          <li>BHP (shaft) vs THP (to air); efficiency = THP/BHP (≈50–80%).</li>
+          <li>Governor: flyweights vs speeder spring move pilot valve to meter oil to hub.</li>
+          <li>Over‑speed → blades coarse (↑torque, ↓RPM); Under‑speed → blades fine (↓torque, ↑RPM).</li>
+          <li>Pitch stops: at full‑fine/full‑coarse behaves like fixed pitch.</li>
+          <li>SE oil‑loss → CTM to full‑fine; ME with counterweights/ATM → coarse/feather bias.</li>
+          <li>Power changes: ↑power = RPM→MP; ↓power = MP→RPM (avoid high MP/low RPM).</li>
+          <li>Carb heat: initial power drop, then recovery as ice clears; with CSU watch MP for ice.</li>
+        </ul>
+
+        <h3 id="csya4-traps">Exam traps</h3>
+        <ul class="check">
+          <li>Oil loss doesn’t always send blades coarse (SE usually goes fine).</li>
+          <li>Using MP like a “thrust lever” without respecting RPM order.</li>
+          <li>At pitch stops, CSU can’t hold RPM constant.</li>
+        </ul>
+
+        <h3 id="csya4-refresh">Final 60‑second refresh</h3>
+        <ul class="check" data-type="flow">
+          <li>Over‑speed → add oil → coarse. Under‑speed → dump oil → fine.</li>
+          <li>Power up: RPM→MP. Power down: MP→RPM. Oil loss: SE→fine; ME→coarse/feather bias.</li>
+        </ul>
+
+        <h3 id="csya4-drills">Micro‑drills</h3>
+        <ul class="check">
+          <li>CTM vs ATM: CTM twists toward fine; ATM toward coarse.</li>
+          <li>Carb‑ice indication: FP → RPM drop; CSU → MP drop (RPM held).</li>
+          <li>Why prop efficiency changes with speed? Blade AoA & advance‑ratio shift.</li>
+        </ul>
+      </section>
+
+      <!-- Q&A -->
+      <section class="card" id="qa10">
+        <h2>10 Quick Practice Q&amp;A <span class="badge">One‑liners</span></h2>
+        <table>
+          <thead><tr><th>Question</th><th>Answer (target keywords)</th></tr></thead>
+          <tbody>
+            <tr><td>Why does TAS increase with altitude for a given IAS?</td><td>Lower density → require higher true speed for same q.</td></tr>
+            <tr><td>Pitot blocked, static clear — ASI in a climb?</td><td>Over‑reads (behaves like altimeter).</td></tr>
+            <tr><td>Three contributors to detonation?</td><td>Over‑boost/high MP, lean mixture/high CHT, low‑octane/old fuel.</td></tr>
+            <tr><td>What does a loadmeter indicate?</td><td>Alternator output load (current to the system).</td></tr>
+            <tr><td>Function of oil filter bypass valve?</td><td>Prevents starvation when clogged/viscous → unfiltered oil path.</td></tr>
+            <tr><td>Two benefits of a hydraulic accumulator?</td><td>S smooths demand; emergency stored pressure.</td></tr>
+            <tr><td>DI drift worst where/why?</td><td>At poles (~15°/hr) due to earth’s rotation.</td></tr>
+            <tr><td>Governor reaction to over‑speed?</td><td>Flyweights out → port oil to hub → blades coarse → RPM ↓.</td></tr>
+            <tr><td>SE oil pressure loss effect on pitch?</td><td>CTM drives blades to full‑fine (fixed‑pitch‑like).</td></tr>
+            <tr><td>Order to increase power with CSU?</td><td>RPM first, then MP.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Final checklist -->
+      <section class="card" id="final-check">
+        <h2>Final Exam Day Checklist <span class="badge">CSYA 1–4</span></h2>
+        <ul class="check">
+          <li>Mark up: V‑speed arcs; VNE; typical MP/RPM combos from your POH.</li>
+          <li>Blockage mnemonics; DI reset rhythm; compass error cues.</li>
+          <li>Power handling order; carb‑heat logic; alternator/battery failure actions.</li>
+          <li>Know locations: drains, dip‑stick, CBs, extinguisher, gear‑emergency controls in your type.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <button id="topbtn" class="topbtn" title="Back to top" aria-label="Back to top">↑</button>
+
+  <footer>
+    <small>© Yohann Aviation Note · Print‑friendly · Built for quick revision</small>
+  </footer>
+
+  <script>
+    (function(){
+      // Simple in‑page search: highlights matches
+      const q = document.getElementById('q');
+      const cards = Array.from(document.querySelectorAll('main .card'));
+      let markId = 0;
+      function clearMarks(){
+        document.querySelectorAll('mark.hl').forEach(m => {
+          const t = document.createTextNode(m.textContent);
+          m.parentNode.replaceChild(t, m);
+        });
+      }
+      function highlight(el, term){
+        const rx = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'ig');
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+        const nodes = [];
+        while(walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(n => {
+          const parent = n.parentNode;
+          if(!rx.test(n.textContent)) return;
+          const frag = document.createDocumentFragment();
+          let lastIdx = 0;
+          n.textContent.replace(rx, (m, idx) => {
+            frag.appendChild(document.createTextNode(n.textContent.slice(lastIdx, idx)));
+            const mark = document.createElement('mark'); mark.className='hl'; mark.textContent = m;
+            frag.appendChild(mark); lastIdx = idx + m.length;
+          });
+          frag.appendChild(document.createTextNode(n.textContent.slice(lastIdx)));
+          parent.replaceChild(frag, n);
+        });
+      }
+      function runSearch(){
+        const term = (q.value || '').trim();
+        clearMarks();
+        if(!term){ return; }
+        cards.forEach(card => highlight(card, term));
+      }
+      if(q){
+        let composing=false;
+        q.addEventListener('compositionstart', ()=>composing=true);
+        q.addEventListener('compositionend', ()=>{ composing=false; runSearch(); });
+        q.addEventListener('input', ()=>{ if(!composing) runSearch(); });
+        q.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ q.value=''; runSearch(); } });
+      }
+
+      // Mobile TOC dropdown
+      const tocSelect = document.getElementById('toc-select');
+      const tocLinks = Array.from(document.querySelectorAll('nav.toc a[href^="#"]'));
+      if (tocSelect) {
+        const opt = document.createElement('option');
+        opt.value = ''; opt.textContent = 'Contents'; opt.selected = true; opt.disabled = true;
+        tocSelect.appendChild(opt);
+        tocLinks.forEach(a => {
+          const o = document.createElement('option');
+          const isSub = a.classList.contains('sub');
+          o.value = a.getAttribute('href').replace('#','');
+          o.textContent = (isSub ? '— ' : '') + a.textContent.trim();
+          tocSelect.appendChild(o);
+        });
+        tocSelect.addEventListener('change', e => {
+          const id = e.target.value; const target = document.getElementById(id);
+          if (target) { history.replaceState(null, '', '#' + id); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+          tocSelect.selectedIndex = 0;
+        });
+      }
+
+      // TOC active state on scroll
+      const headings = Array.from(document.querySelectorAll('main [id]'));
+      const toc = document.querySelector('nav.toc');
+      const tocAs = toc ? Array.from(toc.querySelectorAll('a')) : [];
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if(e.isIntersecting){
+            const id = e.target.id;
+            tocAs.forEach(a => a.classList.toggle('active', a.getAttribute('href')==='#'+id));
+          }
+        });
+      }, {rootMargin: '-60% 0px -35% 0px', threshold: [0,1]});
+      headings.forEach(h => obs.observe(h));
+
+      // Go Back
+      document.getElementById('go-back')?.addEventListener('click', () => {
+        const userLang = navigator.language || navigator.userLanguage;
+        if (userLang && userLang.startsWith('zh')) {
+          window.location.href = 'theory.html';
+        } else {
+          window.location.href = 'theory_en.html';
+        }
+      });
+      // Back to top
+      document.getElementById('topbtn')?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      // Brand link: zh → index.html; else → index_en.html
+      (function(){
+        const brand = document.getElementById('brand-link');
+        if(!brand) return;
+        function resolveLang(){
+          const lang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+          return (lang || '').toLowerCase();
+        }
+        function goHome(ev){
+          ev && ev.preventDefault();
+          const lang = resolveLang();
+          const url = lang.startsWith('zh') ? 'index.html' : 'index_en.html';
+          window.location.href = url;
+        }
+        brand.addEventListener('click', goHome);
+        brand.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' '){
+            goHome(e);
+          }
+        });
+      })();
+    })();
+  </script>
+  <!-- Content reorganised from CSYA_Theory_Exam_Tutorial_v1.0.docx; UI adapted from CADA.html. -->
 </body>
 </html>
