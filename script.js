@@ -77,6 +77,55 @@ function switchImageWithFade(imgElem, newSrc) {
     }, 200); // 200ms delay for fade-out before switching
 }
 
+let carouselTimer = null;
+let isHovering = false;
+let carouselIndex = 0;
+
+function getCarouselList(lang) {
+    const subjects = Object.keys(subjectInfo[lang]);
+    return [
+        {
+            image: 'image_subject/CPL.png',
+            title: lang === 'zh-CN' ? 'CASA CPLA 理论考试' : 'CASA CPLA Theory Exam',
+            description: lang === 'zh-CN'
+                ? 'CASA 商业飞行员执照（CPLA）理论考试是获取澳大利亚商用飞行员执照的必备笔试，涵盖七个科目：导航、气象学、空气动力学、飞机通识、飞行规则与法律、人为因素以及性能与载重。每个科目为单独考试，采用多项选择题、填空题。考试通过 Aspeq 系统在指定考点进行，大多数科目合格分数为 70% ，Air Law合格分数为 80 %。充分的学习与准备对顺利通过考试至关重要。'
+                : 'The CASA Commercial Pilot License (CPLA) theory exam is a mandatory written test for obtaining an Australian commercial pilot license, covering seven subjects: Navigation, Meteorology, Aerodynamics, Aircraft General Knowledge, Air Law, Human Factors, and Performance and Loading. Each subject is a separate exam, consisting of multiple-choice questions and fill-in-the-blank questions. The exam is conducted through the Aspeq system at designated test centers, with most subjects requiring a passing score of 70%, and Air Law requiring a passing score of 80%. Adequate study and preparation are crucial for passing the exam successfully.'
+        },
+        ...subjects.map(title => ({
+            image: subjectInfo[lang][title].image,
+            title,
+            description: subjectInfo[lang][title].description
+        }))
+    ];
+}
+
+function startCarousel() {
+    clearCarousel();
+    const lang = document.documentElement.lang;
+    const carouselList = getCarouselList(lang);
+    carouselIndex = 0;
+
+    function showNext() {
+        const item = carouselList[carouselIndex];
+        switchImageWithFade(detail.querySelector('img'), item.image);
+        detail.querySelector('h2').textContent = item.title;
+        detail.querySelector('p').textContent = item.description;
+        detail.classList.add('active');
+        // CPL.png 停留14s，其余10s
+        const delay = carouselIndex === 0 ? 14000 : 10000;
+        carouselIndex = (carouselIndex + 1) % carouselList.length;
+        carouselTimer = setTimeout(showNext, delay);
+    }
+    showNext();
+}
+
+function clearCarousel() {
+    if (carouselTimer) {
+        clearTimeout(carouselTimer);
+        carouselTimer = null;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const lang = document.documentElement.lang;
     const defaultInfo = {
@@ -98,10 +147,14 @@ document.addEventListener('DOMContentLoaded', () => {
     detail.querySelector('h2').textContent = defaultInfo[lang].title;
     detail.querySelector('p').textContent = defaultInfo[lang].description;
     detail.classList.add('active');
+    // 启动轮播
+    startCarousel();
 });
 
 cards.forEach(card => {
     card.addEventListener('mouseenter', () => {
+        isHovering = true;
+        clearCarousel();
         const lang = document.documentElement.lang;
         // 获取当前学科的标题
         // 兼容 <h3> 结构
@@ -120,12 +173,26 @@ cards.forEach(card => {
     });
 
     card.addEventListener('mouseleave', () => {
-        const lang = document.documentElement.lang;
-        switchImageWithFade(detail.querySelector('img'), 'image_subject/CPL.png');
-        detail.querySelector('h2').textContent = lang === 'zh-CN' ? 'CASA CPLA 理论考试' : 'CASA CPLA Theory Exam';
-        detail.querySelector('p').textContent = lang === 'zh-CN'
-            ? 'CASA 商业飞行员执照（CPLA）理论考试是获取澳大利亚商用飞行员执照的必备笔试，涵盖七个科目：导航、气象学、空气动力学、飞机通识、飞行规则与法律、人为因素以及性能与载重。每个科目为单独考试，采用多项选择题、填空题。考试通过 Aspeq 系统在指定考点进行，大多数科目合格分数为 70% ，Air Law合格分数为 80 %。充分的学习与准备对顺利通过考试至关重要。'
-            : 'The CASA Commercial Pilot License (CPLA) theory exam is a mandatory written test for obtaining an Australian commercial pilot license, covering seven subjects: Navigation, Meteorology, Aerodynamics, Aircraft General Knowledge, Air Law, Human Factors, and Performance and Loading. Each subject is a separate exam, consisting of multiple-choice questions and fill-in-the-blank questions. The exam is conducted through the Aspeq system at designated test centers, with most subjects requiring a passing score of 70%, and Air Law requiring a passing score of 80%. Adequate study and preparation are crucial for passing the exam successfully.';
-        detail.classList.add('active');
+        isHovering = false;
+        // 延迟启动轮播，确保没有其他卡片被hover
+        setTimeout(() => {
+            if (!isHovering) {
+                startCarousel();
+            }
+        }, 10);
+        // 不再立即切换为CPL，交由轮播处理
     });
 });
+
+// 如果鼠标移出整个 subjects 区域，也要恢复轮播
+const subjectsElem = document.querySelector('.subjects');
+if (subjectsElem) {
+    subjectsElem.addEventListener('mouseleave', () => {
+        isHovering = false;
+        setTimeout(() => {
+            if (!isHovering) {
+                startCarousel();
+            }
+        }, 10);
+    });
+}
