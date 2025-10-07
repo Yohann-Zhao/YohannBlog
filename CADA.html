@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CPLA Aerodynamics (ADA1–ADA4) | Yohann Aviation Note</title>
+  <meta name="author" content="Yohann Aviation Note" />
+  <meta name="description" content="Compact, searchable, and print-friendly CPLA Aerodynamics notes (ADA1–ADA4): fundamentals & performance, stability, control & manoeuvres, stall/spin/spiral dive. Test-oriented." />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('js', new Date());
+  gtag('config', 'G-G3TQJTQ67B');
+  </script>
+
+  <style>
+    /* ===== Light Blue Theme (unified with DA40/DA42/IREX) ===== */
+    :root{
+      --bg:#f5f9ff; --bg-1:#eef5ff; --panel:#fff; --card:#fff;
+      --text:#1f2a44; --muted:#5b6b80; --brand:#1976d2; --brand-2:#64b5f6;
+      --warn:#f59e0b; --danger:#ef4444; --ok:#0ea5e9;
+      --border:#e6eef8; --border-dashed:#d7e5fb;
+      --shadow:0 8px 28px rgba(25,118,210,.12), 0 2px 10px rgba(15,23,42,.06);
+      --radius:16px; --fs-base:16px; --maxw:980px; --appbarH:84px;
+      --scrollbar-track:#f1f6ff; --scrollbar-thumb:#c9ddfb; --scrollbar-thumb-hover:#aaceff;
+    }
+    [id]{ scroll-margin-top: var(--appbarH, 84px); }
+    html{ font-size:var(--fs-base); }
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #eaf3ff 0%, rgba(234,243,255,0) 60%),
+        radial-gradient(800px 520px at 95% -10%, #f0f7ff 0%, rgba(240,247,255,0) 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-1) 60%, #f7fbff 100%);
+    }
+
+    /* Appbar */
+    header.appbar{
+      position:sticky; top:0; z-index:100;
+      backdrop-filter:saturate(150%) blur(10px);
+      background:rgba(255,255,255,.86);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 4px 18px rgba(30,64,175,.08);
+    }
+    .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 16px; }
+    .appbar .row{ display:grid; grid-template-columns:1fr; gap:8px; align-items:center; }
+
+    /* Title */
+    h1.title{
+      font-size:clamp(18px, 1.1rem + 0.4vw, 22px);
+      margin:0; letter-spacing:.2px; line-height:1.1;
+      display:inline-flex; align-items:baseline; gap:10px; flex-wrap:nowrap;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; justify-self:start;
+    }
+    h1.title .author{
+      font-size:.8em; color:var(--muted); font-weight:700;
+      border:1px solid var(--border); padding:2px 10px; border-radius:999px;
+      background:#f8fbff; cursor:pointer; text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px;
+      transition:box-shadow .15s ease, border-color .15s ease, transform .02s ease;
+    }
+    h1.title .author:hover{ border-color:#cfe0fb; box-shadow:0 6px 16px rgba(25,118,210,.12); }
+    h1.title .author:active{ transform:translateY(1px); }
+
+    /* Controls */
+    .controls{
+      isolation:isolate; display:grid;
+      grid-template-columns:auto 1fr auto; align-items:center; gap:10px; width:100%;
+    }
+    .controls > *{ position:relative; z-index:1; }
+    .chip, button, select{
+      background:var(--panel); color:var(--text); border:1px solid var(--border);
+      border-radius:999px; padding:8px 12px; box-shadow:var(--shadow);
+      font-weight:600; cursor:pointer; transition:border-color .15s ease, box-shadow .15s ease, transform .02s ease;
+    }
+    .chip:hover, button:hover, select:hover{ border-color:#cfe0fb; }
+    .chip:active, button:active{ transform:translateY(1px); }
+    .chip:focus-visible, button:focus-visible, select:focus-visible{ outline:3px solid rgba(25,118,210,.25); outline-offset:2px; }
+
+    /* Search */
+    .search{ z-index:0; position:relative; min-width:0; }
+    .search input{
+      width:100%; background:var(--panel); color:var(--text);
+      border:1px solid var(--border); outline:none;
+      padding:10px 12px 10px 36px; border-radius:999px; box-shadow:var(--shadow);
+      background-clip:padding-box;
+    }
+    .search input::placeholder{ color:#7d8aa4; }
+    .search svg{ position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:.7; pointer-events:none; color:#5d90da; }
+
+    /* Layout / TOC */
+    #toc-select{ min-width:112px; width:max-content; max-width:34vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; appearance:none; padding-right:28px; }
+    .grid{ display:grid; grid-template-columns:1fr; gap:18px; padding:16px; }
+    @media (min-width:920px){
+      .appbar .row{ grid-template-columns:1fr auto; }
+      .grid{ grid-template-columns:260px 1fr; align-items:start; }
+    }
+    nav.toc{
+      position:sticky; top:68px; align-self:start; background:var(--panel);
+      border:1px solid var(--border); border-radius:var(--radius); padding:12px; box-shadow:var(--shadow);
+      max-height:calc(100vh - 96px); overflow:auto; scrollbar-gutter:stable; scrollbar-width:thin;
+      scrollbar-color:var(--scrollbar-thumb) var(--scrollbar-track);
+    }
+    nav.toc::-webkit-scrollbar{ width:10px; }
+    nav.toc::-webkit-scrollbar-track{ background:var(--scrollbar-track); border-radius:10px; }
+    nav.toc::-webkit-scrollbar-thumb{ background:linear-gradient(180deg, var(--scrollbar-thumb), #b7d2ff); border-radius:10px; border:2px solid var(--scrollbar-track); }
+    nav.toc::-webkit-scrollbar-thumb:hover{ background:var(--scrollbar-thumb-hover); }
+    nav.toc h2{ margin:6px 8px 8px; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; }
+    nav.toc a{ display:block; padding:8px 10px; margin:4px 0; text-decoration:none; color:var(--text); border-radius:10px; border:1px dashed transparent; }
+    nav.toc a:hover{ background:linear-gradient(90deg, rgba(25,118,210,.10), rgba(25,118,210,0) 85%); border-color:var(--border-dashed); }
+    nav.toc .sub{ margin-left:10px; font-size:.94em; color:var(--muted); }
+    nav.toc .sub2{ margin-left:22px; font-size:.90em; color:var(--muted); }
+    #toc-select{ display:none; }
+    @media (max-width:919px){
+      header.appbar .wrap{ padding:6px 12px; }
+      h1.title{ font-size:18px; gap:8px; justify-self:center; text-align:center; }
+      h1.title .author{ font-size:.74em; padding:1px 6px; }
+      nav.toc{ display:none !important; }
+      #toc-select{ display:inline-flex; font-size:14px; max-width:30vw; }
+      .controls{ gap:8px; grid-template-columns:auto minmax(120px,1fr) minmax(96px,max-content); }
+      .search input{ padding:8px 10px 8px 30px; }
+      button#go-back{ padding:6px 10px; font-size:14px; }
+    }
+
+    /* Cards / Content */
+    section.card{
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      padding:16px; box-shadow:var(--shadow);
+    }
+    section.card h2{ margin-top:0; display:flex; align-items:center; gap:10px; }
+    section.card h3{ margin-top:1.1em; }
+    .badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; border:1px solid var(--border); background:#f4f9ff; font-size:.85em; color:var(--brand); font-weight:700; }
+    .tag{ color:var(--muted); font-weight:600; text-transform:uppercase; font-size:.78em; letter-spacing:.12em; }
+    .warn{ color:var(--warn); font-weight:700; }
+    .danger{ color:var(--danger); font-weight:700; }
+    .ok{ color:var(--ok); font-weight:700; }
+    .muted{ color:var(--muted); }
+    .kv{ display:grid; grid-template-columns:1fr; gap:8px; }
+    @media (min-width:720px){ .kv{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    ul.check{ list-style:none; padding:0; margin:.25rem 0 1rem; }
+    ul.check li{ padding:6px 8px; border-left:3px solid transparent; }
+    ul.check li + li{ border-top:1px dashed var(--border); }
+    ul.check li[data-type="flow"]{ border-left-color:var(--brand); background:linear-gradient(90deg, rgba(25,118,210,.08), transparent); }
+    ul.check li[data-type="callout"]{ border-left-color:var(--warn); background:linear-gradient(90deg, rgba(245,158,11,.14), transparent); }
+
+    details{ border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:linear-gradient(180deg, rgba(25,118,210,.04), rgba(255,255,255,0)); }
+    details > summary{ cursor:pointer; font-weight:700; list-style:none; }
+    details[open]{ background:linear-gradient(180deg, rgba(100,181,246,.16), rgba(255,255,255,0)); }
+
+    /* Links / marks (stronger hover) */
+    main a[href]{
+      position:relative; text-decoration:underline; text-decoration-thickness:.06em; text-underline-offset:.18em;
+      text-decoration-color:rgba(25,118,210,.35); border-radius:.35em; padding:0 2px;
+      transition:color .15s ease, text-decoration-color .15s ease, text-decoration-thickness .15s ease, box-shadow .15s ease, transform .06s ease, background-color .15s ease;
+    }
+    main a[href]:hover{ color:#0f5fb3; text-decoration-thickness:.14em; text-decoration-color:rgba(25,118,210,.9); background:linear-gradient(transparent 60%, rgba(25,118,210,.18) 0); box-shadow:0 4px 0 rgba(25,118,210,.35) inset; }
+    main a[href]:active{ transform:translateY(1px); box-shadow:0 2px 0 rgba(25,118,210,.45) inset; }
+    mark.hl{ background:rgba(25,118,210,.22); color:inherit; padding:0 .15em; border-radius:.2em; box-shadow:0 0 0 1px rgba(25,118,210,.18) inset; }
+
+    /* Top button & footer */
+    .topbtn{
+      position:fixed; bottom:18px; right:18px; width:44px; height:44px; border-radius:50%; display:grid; place-items:center; box-shadow:var(--shadow);
+      background:var(--panel); border:1px solid var(--border); cursor:pointer; opacity:.95;
+      transition:transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .topbtn:hover{ border-color:#cfe0fb; box-shadow:0 10px 24px rgba(25,118,210,.18); }
+    .topbtn:active{ transform:translateY(1px); }
+    footer{ color:var(--muted); text-align:center; padding:24px; }
+
+    /* Print */
+    @media print{
+      header.appbar, nav.toc, .topbtn{ display:none !important; }
+      body{ background:#fff; color:#000; }
+      section.card{ break-inside:avoid; box-shadow:none; border-color:#ddd; }
+      a{ color:#000; text-decoration:none; }
+      th,td{ border-color:#bbb; }
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="wrap">
+      <div class="row">
+        <h1 class="title">
+          CPLA Aerodynamics (ADA1–ADA4)
+          <a id="brand-link" class="author" href="#" role="link" title="Home · Yohann Aviation Note">Yohann Aviation Note</a>
+        </h1>
+        <div class="controls">
+          <button id="go-back" class="chip" title="Go Back">← Go Back</button>
+          <div class="search" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input id="q" placeholder="Search (e.g. L/Dmax, Rate-1, Vs√n, spiral vs spin)" aria-label="Search all content" />
+          </div>
+          <select id="toc-select" aria-label="Contents"></select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid wrap">
+    <!-- ====================== FIXED TOC STRUCTURE ====================== -->
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+
+      <!-- Top-level block 1: How to Use (peer to ADA1–ADA4) -->
+      <a href="#how-to-use">How to Use</a>
+
+      <!-- Top-level block 2: ADA1 and its sub-items -->
+      <a href="#ada1">ADA1 — Fundamentals & Performance</a>
+      <a href="#ada1-core" class="sub">Core Concepts</a>
+      <a href="#ada1-graphs" class="sub">Graph Literacy</a>
+      <a href="#ada1-thrust" class="sub">Thrust/Power Curves</a>
+      <a href="#ada1-effects" class="sub">Altitude & Weight</a>
+      <a href="#ada1-quick" class="sub">Quick Calcs</a>
+
+      <!-- Top-level block 3: ADA2 and its sub-items -->
+      <a href="#ada2">ADA2 — Stability</a>
+      <a href="#ada2-long" class="sub">Longitudinal</a>
+      <a href="#ada2-lat" class="sub">Lateral</a>
+      <a href="#ada2-dir" class="sub">Directional</a>
+      <a href="#ada2-coupled" class="sub">Coupled Effects</a>
+
+      <!-- Top-level block 4: ADA3 and its sub-items -->
+      <a href="#ada3">ADA3 — Control & Manoeuvres</a>
+      <a href="#ada3-primary" class="sub">Primary Effects</a>
+      <a href="#ada3-adverse" class="sub">Adverse Yaw & Fixes</a>
+      <a href="#ada3-trim" class="sub">Trim & Balancing</a>
+      <a href="#ada3-devices" class="sub">High-Lift/Drag Devices</a>
+      <a href="#ada3-turns" class="sub">Rate/Radius/Load Factor</a>
+      <a href="#ada3-overunder" class="sub">Over/Under-bank</a>
+      <a href="#ada3-prop" class="sub">Prop & Ground Effect</a>
+
+      <!-- Top-level block 5: ADA4 and its sub-items -->
+      <a href="#ada4">ADA4 — Loss of Control</a>
+      <a href="#ada4-stall" class="sub">Stall</a>
+      <a href="#ada4-why" class="sub">Why Vs Changes</a>
+      <a href="#ada4-recov" class="sub">Recoveries</a>
+      <a href="#ada4-diff" class="sub">Wing-drop vs Spin vs Spiral</a>
+
+      <!-- Top-level block 6: Cram section -->
+      <a href="#cram">Last-Minute Cram</a>
+      <a href="#traps" class="sub">Common MCQ Traps</a>
+    </nav>
+
+    <main>
+      <section class="card" id="how-to-use">
+        <h2>How to Use <span class="badge">Exam Strategy</span></h2>
+        <ul class="check">
+          <li>Start with the MOS checklist — know exactly what’s examinable.</li>
+          <li>Memorise the handful of graphs: CL vs AoA; CD vs AoA; CL/CD; Thrust-Required & Power-Required; L/Dmax; Load-factor vs AoB.</li>
+          <li>Automate quick calcs: Rate-1 bank, Vs√n in turns, range/endurance logic, glide/weight effects.</li>
+          <li>Use the <em>Red Flag</em> boxes to avoid common distractors; finish with a 10-minute cram before the exam.</li>
+        </ul>
+      </section>
+
+      <!-- ADA1 -->
+      <section class="card" id="ada1">
+        <h2>ADA1 — Fundamentals & Performance <span class="badge">Basics</span></h2>
+
+        <h3 id="ada1-core">Core Concepts</h3>
+        <ul class="check">
+          <li>Airflow & boundary layer; laminar vs turbulent; Bernoulli + Coandă contribute, but lift is primarily flow turning & pressure differential.</li>
+          <li>AoA ↑ ⇒ CL ↑ until critical AoA; centre of pressure moves forward then aft post-stall.</li>
+          <li>Lift: <strong>L = CL · ½ρV² · S</strong> — reduce any factor ⇒ reduce lift.</li>
+          <li>Drag families: Induced (high at low speed/high AoA) vs Parasite (high at high speed); total drag minimum at L/Dmax.</li>
+        </ul>
+
+        <h3 id="ada1-graphs">Graph Literacy (CL/CD, Thrust/Power)</h3>
+        <ul class="check">
+          <li><strong>Best range (still air)</strong> at speed for minimum drag (L/Dmax). <strong>Best endurance</strong> at minimum power required.</li>
+          <li>Vx where surplus <strong>thrust</strong> is max; Vy where surplus <strong>power</strong> is max.</li>
+        </ul>
+
+        <h3 id="ada1-thrust">Thrust/Power Required vs Available</h3>
+        <ul class="check">
+          <li>Level flight: Thrust = Drag. Minimum thrust ⇒ minimum drag ⇒ longest still-air range.</li>
+          <li>Minimum power ⇒ max endurance; surplus power peak ⇒ Vy (best ROC).</li>
+          <li>Reverse command at very low speed: slower may require <strong>more</strong> power to hold level.</li>
+        </ul>
+
+        <h3 id="ada1-effects">Altitude & Weight Effects</h3>
+        <ul class="check">
+          <li>At L/Dmax, <strong>IAS</strong> ~same with altitude; <strong>TAS</strong> ↑ at higher altitude.</li>
+          <li>Heavier aircraft: same AoA for L/Dmax but higher speed needed.</li>
+        </ul>
+
+        <h3 id="ada1-quick">Quick Calcs & Triggers</h3>
+        <ul class="check">
+          <li>Best glide ⇒ published IAS at/near L/Dmax.</li>
+          <li>Headwind for range ⇒ fly slightly <strong>faster</strong> than still-air L/Dmax; tailwind ⇒ slightly <strong>slower</strong>.</li>
+        </ul>
+      </section>
+
+      <!-- ADA2 -->
+      <section class="card" id="ada2">
+        <h2>ADA2 — Stability <span class="badge">Static & Dynamic</span></h2>
+
+        <h3 id="ada2-long">Longitudinal (Pitch)</h3>
+        <ul class="check">
+          <li>CG vs centre of pressure set a pitch-down couple; tailplane provides stabilising tail-down force (pitch-up couple).</li>
+          <li>Forward CG ⇒ greater stability, higher stall speed, heavier control forces.</li>
+          <li>Incidence/downwash & “longitudinal dihedral” give tail downforce in cruise (type-dependent).</li>
+        </ul>
+
+        <h3 id="ada2-lat">Lateral (Roll)</h3>
+        <ul class="check">
+          <li>Dihedral: sideslip ⇒ restoring roll moment. High-wing pendulum & sweepback assist self-righting.</li>
+          <li>Anhedral (often on high-wing/heavy-lift/military) reduces excessive stability to improve manoeuvrability.</li>
+        </ul>
+
+        <h3 id="ada2-dir">Directional (Yaw)</h3>
+        <ul class="check">
+          <li>Vertical stabiliser aligns aircraft to relative airflow; larger fin/rudder & forward CG improve directional stability.</li>
+        </ul>
+
+        <h3 id="ada2-coupled">Coupled Effects & Pathologies</h3>
+        <ul class="check">
+          <li><strong>Spiral instability</strong>: bank steepens & turn tightens unless corrected.</li>
+          <li><strong>Dutch roll</strong>: coupled yaw-roll oscillation; manage with coordination.</li>
+          <li>Ground handling: slow taxi, light back-pressure, aileron into wind.</li>
+        </ul>
+      </section>
+
+      <!-- ADA3 -->
+      <section class="card" id="ada3">
+        <h2>ADA3 — Control & Manoeuvres <span class="badge">Handling</span></h2>
+
+        <h3 id="ada3-primary">Primary/Secondary Effects</h3>
+        <ul class="check">
+          <li>Rudder: yaw (primary), roll (secondary).</li>
+          <li>Aileron: roll (primary); adverse yaw (secondary) ⇒ coordinate rudder.</li>
+          <li>Elevator: pitch (primary); with constant power, pitch changes airspeed/energy.</li>
+        </ul>
+
+        <h3 id="ada3-adverse">Adverse Yaw & Fixes</h3>
+        <ul class="check">
+          <li>Down-going aileron ↑lift & ↑drag ⇒ yaw opposite roll.</li>
+          <li>Mitigations: differential/Frise ailerons, aileron-rudder interconnects, coordinated rudder.</li>
+        </ul>
+
+        <h3 id="ada3-trim">Trim & Balancing</h3>
+        <ul class="check">
+          <li>Trim tab: relieve sustained force; balance/anti-balance tabs shape control feel.</li>
+          <li>Mass/horn balance: mitigate flutter & hinge moments.</li>
+        </ul>
+
+        <h3 id="ada3-devices">High-Lift & Drag Devices</h3>
+        <ul class="check">
+          <li>Flaps (plain/split/slotted/Fowler): ↑CL & ↑CD; lower approach attitude; obey VFE/VFO.</li>
+          <li>LE devices (slats/LE flaps/Krueger): ↑CLmax & high-AoA handling.</li>
+          <li>Spoilers/speed brakes: descent/approach control; VG/strakes/fences/winglets: boundary-layer/spanwise control & reduced induced drag.</li>
+        </ul>
+
+        <h3 id="ada3-turns">Turns: Rate/Radius/Load Factor</h3>
+        <ul class="check">
+          <li>Higher bank ⇒ higher rate (deg/s) & smaller radius at a given IAS — needs more AoA/power.</li>
+          <li><strong>Rate-1 bank ≈ 0.1×IAS + 7</strong> (deg). <strong>Rate-1 radius ≈ 0.01×IAS</strong> (nm).</li>
+          <li>Load factor n: 45° ≈ 1.41g; 60° ≈ 2g; <strong>Vs_n = Vs_1 × √n</strong>.</li>
+        </ul>
+
+        <h3 id="ada3-overunder">Over-/Under-Bank Tendencies</h3>
+        <ul class="check">
+          <li>Climb/level turns: over-bank tendency; descending turns: under-bank tendency — manage with small aileron inputs.</li>
+        </ul>
+
+        <h3 id="ada3-prop">Propeller & Ground Effects</h3>
+        <ul class="check">
+          <li>Slipstream/torque (CW props from cockpit): left yaw/right roll — right rudder in climb.</li>
+          <li>Gyroscopic precession; P-factor at high AoA: down-going blade thrust ↑ ⇒ yaw.</li>
+          <li>Ground effect: induced drag ↓ near surface; can cause float — fly by numbers.</li>
+        </ul>
+      </section>
+
+      <!-- ADA4 -->
+      <section class="card" id="ada4">
+        <h2>ADA4 — Loss of Control <span class="badge">Stall / Spin / Spiral</span></h2>
+
+        <h3 id="ada4-stall">Stall (Recognition)</h3>
+        <ul class="check">
+          <li>Stall = AoA exceeds critical; speed is incidental. Signs: sloppy controls, buffet, warning.</li>
+          <li><span class="warn">Never pick up a dropped wing with aileron near stall — use rudder + unload AoA.</span></li>
+        </ul>
+
+        <h3 id="ada4-why">Why Stall Speed Changes (IAS)</h3>
+        <ul class="check">
+          <li>Weight ↑ ⇒ Vs ↑; Load factor ↑ ⇒ Vs_n = Vs_1√n.</li>
+          <li>Flap ↓ ⇒ Vs ↓; Power ↑ ⇒ Vs ↓; Ice/damage ⇒ Vs ↑.</li>
+          <li>Altitude/temp ↑ ⇒ Vs (IAS) ~same; Vs (TAS) ↑.</li>
+        </ul>
+
+        <h3 id="ada4-recov">Recoveries (Order Matters)</h3>
+        <ul class="check">
+          <li><strong>Stall:</strong> reduce AoA → stop wing drop with rudder → smoothly add power → climb at Vy when flying.</li>
+          <li><strong>Spin (incipient):</strong> power idle → ailerons neutral → opposite rudder → forward to break stall → recover to climb (AFM/PoH).</li>
+          <li><strong>Spiral dive:</strong> very high IAS, steep AoB, low nose — power idle → roll wings level → ease out of dive → add power near climb speed.</li>
+        </ul>
+
+        <h3 id="ada4-diff">Wing-drop vs Spin vs Spiral — Snapshot</h3>
+        <table>
+          <thead><tr><th>Feature</th><th>Wing-drop at Stall</th><th>Spin</th><th>Spiral Dive</th></tr></thead>
+          <tbody>
+            <tr><td>Airspeed</td><td>Low/near Vs</td><td>Low & steady</td><td>High & increasing (may exceed VNE)</td></tr>
+            <tr><td>AoA</td><td>Exceeded on one wing</td><td>Exceeded on both (asymmetric)</td><td>Below critical (wing flying)</td></tr>
+            <tr><td>Heading/Bank</td><td>Uncommanded roll</td><td>Rapid heading change, yaw + roll</td><td>Very steep bank, tightening turn</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Cram -->
+      <section class="card" id="cram">
+        <h2>Last-Minute Cram <span class="badge">10-minute Blitz</span></h2>
+        <ul class="check">
+          <li><strong>L = CL · ½ρV² · S</strong></li>
+          <li><strong>Rate-1 bank ≈ 0.1×IAS + 7</strong> (deg)</li>
+          <li><strong>Rate-1 turn radius ≈ 0.01×IAS</strong> (nm)</li>
+          <li><strong>Vs_n = Vs_1 × √n</strong> (60° ≈ 2g ⇒ Vs × 1.414)</li>
+          <li><strong>L/Dmax</strong> ⇒ best glide range; <strong>min power</strong> ⇒ best endurance</li>
+          <li>Induced drag high at low speed; parasite drag high at high speed</li>
+          <li>Vx: max surplus thrust; Vy: max surplus power</li>
+          <li>Heavier ⇒ same AoA, higher speed; higher altitude ⇒ same IAS, higher TAS</li>
+          <li><span class="danger">Near stall, fix wing-drop with rudder + unload; no aileron.</span></li>
+        </ul>
+
+        <h3 id="traps">Common MCQ Traps</h3>
+        <ul class="check">
+          <li>“Stall always at the published speed” — false (AoA & load factor drive it).</li>
+          <li>Confusing spin vs spiral — check IAS & bank; high/increasing IAS ⇒ spiral.</li>
+          <li>Mixing up range vs endurance speeds.</li>
+          <li>Ignoring CG effects on stability/handling & stall speed.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Tips</h2>
+        <ul class="check">
+          <li>Tap any section title to collapse/expand content.</li>
+          <li>Use the search box to filter/highlight keywords (expanded automatically in matching details).</li>
+          <li>If any question, please contact me by Email. Thank you!</li>
+        </ul>
+      </section>
+
+      <footer>
+        Last updated: 2025-10-07 • © Yohann Aviation Note
+      </footer>
+    </main>
+  </div>
+
+  <button class="topbtn" id="topbtn" title="Back to top" aria-label="Back to top">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script>
+    (function(){
+      // Search index
+      const q = document.getElementById('q');
+      const sections = Array.from(document.querySelectorAll('main section.card'));
+      const sectionIndex = sections.map(sec => ({
+        el: sec,
+        text: (sec.innerText || sec.textContent || '').toLowerCase().replace(/\s+/g,' ')
+      }));
+
+      function unwrapMarks(root){
+        root.querySelectorAll('mark.hl').forEach(m => m.replaceWith(document.createTextNode(m.textContent)));
+        root.normalize();
+      }
+      function escapeRx(s){ return s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'); }
+      function highlightTerm(root, term){
+        if(!term) return;
+        const rx = new RegExp(escapeRx(term), 'gi');
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node){
+            if(!node?.parentNode) return NodeFilter.FILTER_REJECT;
+            if(!node.nodeValue?.trim()) return NodeFilter.FILTER_REJECT;
+            const tag = node.parentNode.nodeName.toLowerCase();
+            if(tag === 'script' || tag === 'style' || tag === 'mark') return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        const nodes = [];
+        while(walker.nextNode()) nodes.push(walker.currentNode);
+
+        for(const node of nodes){
+          const text = node.nodeValue;
+          rx.lastIndex = 0;
+          let m, last = 0, matched = false;
+          const frag = document.createDocumentFragment();
+          while((m = rx.exec(text))){
+            matched = true;
+            const start = m.index, end = start + m[0].length;
+            if(start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
+            const mark = document.createElement('mark');
+            mark.className = 'hl';
+            mark.textContent = text.slice(start, end);
+            frag.appendChild(mark);
+            last = end;
+            if(frag.childNodes.length > 400) break;
+          }
+          if(matched){
+            if(last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+            node.parentNode.replaceChild(frag, node);
+          }
+        }
+      }
+      function expandDetailsIfHighlighted(root){
+        root.querySelectorAll('details').forEach(d => {
+          if(d.querySelector('mark.hl')) d.open = true;
+        });
+      }
+
+      // Appbar offset variable
+      const appbar = document.querySelector('header.appbar');
+      function setAppbarVar(){
+        const h = appbar ? appbar.getBoundingClientRect().height : 72;
+        document.documentElement.style.setProperty('--appbarH', (h + 12) + 'px');
+      }
+      setAppbarVar();
+      window.addEventListener('resize', setAppbarVar);
+
+      // Build collapsible TOC groups + precise anchor scroll
+      (function(){
+        const navEl = document.querySelector('nav.toc');
+        if(!navEl){ window._tocState = { idToGroup:{} }; return; }
+
+        const links = Array.from(navEl.querySelectorAll('a[href^="#"]'));
+        const container = document.createElement('div');
+        let currentDetails = null;
+        const idToGroup = {};
+
+        links.forEach(a => {
+          const id = a.getAttribute('href').slice(1);
+          const isSub = a.classList.contains('sub');
+          const isSub2 = a.classList.contains('sub2');
+
+          if(!isSub){
+            // Start a new collapsible group for each top-level item
+            currentDetails = document.createElement('details');
+            const sum = document.createElement('summary');
+            const caret = document.createElement('span');
+            caret.textContent = '▸'; caret.style.opacity = '.6'; caret.style.marginLeft = '8px';
+            sum.appendChild(a); sum.appendChild(caret);
+            currentDetails.appendChild(sum);
+            container.appendChild(currentDetails);
+          }else if(currentDetails){
+            const item = document.createElement('div');
+            item.style.marginLeft = isSub2 ? '22px' : '8px';
+            item.appendChild(a);
+            currentDetails.appendChild(item);
+          }
+          if(currentDetails && id) idToGroup[id] = currentDetails;
+        });
+
+        // Replace links with collapsible blocks
+        navEl.querySelectorAll('a[href^="#"]').forEach(x => x.remove());
+        navEl.appendChild(container);
+
+        // Open first two groups by default
+        const groups = Array.from(container.querySelectorAll('details'));
+        groups[0]?.setAttribute('open','');
+        groups[1]?.setAttribute('open','');
+
+        container.addEventListener('toggle', (e)=>{
+          if(e.target.nodeName.toLowerCase() !== 'details') return;
+          const caret = e.target.querySelector('summary span:last-child');
+          if(caret) caret.textContent = e.target.open ? '▾' : '▸';
+          if(e.isTrusted){
+            if(e.target.open){ e.target.dataset.pinned = '1'; }
+            else{ delete e.target.dataset.pinned; }
+          }
+        }, true);
+
+        function autoOpenGroupForId(id){
+          const grp = idToGroup[id];
+          if(!grp) return;
+          if(!grp.open) grp.setAttribute('open','');
+          const all = Array.from(container.querySelectorAll('details'));
+          all.forEach(g => {
+            if(g === grp) return;
+            if(g.dataset.pinned === '1') return;
+            if(g.open) g.removeAttribute('open');
+          });
+        }
+        function scrollToAnchor(id){
+          const target = document.getElementById(id);
+          if(!target) return;
+          const h = appbar ? appbar.getBoundingClientRect().height : 72;
+          const y = target.getBoundingClientRect().top + window.scrollY - h - 8;
+          window.scrollTo({ top:y, behavior:'smooth' });
+        }
+
+        navEl.addEventListener('click', (ev) => {
+          const a = ev.target.closest('a[href^="#"]');
+          if(!a) return;
+          ev.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          autoOpenGroupForId(id);
+          scrollToAnchor(id);
+          history.replaceState(null, '', '#' + id);
+        });
+
+        const tocSelect = document.getElementById('toc-select');
+        if(tocSelect){
+          tocSelect.innerHTML = '';
+          const opt = document.createElement('option');
+          opt.value = ''; opt.textContent = 'Contents'; opt.selected = true; opt.disabled = true;
+          tocSelect.appendChild(opt);
+          // Flatten groups into select options
+          container.querySelectorAll('summary > a, div > a').forEach(a => {
+            const o = document.createElement('option');
+            o.value = a.getAttribute('href').slice(1);
+            o.textContent = a.textContent.trim();
+            tocSelect.appendChild(o);
+          });
+          tocSelect.addEventListener('change', e => {
+            const id = e.target.value;
+            autoOpenGroupForId(id);
+            scrollToAnchor(id);
+            e.target.blur();
+          });
+        }
+
+        window._tocState = { idToGroup, scrollToAnchor };
+      })();
+
+      // Live search with highlight
+      if(q){
+        let lastQuery = '';
+        q.addEventListener('input', () => {
+          const term = (q.value || '').trim().toLowerCase();
+          if(term === lastQuery) return;
+          lastQuery = term;
+
+          sections.forEach(s => unwrapMarks(s));
+          if(!term) return;
+
+          let firstMatchId = null;
+          sectionIndex.forEach(({el, text}) => {
+            if(text.includes(term)){
+              highlightTerm(el, term);
+              if(!firstMatchId) firstMatchId = el.id;
+            }
+          });
+          if(firstMatchId){
+            expandDetailsIfHighlighted(document);
+          }
+        });
+      }
+
+      // Back button
+      document.getElementById('go-back')?.addEventListener('click', () => {
+        // 判断用户语言
+        const lang = navigator.language || navigator.userLanguage || '';
+        const isZh = lang.toLowerCase().startsWith('zh');
+        const target = isZh ? 'theory.html' : 'theory_en.html';
+        try{
+          window.location.href = target;
+        }catch(e){
+          history.back();
+        }
+      });
+
+      // Top button
+      document.getElementById('topbtn')?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+    })();
+  </script>
+</body>
+</html>
