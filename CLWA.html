@@ -1,23 +1,16 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="Content-Language" content="en" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CPL Air Law (CLWA) | Yohann Aviation Note</title>
+  <title>CPL Air Law (CLWA) - Exam Tutorial</title>
   <meta name="author" content="Yohann Aviation Note" />
   <meta name="description" content="Open-book CLWA exam playbook: quick locator index to regs/AIP/ERSA, Part 61 licensing, Part 91 rules, Part 135 overlays, CAO 48.1 fatigue, altimetry, ADIZ/interception, ATSB reporting." />
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
-  <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);} 
-  gtag('js', new Date());
-  gtag('config', 'G-G3TQJTQ67B');
-  </script>
-
   <style>
-    /* ===== Light Blue Theme (unified with CADA/IREX) ===== */
     :root{
       --bg:#f5f9ff; --bg-1:#eef5ff; --panel:#fff; --card:#fff;
       --text:#1f2a44; --muted:#5b6b80; --brand:#1976d2; --brand-2:#64b5f6;
@@ -38,7 +31,6 @@
         linear-gradient(180deg, var(--bg), var(--bg-1) 60%, #f7fbff 100%);
     }
 
-    /* Appbar */
     header.appbar{
       position:sticky; top:0; z-index:100;
       backdrop-filter:saturate(150%) blur(10px);
@@ -47,9 +39,8 @@
       box-shadow:0 4px 18px rgba(30,64,175,.08);
     }
     .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 16px; }
-    .appbar .row{ display:grid; grid-template-columns:1fr; gap:8px; align-items:center; }
+    .appbar .row{ display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; }
 
-    /* Title */
     h1.title{
       font-size:clamp(18px, 1.1rem + 0.4vw, 22px);
       margin:0; letter-spacing:.2px; line-height:1.1;
@@ -66,7 +57,6 @@
     h1.title .author:hover{ border-color:#cfe0fb; box-shadow:0 6px 16px rgba(25,118,210,.12); }
     h1.title .author:active{ transform:translateY(1px); }
 
-    /* Controls */
     .controls{
       isolation:isolate; display:grid;
       grid-template-columns:auto 1fr auto; align-items:center; gap:10px; width:100%;
@@ -81,7 +71,6 @@
     .chip:active, button:active{ transform:translateY(1px); }
     .chip:focus-visible, button:focus-visible, select:focus-visible{ outline:3px solid rgba(25,118,210,.25); outline-offset:2px; }
 
-    /* Search */
     .search{ z-index:0; position:relative; min-width:0; }
     .search input{
       width:100%; background:var(--panel); color:var(--text);
@@ -92,7 +81,6 @@
     .search input::placeholder{ color:#7d8aa4; }
     .search svg{ position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:.7; pointer-events:none; color:#5d90da; }
 
-    /* Layout / TOC */
     #toc-select{ min-width:112px; width:max-content; max-width:34vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; appearance:none; padding-right:28px; }
     .grid{ display:grid; grid-template-columns:1fr; gap:18px; padding:16px; }
     @media (min-width:920px){
@@ -126,7 +114,6 @@
       button#go-back{ padding:6px 10px; font-size:14px; }
     }
 
-    /* Cards / Content */
     section.card{
       background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
       padding:16px; box-shadow:var(--shadow);
@@ -141,7 +128,6 @@
     .muted{ color:var(--muted); }
     mark.hl{ background:rgba(25,118,210,.22); color:inherit; padding:0 .15em; border-radius:.2em; box-shadow:0 0 0 1px rgba(25,118,210,.18) inset; }
 
-    /* Stronger hover for links and details */
     main a[href]{
       position:relative; text-decoration:underline; text-decoration-thickness:.06em; text-underline-offset:.18em;
       text-decoration-color:rgba(25,118,210,.35); border-radius:.35em; padding:0 2px;
@@ -150,7 +136,6 @@
     main a[href]:hover{ color:#0f5fb3; text-decoration-thickness:.14em; text-decoration-color:rgba(25,118,210,.9); background:linear-gradient(transparent 60%, rgba(25,118,210,.18) 0); box-shadow:0 4px 0 rgba(25,118,210,.35) inset; }
     main a[href]:active{ transform:translateY(1px); box-shadow:0 2px 0 rgba(25,118,210,.45) inset; }
 
-    /* Top button & footer */
     .topbtn{
       position:fixed; bottom:18px; right:18px; width:44px; height:44px; border-radius:50%; display:grid; place-items:center; box-shadow:var(--shadow);
       background:var(--panel); border:1px solid var(--border); cursor:pointer; opacity:.95;
@@ -160,7 +145,6 @@
     .topbtn:active{ transform:translateY(1px); }
     footer{ color:var(--muted); text-align:center; padding:24px; }
 
-    /* Print */
     @media print{
       header.appbar, nav.toc, .topbtn{ display:none !important; }
       body{ background:#fff; color:#000; }
@@ -169,7 +153,6 @@
       th,td{ border-color:#bbb; }
     }
 
-    /* Tables */
     table{ width:100%; border-collapse:collapse; margin:.5rem 0 1rem; }
     th,td{ border:1px dashed var(--border-dashed); padding:8px 10px; text-align:left; vertical-align:top; }
     th{ color:var(--muted); font-weight:700; background:#f7fbff; }
@@ -182,7 +165,7 @@
       <div class="row">
         <h1 class="title">
           CPL Air Law (CLWA)
-          <a id="brand-link" class="author" href="#" role="link" title="Home · Yohann Aviation Note">Yohann Aviation Note</a>
+          <a id="brand-link" class="author" href="#" role="link" title="Home - Yohann Aviation Note">Yohann Aviation Note</a>
         </h1>
         <div class="controls">
           <button id="go-back" class="chip" title="Go Back">← Go Back</button>
@@ -197,65 +180,63 @@
   </header>
 
   <div class="grid wrap">
-    <!-- ====================== TOC ====================== -->
     <nav class="toc" aria-label="Table of contents">
       <h2>Contents</h2>
       <a href="#how-to-use">How to Use (Open-Book)</a>
       <a href="#quick-locator">Quick Locator Index</a>
 
-      <a href="#overview">1. Overview & Documentation</a>
+      <a href="#overview">1. Overview and Documentation</a>
 
       <a href="#licensing">2. Licensing (Part 61)</a>
       <a href="#lic-logs" class="sub">2.1 Logbooks</a>
-      <a href="#lic-recency" class="sub">2.2 Recency & Medical</a>
-      <a href="#lic-ratings" class="sub">2.3 Ratings & Endorsements</a>
+      <a href="#lic-recency" class="sub">2.2 Recency and Medical</a>
+      <a href="#lic-ratings" class="sub">2.3 Ratings and Endorsements</a>
 
-      <a href="#rules">3. Flight Rules & Conditions</a>
+      <a href="#rules">3. Flight Rules and Conditions</a>
       <a href="#rules-docs" class="sub">3.1 Carriage of Documents</a>
-      <a href="#rules-prd" class="sub">3.2 PRD/SUA</a>
-      <a href="#rules-row" class="sub">3.3 Right-of-Way</a>
-      <a href="#rules-vmc" class="sub">3.4 VMC & Min Heights</a>
-      <a href="#rules-ads" class="sub">3.5 Alcohol/Drugs/Smoking & Signals</a>
-      <a href="#rules-svfr" class="sub">3.6 Class C/D & SVFR</a>
+      <a href="#rules-prd" class="sub">3.2 PRD and Special Use Airspace</a>
+      <a href="#rules-row" class="sub">3.3 Right of Way</a>
+      <a href="#rules-vmc" class="sub">3.4 VMC Minima and Minimum Heights</a>
+      <a href="#rules-ads" class="sub">3.5 Alcohol, Drugs, Smoking and Light Signals</a>
+      <a href="#rules-svfr" class="sub">3.6 Class C/D and SVFR</a>
 
       <a href="#ops">4. Air Service Operations</a>
       <a href="#ops-forecast" class="sub">4.1 Forecast Availability</a>
       <a href="#ops-alt" class="sub">4.2 Destination Alternate (Day VFR)</a>
       <a href="#ops-fpl" class="sub">4.3 Flight Notification</a>
-      <a href="#ops-water" class="sub">4.4 Over-Water Equipment</a>
+      <a href="#ops-water" class="sub">4.4 Over-water Equipment</a>
       <a href="#ops-cargo" class="sub">4.5 Cargo / Pax / Special Loads</a>
       <a href="#ops-pic" class="sub">4.6 PIC Responsibilities</a>
 
-      <a href="#aerodrome">5. Aerodromes, Airspace & Altimetry</a>
-      <a href="#aer-types" class="sub">5.1 Aerodrome Types & Radio</a>
-      <a href="#aer-grounds" class="sub">5.2 Ground Signals & Cones</a>
-      <a href="#aer-circuits" class="sub">5.3 Circuits, Joins & Broadcasts</a>
-      <a href="#aer-altimetry" class="sub">5.4 Altimetry & Transition</a>
+      <a href="#aerodrome">5. Aerodromes, Airspace and Altimetry</a>
+      <a href="#aer-types" class="sub">5.1 Aerodrome Types and Radio</a>
+      <a href="#aer-grounds" class="sub">5.2 Ground Signals and Cones</a>
+      <a href="#aer-circuits" class="sub">5.3 Circuits, Joins and Broadcasts</a>
+      <a href="#aer-altimetry" class="sub">5.4 Altimetry and Transition</a>
 
-      <a href="#reporting">6. Reporting & Airworthiness</a>
+      <a href="#reporting">6. Reporting and Airworthiness</a>
       <a href="#atsb" class="sub">6.1 ATSB Reporting</a>
-      <a href="#hazards" class="sub">6.2 Emergencies & Hazards</a>
-      <a href="#adiz" class="sub">6.3 ADIZ & Interception</a>
-      <a href="#airworthiness" class="sub">6.4 Airworthiness & PIC Duties</a>
+      <a href="#hazards" class="sub">6.2 Emergencies and Hazards</a>
+      <a href="#adiz" class="sub">6.3 ADIZ and Interception</a>
+      <a href="#airworthiness" class="sub">6.4 Airworthiness and PIC Duties</a>
 
-      <a href="#fatigue">7. Fatigue Management — CAO 48.1</a>
+      <a href="#fatigue">7. Fatigue Management (CAO 48.1)</a>
       <a href="#fatigue-shared" class="sub">7.1 Shared Responsibility</a>
-      <a href="#fatigue-app1" class="sub">7.2 Appendix 1 (High-yield)</a>
+      <a href="#fatigue-app1" class="sub">7.2 Appendix 1 Highlights</a>
       <a href="#fatigue-app45" class="sub">7.3 Appendix 4/5 Highlights</a>
 
-      <a href="#drills">8. Quick Drills & Common Traps</a>
-      <a href="#annex" class="sub">Annex A — Clause Quick-Finder</a>
+      <a href="#drills">8. Quick Drills and Common Traps</a>
+      <a href="#annex" class="sub">Annex A - Clause Quick Finder</a>
     </nav>
 
-    <!-- ====================== MAIN ====================== -->
     <main>
       <section class="card" id="how-to-use">
         <h2>How to Use (Open-Book) <span class="badge">Exam Tactics</span></h2>
         <ul class="check">
-          <li>先看 <em>Quick Locator Index</em>，题目出现关键词就跳到对应章节与法规条款。</li>
-          <li>作答三步：①定位条款；②用自己的话摘述规则；③把数值/限制代入情境。</li>
-          <li>如出现冲突：<strong>Part 135</strong> 对运营要求优先于 Part 91；具体数值看 <strong>MOS</strong>；程序与本地信息看 <strong>AIP/ERSA</strong>。:contentReference[oaicite:1]{index=1}</li>
-          <li>牢记缓冲与定义（如 ETA 前后 +30 min、beyond glide distance over water 等）。:contentReference[oaicite:2]{index=2}</li>
+          <li>Start with Quick Locator Index. When a question mentions a keyword, jump to the matching section and clause.</li>
+          <li>Answer in three steps: (1) locate the clause; (2) paraphrase the rule; (3) plug in the numbers/limits to the scenario.</li>
+          <li>If conflicts appear: Part 135 operator requirements override general Part 91 rules; numeric limits are in MOS; procedures and local details are in AIP/ERSA.</li>
+          <li>Keep buffers and definitions in mind (e.g. ETA +/- 30 min; beyond glide distance over water).</li>
         </ul>
       </section>
 
@@ -264,192 +245,192 @@
         <table>
           <thead><tr><th>Topic</th><th>Primary Source to Open</th></tr></thead>
           <tbody>
-            <tr><td>Carriage of documents</td><td>CASR 91.105 / 91.110; CASR 135.065 / 135.070; AIP GEN/ENR.</td></tr>
-            <tr><td>Right-of-way / Rules of the air</td><td>CASR 91.325–91.340; 91 MOS ch.9.</td></tr>
-            <tr><td>PRD/RA (RA1/RA2/RA3)</td><td>AIP ENR 5.1 (PRD & MOA).</td></tr>
-            <tr><td>VMC minima / Minimum heights</td><td>CASR Part 91 + 91 MOS tables.</td></tr>
-            <tr><td>Alcohol/Drugs/Smoking</td><td>CASR 91.055 / 91.065 / 91.070.</td></tr>
-            <tr><td>Light signals</td><td>AIP Signals table / CASR 91.</td></tr>
-            <tr><td>Class C/D & SVFR</td><td>CASR 91 & 91 MOS; CFRA outcomes.</td></tr>
-            <tr><td>Forecast buffers & unavailability</td><td>91 MOS 7.02–7.03.</td></tr>
-            <tr><td>Destination alternate (Day VFR)</td><td>91 MOS 8.02, 8.04 (TAF3 nuance).</td></tr>
-            <tr><td>Flight notification / SARTIME</td><td>91 MOS 9.02.</td></tr>
-            <tr><td>Over-water lifejackets / rafts</td><td>91 MOS 26.56/26.58/26.60; 135 MOS 11.55.</td></tr>
-            <tr><td>Cargo / infants / animals</td><td>CASR 91.585/91.600/91.610; 91.620; 135 MOS 9.02.</td></tr>
-            <tr><td>Aerodromes / circuits / joins</td><td>CASR 91.400/91.410; AIP ENR 1.1 (9.x); ERSA.</td></tr>
-            <tr><td>Altimetry (QNH/QFE/Std)</td><td>AIP ENR 1.7; 91 MOS altimetry.</td></tr>
-            <tr><td>ATSB reporting</td><td>AIP ENR 1.14 (IRM/RRM).</td></tr>
-            <tr><td>ADIZ & interception</td><td>AIP ENR 5.2(7); AIP ENR 1.12.</td></tr>
-            <tr><td>Fatigue limits</td><td>CAO 48.1 Instrument 2019.</td></tr>
+            <tr><td>Carriage of documents</td><td>CASR 91.105 / 91.110; CASR 135.065 / 135.070; AIP GEN/ENR</td></tr>
+            <tr><td>Right of way / rules of the air</td><td>CASR 91.325 to 91.340; 91 MOS ch.9</td></tr>
+            <tr><td>PRD and RA1/RA2/RA3</td><td>AIP ENR 5.1 (PRD and MOA)</td></tr>
+            <tr><td>VMC minima / minimum heights</td><td>CASR Part 91 plus 91 MOS tables</td></tr>
+            <tr><td>Alcohol / drugs / smoking</td><td>CASR 91.055 / 91.065 / 91.070</td></tr>
+            <tr><td>Light signals</td><td>AIP signals table / CASR 91</td></tr>
+            <tr><td>Class C/D and SVFR</td><td>CASR 91 and 91 MOS</td></tr>
+            <tr><td>Forecast buffers and unavailability</td><td>91 MOS 7.02 to 7.03</td></tr>
+            <tr><td>Destination alternate (day VFR)</td><td>91 MOS 8.02, 8.04 (TAF3 nuance)</td></tr>
+            <tr><td>Flight notification / SARTIME</td><td>91 MOS 9.02</td></tr>
+            <tr><td>Over-water lifejackets / rafts</td><td>91 MOS 26.56/26.58/26.60; 135 MOS 11.55</td></tr>
+            <tr><td>Cargo / infants / animals</td><td>CASR 91.585/91.600/91.610; 91.620; 135 MOS 9.02</td></tr>
+            <tr><td>Aerodromes / circuits / joins</td><td>CASR 91.400/91.410; AIP ENR 1.1 (section 9)</td></tr>
+            <tr><td>Altimetry (QNH/QFE/Std)</td><td>AIP ENR 1.7; 91 MOS altimetry</td></tr>
+            <tr><td>ATSB reporting</td><td>AIP ENR 1.14 (IRM/RRM)</td></tr>
+            <tr><td>ADIZ and interception</td><td>AIP ENR 5.2 (7); ENR 1.12</td></tr>
+            <tr><td>Fatigue limits</td><td>CAO 48.1 Instrument 2019</td></tr>
           </tbody>
         </table>
-        <p class="muted tag">Source distilled from the CLWA tutorial. :contentReference[oaicite:3]{index=3}</p>
+        <p class="muted tag">Use this as your first stop during the exam.</p>
       </section>
 
       <section class="card" id="overview">
-        <h2>1. Overview & Documentation <span class="badge">Where things live</span></h2>
+        <h2>1. Overview and Documentation <span class="badge">Where things live</span></h2>
         <ul class="check">
-          <li>层级：Act → Regulations (CASR/CAR) → MOS/CAO → Instruments；<strong>AIP/ERSA</strong> 属于经授权的航空信息。:contentReference[oaicite:4]{index=4}</li>
-          <li><strong>CASR 61</strong>（执照）、<strong>CASR 91</strong>（通用作业/飞行规则）、<strong>CASR 135</strong>（小型航空运输）。:contentReference[oaicite:5]{index=5}</li>
+          <li>Hierarchy: Act -> Regulations (CASR/CAR) -> MOS/CAO -> Instruments. AIP/ERSA are authorised aeronautical information.</li>
+          <li>Core parts you will use: CASR Part 61 (licensing), CASR Part 91 (general operating and flight rules), CASR Part 135 (small air transport).</li>
         </ul>
       </section>
 
       <section class="card" id="licensing">
-        <h2>2. Licensing (CASR Part 61) <span class="badge">Privileges & Recency</span></h2>
+        <h2>2. Licensing (CASR Part 61) <span class="badge">Privileges and Recency</span></h2>
 
-        <h3 id="lic-logs">2.1 Logbooks, Retention & Production</h3>
+        <h3 id="lic-logs">2.1 Logbooks, Retention and Production</h3>
         <ul class="check">
-          <li>61.345：及时记录日期/机型注册/起降/时间（含昼夜与仪表）。</li>
-          <li>61.355：保留 7 年；61.365：CASA 可在 7 天内要求出示（电子需打印/认证）。:contentReference[oaicite:6]{index=6}</li>
+          <li>61.345: record promptly (date, aircraft reg and type, TO/LDG, flight time including day/night and instrument).</li>
+          <li>61.355: keep for 7 years; 61.365: CASA may require production within 7 days (electronic needs printout or certification).</li>
         </ul>
 
-        <h3 id="lic-recency">2.2 Privileges, Recency & Medical</h3>
+        <h3 id="lic-recency">2.2 Privileges, Recency and Medical</h3>
         <ul class="check">
-          <li>持有相应类别/级别评级与一般胜任力（61.375 / 61.385）。</li>
-          <li>近 90 天载客：3 次起降（夜航需在夜间）或一次相关检查（61.395）。</li>
-          <li>体检：RPL/CPL/PPL 等对应 Class 1/2/RAMPC/Class 5 范围。:contentReference[oaicite:7]{index=7}</li>
+          <li>Hold the right category/class ratings and general competency (61.375 / 61.385).</li>
+          <li>Passenger carrying in last 90 days: 3 TO/LDG (night must be at night) or a relevant check (61.395).</li>
+          <li>Medical classes: as applicable for RPL/PPL/CPL etc.</li>
         </ul>
 
-        <h3 id="lic-ratings">2.3 Ratings & Endorsements</h3>
-        <p>理解执照 vs 评级 vs 签注结构（仪表、机型/级别、收放轮等）。:contentReference[oaicite:8]{index=8}</p>
+        <h3 id="lic-ratings">2.3 Ratings and Endorsements</h3>
+        <p>Know the structure: licence vs ratings vs endorsements (instrument, class/type, retractable gear, etc.).</p>
       </section>
 
       <section class="card" id="rules">
-        <h2>3. Flight Rules & Conditions <span class="badge">Part 91 + MOS</span></h2>
+        <h2>3. Flight Rules and Conditions <span class="badge">Part 91 plus MOS</span></h2>
 
         <h3 id="rules-docs">3.1 Carriage of Documents</h3>
-        <ul class="check"><li>91.105/91.110 + 135.065/.070：携带证照、AFM/POH、授权信息、运维文件等。:contentReference[oaicite:9]{index=9}</li></ul>
+        <ul class="check"><li>91.105 and 91.110 plus 135.065 and 135.070: carry licences, AFM/POH, authorisations, ops documents as required.</li></ul>
 
-        <h3 id="rules-prd">3.2 PRD & Special Use Airspace</h3>
-        <p>AIP ENR 5.1：Prohibited/Restricted (RA1/RA2/RA3)/Danger 的准入逻辑。:contentReference[oaicite:10]{index=10}</p>
+        <h3 id="rules-prd">3.2 PRD and Special Use Airspace</h3>
+        <p>AIP ENR 5.1: entry logic for Prohibited/Restricted (RA1/RA2/RA3) and Danger areas.</p>
 
-        <h3 id="rules-row">3.3 Rules of the Air & Right of Way</h3>
+        <h3 id="rules-row">3.3 Rules of the Air and Right of Way</h3>
         <ul class="check">
-          <li>91.325：首要义务为 see-and-avoid；91.330 系列：优先序与进近优先。:contentReference[oaicite:11]{index=11}</li>
+          <li>91.325: primary obligation is see-and-avoid; 91.330 series: right-of-way hierarchy and approach priority.</li>
         </ul>
 
-        <h3 id="rules-vmc">3.4 VMC Minima & Minimum Heights</h3>
-        <p>按空域/高度带掌握 VMC；人口稠密/其他区域最低高度。:contentReference[oaicite:12]{index=12}</p>
+        <h3 id="rules-vmc">3.4 VMC Minima and Minimum Heights</h3>
+        <p>Know VMC by airspace/altitude band; minimum heights over populous vs other areas per Part 91 and MOS.</p>
 
-        <h3 id="rules-ads">3.5 Alcohol/Drugs/Smoking & Light Signals</h3>
-        <p>CASR 91.055/91.065/91.070；地面信号灯表（AIP/CASR）。:contentReference[oaicite:13]{index=13}</p>
+        <h3 id="rules-ads">3.5 Alcohol, Drugs, Smoking and Light Signals</h3>
+        <p>CASR 91.055/91.065/91.070; ground light signals per AIP/CASR.</p>
 
-        <h3 id="rules-svfr">3.6 Class C/D & SVFR</h3>
-        <p>进 CTR 的许可/复诵/隔离与 SVFR 规定。:contentReference[oaicite:14]{index=14}</p>
+        <h3 id="rules-svfr">3.6 Class C/D and SVFR</h3>
+        <p>Clearances, readbacks, separation in CTR, and SVFR requirements.</p>
       </section>
 
       <section class="card" id="ops">
         <h2>4. Air Service Operations <span class="badge">Planning</span></h2>
 
-        <h3 id="ops-forecast">4.1 Weather Briefing & Forecast Availability</h3>
+        <h3 id="ops-forecast">4.1 Weather Briefing and Forecast Availability</h3>
         <ul class="check">
-          <li>91 MOS 7.02：起飞前 1 h 内研读；有效期 ETA −30 / +60。:contentReference[oaicite:15]{index=15}</li>
-          <li>91 MOS 7.03：无预报可先起飞但须 1 h 内可返降；30 min 内取得目的地预报，否则返航（或已选 ALTN）。:contentReference[oaicite:16]{index=16}</li>
+          <li>91 MOS 7.02: review within 1 hour of take-off; validity around ETA minus 30 / plus 60 minutes.</li>
+          <li>91 MOS 7.03: if no forecast, you may depart if you can return within 1 hour; obtain destination forecast within 30 minutes after departure or have an alternate.</li>
         </ul>
 
         <h3 id="ops-alt">4.2 Destination Alternate (Day VFR)</h3>
         <ul class="check">
-          <li>91 MOS 8.02：云（SCT &lt;1500’）、能见度（&lt;8 km）、风出限制、T/S (≥PROB30) → 需 ALTN。:contentReference[oaicite:17]{index=17}</li>
-          <li>91 MOS 8.04：&gt;50 nm 无目的地预报 → 需 ALTN；+30 min 缓冲；<strong>TAF3 前 3 小时</strong>对能见/T/S 的 PROB30 不触发 +30。:contentReference[oaicite:18]{index=18}</li>
+          <li>91 MOS 8.02: cloud, visibility, wind limits, and thunderstorm probabilities may require an alternate.</li>
+          <li>91 MOS 8.04: if distance is more than 50 nm and there is no destination forecast, you need an alternate; apply plus 30 minutes buffer. TAF3 first 3 hours: PROB30 for visibility and TS does not trigger the plus 30 buffer.</li>
         </ul>
 
         <h3 id="ops-fpl">4.3 Flight Notification</h3>
-        <p>91 MOS 9.02：IFR 与 VFR C/D 需报；其他场景用计划/SARTIME/flight note。:contentReference[oaicite:19]{index=19}</p>
+        <p>91 MOS 9.02: IFR and VFR in Class C/D require notification; otherwise, use a plan/SARTIME/flight note as appropriate.</p>
 
-        <h3 id="ops-water">4.4 Over-Water Equipment</h3>
+        <h3 id="ops-water">4.4 Over-water Equipment</h3>
         <ul class="check">
-          <li>救生衣：超滑翔距离且 ≤2000’ AGL <strong>必须穿着</strong>（系紧即可）。:contentReference[oaicite:20]{index=20}</li>
-          <li>救生筏：阈值取“较短者”——静风 30 min 航程或 100 nm。:contentReference[oaicite:21]{index=21}</li>
+          <li>Lifejackets: when beyond glide distance and at or below 2000 ft AGL, they must be worn (properly secured).</li>
+          <li>Life rafts: threshold is the shorter of 30 minutes still-air cruise or 100 nm.</li>
         </ul>
 
         <h3 id="ops-cargo">4.5 Cargo / Pax / Special Loads</h3>
-        <p>货舱约束/婴幼儿/危险品/协助动物等；按 91/92/135。:contentReference[oaicite:22]{index=22}</p>
+        <p>Stowage and restraint, infants, dangerous goods, and assistance animals per Parts 91/92/135.</p>
 
-        <h3 id="ops-pic">4.6 PIC Responsibilities Pre-/In-Flight</h3>
-        <p>油料/简报/操纵/安全带/除冰与检查清单等。:contentReference[oaicite:23]{index=23}</p>
+        <h3 id="ops-pic">4.6 PIC Responsibilities Pre/In-Flight</h3>
+        <p>Fuel, briefings, control, seat belts, de-icing, and checklist use.</p>
       </section>
 
       <section class="card" id="aerodrome">
-        <h2>5. Aerodromes, Airspace & Altimetry <span class="badge">ERSA/AIP</span></h2>
+        <h2>5. Aerodromes, Airspace and Altimetry <span class="badge">ERSA/AIP</span></h2>
 
-        <h3 id="aer-types">5.1 Aerodrome Types & Radio</h3>
-        <p>CERT/UNCR/MIL/JOINT；UNCR 多无 NOTAM，必要时联系场方；无线电携带要求见 91.400/ERSA。:contentReference[oaicite:24]{index=24}</p>
+        <h3 id="aer-types">5.1 Aerodrome Types and Radio</h3>
+        <p>CERT / UNCR / MIL / JOINT. UNCR often have no NOTAM; contact aerodrome operator as needed. Radio carriage per 91.400 and ERSA.</p>
 
-        <h3 id="aer-grounds">5.2 Ground Signals & Cones</h3>
-        <p>91 MOS 2.05：地面信号表；圆锥/标识颜色（跑道白、滑行道黄、白红条纹为不可用）。:contentReference[oaicite:25]{index=25}</p>
+        <h3 id="aer-grounds">5.2 Ground Signals and Cones</h3>
+        <p>91 MOS 2.05: ground signal table; cone and marking colors (runway white, taxiway yellow, white-red stripes mean unserviceable).</p>
 
-        <h3 id="aer-circuits">5.3 Circuits, Joins & Broadcasts</h3>
-        <p>ENR 1.1 (9.x)：推荐航线高度、各种加入方式、CTAF 术语与使用。:contentReference[oaicite:26]{index=26}</p>
+        <h3 id="aer-circuits">5.3 Circuits, Joins and Broadcasts</h3>
+        <p>ENR 1.1 (section 9): recommended circuit heights, join methods, CTAF phraseology and use.</p>
 
-        <h3 id="aer-altimetry">5.4 Altimetry & Transition</h3>
-        <p>QNH/QFE/Std，转换高度/层，白天 VFR 高度表误差容限与 ISA 参照。:contentReference[oaicite:27]{index=27}</p>
+        <h3 id="aer-altimetry">5.4 Altimetry and Transition</h3>
+        <p>QNH/QFE/Standard; transition altitude/level; VFR altimeter tolerance and ISA reference.</p>
       </section>
 
       <section class="card" id="reporting">
-        <h2>6. Reporting & Airworthiness <span class="badge">ENR 1.14 / CASR</span></h2>
+        <h2>6. Reporting and Airworthiness <span class="badge">ENR 1.14 / CASR</span></h2>
 
         <h3 id="atsb">6.1 ATSB Reporting (ENR 1.14)</h3>
-        <p>IRM：尽快电话 + 72h 内书面；RRM：72h 内书面；熟悉 A–D 类表。:contentReference[oaicite:28]{index=28}</p>
+        <p>IRM: phone as soon as possible plus written within 72 hours. RRM: written within 72 hours. Know A to D categories.</p>
 
-        <h3 id="hazards">6.2 Emergencies & Hazards</h3>
-        <p>91.680：紧急情况向 ATS 报告（含 DG）；91.675：若未发布，应报告危害（跑道情况、山火、火山、激光）。:contentReference[oaicite:29]{index=29}</p>
+        <h3 id="hazards">6.2 Emergencies and Hazards</h3>
+        <p>91.680: report emergencies to ATS (including DG). 91.675: report hazards if not already published (runway condition, bushfire, volcano, lasers).</p>
 
-        <h3 id="adiz">6.3 ADIZ & Interception</h3>
+        <h3 id="adiz">6.3 ADIZ and Interception</h3>
         <ul class="check">
-          <li>ADIZ：≥60 min 前报；偏差阈值 ±5 min / ±10 nm(陆) / ±20 nm(洋)，超出立即报告。</li>
-          <li>拦截信号与应对见 AIP ENR 1.12；121.5、通知 ATS、必要时 7700。:contentReference[oaicite:31]{index=31}</li>
+          <li>ADIZ: file at least 60 minutes before. Deviation thresholds: +/- 5 minutes, +/- 10 nm over land, +/- 20 nm over water. Report immediately if exceeded.</li>
+          <li>Interception: see ENR 1.12. Monitor 121.5, inform ATS, squawk 7700 if required.</li>
         </ul>
 
-        <h3 id="airworthiness">6.4 Airworthiness & PIC Duties</h3>
-        <p>适航/登记、日检、缺陷记录、CPL 可执行的维护、MR 的类别/签注/放行限制；VFR 最低设备清单（135 可能加严）。:contentReference[oaicite:32]{index=32}</p>
+        <h3 id="airworthiness">6.4 Airworthiness and PIC Duties</h3>
+        <p>Airworthiness/registration, daily inspection, defect recording, maintenance you may perform, maintenance release categories and endorsements, and minimum equipment for VFR (note: Part 135 may be stricter).</p>
       </section>
 
       <section class="card" id="fatigue">
-        <h2>7. Fatigue Management — CAO 48.1 <span class="badge">Appendix 1/4/5</span></h2>
+        <h2>7. Fatigue Management (CAO 48.1) <span class="badge">Appendix 1/4/5</span></h2>
 
         <h3 id="fatigue-shared">7.1 Shared Responsibility</h3>
-        <p>91.520：机组需保持适航状态；运营人不得安排不适任机组；AOC/FCM 遵守适用附录。:contentReference[oaicite:33]{index=33}</p>
+        <p>91.520: crew must be fit for duty; operators must not roster unfit crew; AOC/FCM must comply with applicable appendices.</p>
 
-        <h3 id="fatigue-app1">7.2 Appendix 1 (High-yield)</h3>
+        <h3 id="fatigue-app1">7.2 Appendix 1 Highlights</h3>
         <ul class="check">
-          <li>离基地：前 10 h 内保证 8 h 睡眠机会；在本场：前 12 h 内 8 h。:contentReference[oaicite:34]{index=34}</li>
-          <li>最早 FDP：拂晓或 0700 LT（二者取较早）；最晚结束：次日 0100；随后按表限额与累计上限执行。:contentReference[oaicite:35]{index=35}</li>
+          <li>Off-base: in the 10 hours prior, provide an 8-hour sleep opportunity. On-base: in the 12 hours prior, provide an 8-hour sleep opportunity.</li>
+          <li>Earliest FDP start: local dawn or 0700 LT (whichever is earlier). Latest finish: 0100 next day, then apply table limits and cumulative caps.</li>
         </ul>
 
         <h3 id="fatigue-app45">7.3 Appendix 4/5 Highlights</h3>
-        <p>理解分段执勤/待命/叫班、WOCL 保护与合规记录。:contentReference[oaicite:36]{index=36}</p>
+        <p>Know split duty, standby and call-out, WOCL protection, and compliance records.</p>
       </section>
 
       <section class="card" id="drills">
-        <h2>8. Quick Drills & Common Traps <span class="badge">1-minute checks</span></h2>
+        <h2>8. Quick Drills and Common Traps <span class="badge">1-minute checks</span></h2>
         <ul class="check">
-          <li><strong>TAF3 rule</strong>：前 3 小时内，能见/T/S 的 PROB30 不触发 +30 min；超过窗口恢复常规缓冲。:contentReference[oaicite:37]{index=37}</li>
-          <li><strong>Rafts threshold</strong>：30 min 航程或 100 nm，取较短。:contentReference[oaicite:38]{index=38}</li>
-          <li><strong>Lifejacket wear</strong>：≤2000’ AGL 且超滑翔距离必须穿着。:contentReference[oaicite:39]{index=39}</li>
-          <li><strong>UNCR NOTAM</strong>：通常不发，需联系场方确认现况。:contentReference[oaicite:40]{index=40}</li>
-          <li><strong>ADIZ deviations</strong>：±5 min / ±10 nm(陆) / ±20 nm(洋)；超限即报。:contentReference[oaicite:41]{index=41}</li>
+          <li>TAF3 rule: in the first 3 hours of a TAF3, PROB30 for visibility and TS does not trigger the plus 30 minutes buffer; outside that window, apply normal buffers.</li>
+          <li>Rafts threshold: shorter of 30 minutes or 100 nm.</li>
+          <li>Lifejacket wear: at or below 2000 ft AGL and beyond glide distance, they must be worn.</li>
+          <li>UNCR NOTAM: often not issued; contact the aerodrome operator.</li>
+          <li>ADIZ deviations: +/- 5 min, +/- 10 nm over land, +/- 20 nm over water; report if exceeded.</li>
         </ul>
       </section>
 
       <section class="card" id="annex">
-        <h2>Annex A — Clause Quick-Finder <span class="badge">By keyword</span></h2>
+        <h2>Annex A - Clause Quick Finder <span class="badge">By keyword</span></h2>
         <table>
           <thead><tr><th>Keyword</th><th>Where in Regs</th></tr></thead>
           <tbody>
             <tr><td>Documents carried</td><td>CASR 91.105 / 91.110; CASR 135.065 / 135.070</td></tr>
-            <tr><td>Right-of-way hierarchy</td><td>CASR 91.330 series</td></tr>
+            <tr><td>Right of way hierarchy</td><td>CASR 91.330 series</td></tr>
             <tr><td>PRD RA1/RA2/RA3</td><td>AIP ENR 5.1</td></tr>
-            <tr><td>VMC & min heights</td><td>CASR Part 91; 91 MOS tables</td></tr>
+            <tr><td>VMC and min heights</td><td>CASR Part 91; 91 MOS tables</td></tr>
             <tr><td>Alcohol/Drugs/Smoking</td><td>CASR 91.055/91.065/91.070</td></tr>
-            <tr><td>Light signals</td><td>AIP Signals / CASR 91</td></tr>
-            <tr><td>Special VFR</td><td>CASR / 91 MOS</td></tr>
+            <tr><td>Light signals</td><td>AIP signals / CASR 91</td></tr>
+            <tr><td>Special VFR</td><td>CASR and 91 MOS</td></tr>
             <tr><td>Forecast window</td><td>91 MOS 7.02 / 7.03</td></tr>
             <tr><td>Alternate (Day VFR)</td><td>91 MOS 8.02 / 8.04</td></tr>
             <tr><td>Flight notification</td><td>91 MOS 9.02</td></tr>
             <tr><td>Lifejackets/Rafts</td><td>91 MOS 26.56/26.58/26.60; 135 MOS 11.55</td></tr>
-            <tr><td>Cargo & infants</td><td>CASR 91.585/91.600/91.610; 135 MOS 9.02</td></tr>
+            <tr><td>Cargo and infants</td><td>CASR 91.585/91.600/91.610; 135 MOS 9.02</td></tr>
             <tr><td>Animals</td><td>CASR 91.620</td></tr>
-            <tr><td>CTAF & circuits</td><td>CASR 91.400/91.410; AIP ENR 1.1 (9.x)</td></tr>
+            <tr><td>CTAF and circuits</td><td>CASR 91.400/91.410; AIP ENR 1.1 (section 9)</td></tr>
             <tr><td>Altimetry</td><td>AIP ENR 1.7; 91 MOS</td></tr>
             <tr><td>ATSB IRM/RRM</td><td>AIP ENR 1.14</td></tr>
             <tr><td>Hazards (lasers etc.)</td><td>CASR 91.675; AIP ENR 1.1 10.10.x</td></tr>
@@ -461,11 +442,11 @@
             <tr><td>Fatigue (App 1/4/5)</td><td>CAO 48.1 Instrument 2019</td></tr>
           </tbody>
         </table>
-        <p class="muted tag">Pulled from Annex A of the CLWA tutorial. :contentReference[oaicite:42]{index=42}</p>
+        <p class="muted tag">Copy-paste friendly; ASCII only to avoid encoding issues.</p>
       </section>
 
       <footer>
-        Last updated: 2025-10-07 • © Yohann Aviation Note
+        Last updated: 2025-10-07 &middot; &copy; Yohann Aviation Note
       </footer>
     </main>
   </div>
@@ -476,7 +457,6 @@
 
   <script>
     (function(){
-      // Build searchable index
       const q = document.getElementById('q');
       const sections = Array.from(document.querySelectorAll('main section.card'));
       const sectionIndex = sections.map(s => ({ el: s, text: s.innerText.toLowerCase() }));
@@ -487,7 +467,7 @@
         });
       }
       function highlightTerm(root, term){
-        const rx = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        const rx = new RegExp(term.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'), 'gi');
         const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
         const nodes = [];
         while(walker.nextNode()){ nodes.push(walker.currentNode); }
@@ -530,7 +510,6 @@
       q && q.addEventListener('input', () => { if (!composing) runSearch(); });
       q && q.addEventListener('keydown', (e) => { if (e.key === 'Escape') { q.value = ''; runSearch(); } });
 
-      // Mobile TOC dropdown
       const tocSelect = document.getElementById('toc-select');
       const tocLinks = Array.from(document.querySelectorAll('nav.toc a[href^="#"]'));
       if (tocSelect) {
@@ -541,7 +520,7 @@
           const o = document.createElement('option');
           const isSub = a.classList.contains('sub');
           o.value = a.getAttribute('href').replace('#','');
-          o.textContent = (isSub ? '— ' : '') + a.textContent.trim();
+          o.textContent = (isSub ? '-- ' : '') + a.textContent.trim();
           tocSelect.appendChild(o);
         });
         tocSelect.addEventListener('change', e => {
@@ -551,7 +530,6 @@
         });
       }
 
-      // Go Back (theory zh/en)
       document.getElementById('go-back')?.addEventListener('click', () => {
         const userLang = navigator.language || navigator.userLanguage;
         if (userLang && userLang.startsWith('zh')) {
@@ -561,24 +539,16 @@
         }
       });
 
-      // Back to top
       document.getElementById('topbtn')?.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      // Brand link: zh → index.html; else → index_en.html
       (function(){
         const brand = document.getElementById('brand-link');
         if(!brand) return;
-        function resolveLang(){
-          const lang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-          return (lang || '').toLowerCase();
-        }
         function goHome(ev){
           ev && ev.preventDefault();
-          const lang = resolveLang();
-          const url = lang.startsWith('zh') ? 'index.html' : 'index_en.html';
-          window.location.href = url;
+          window.location.href = 'index_en.html';
         }
         brand.addEventListener('click', goHome);
         brand.addEventListener('keydown', (e)=>{
@@ -590,7 +560,6 @@
     })();
   </script>
 
-  <!-- Content reorganized from CLWA_Theory_Exam_Tutorial_v1.0.docx; UI adapted from CADA.html. -->
+  <!-- English-only, ASCII-safe content to avoid mojibake on non-UTF-8 editors. -->
 </body>
 </html>
- 

@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CPLA Navigation | Yohann Aviation Note</title>
+  <meta name="author" content="Yohann Aviation Note" />
+  <meta name="description" content="Compact, searchable, and print-friendly CPLA Navigation notes (NAV1–6 + GNSS): earth & time, charts, computations, pilot nav, ADF/VOR/DME, GNSS principles & errors. Test-oriented." />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('js', new Date());
+  gtag('config', 'G-G3TQJTQ67B');
+  </script>
+
+  <style>
+    /* ===== Light Blue Theme (unified with DA40/DA42/IREX/CADA) ===== */
+    :root{
+      --bg:#f5f9ff; --bg-1:#eef5ff; --panel:#fff; --card:#fff;
+      --text:#1f2a44; --muted:#5b6b80; --brand:#1976d2; --brand-2:#64b5f6;
+      --warn:#f59e0b; --danger:#ef4444; --ok:#0ea5e9;
+      --border:#e6eef8; --border-dashed:#d7e5fb;
+      --shadow:0 8px 28px rgba(25,118,210,.12), 0 2px 10px rgba(15,23,42,.06);
+      --radius:16px; --fs-base:16px; --maxw:980px; --appbarH:84px;
+      --scrollbar-track:#f1f6ff; --scrollbar-thumb:#c9ddfb; --scrollbar-thumb-hover:#aaceff;
+    }
+    [id]{ scroll-margin-top: var(--appbarH, 84px); }
+    html{ font-size:var(--fs-base); }
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #eaf3ff 0%, rgba(234,243,255,0) 60%),
+        radial-gradient(800px 520px at 95% -10%, #f0f7ff 0%, rgba(240,247,255,0) 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-1) 60%, #f7fbff 100%);
+    }
+
+    /* Appbar */
+    header.appbar{
+      position:sticky; top:0; z-index:100;
+      backdrop-filter:saturate(150%) blur(10px);
+      background:rgba(255,255,255,.86);
+      border-bottom:1px solid var(--border);
+      box-shadow:0 4px 18px rgba(30,64,175,.08);
+    }
+    .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 16px; }
+    .appbar .row{ display:grid; grid-template-columns:1fr; gap:8px; align-items:center; }
+
+    /* Title */
+    h1.title{
+      font-size:clamp(18px, 1.1rem + 0.4vw, 22px);
+      margin:0; letter-spacing:.2px; line-height:1.1;
+      display:inline-flex; align-items:baseline; gap:10px; flex-wrap:nowrap;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; justify-self:start;
+    }
+    h1.title .author{
+      font-size:.8em; color:var(--muted); font-weight:700;
+      border:1px solid var(--border); padding:2px 10px; border-radius:999px;
+      background:#f8fbff; cursor:pointer; text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px;
+      transition:box-shadow .15s ease, border-color .15s ease, transform .02s ease;
+    }
+    h1.title .author:hover{ border-color:#cfe0fb; box-shadow:0 6px 16px rgba(25,118,210,.12); }
+    h1.title .author:active{ transform:translateY(1px); }
+
+    /* Controls */
+    .controls{
+      isolation:isolate; display:grid;
+      grid-template-columns:auto 1fr auto; align-items:center; gap:10px; width:100%;
+    }
+    .controls > *{ position:relative; z-index:1; }
+    .chip, button, select{
+      background:var(--panel); color:var(--text); border:1px solid var(--border);
+      border-radius:999px; padding:8px 12px; box-shadow:var(--shadow);
+      font-weight:600; cursor:pointer; transition:border-color .15s ease, box-shadow .15s ease, transform .02s ease;
+    }
+    .chip:hover, button:hover, select:hover{ border-color:#cfe0fb; }
+    .chip:active, button:active{ transform:translateY(1px); }
+    .chip:focus-visible, button:focus-visible, select:focus-visible{ outline:3px solid rgba(25,118,210,.25); outline-offset:2px; }
+
+    /* Search */
+    .search{ z-index:0; position:relative; min-width:0; }
+    .search input{
+      width:100%; background:var(--panel); color:var(--text);
+      border:1px solid var(--border); outline:none;
+      padding:10px 12px 10px 36px; border-radius:999px; box-shadow:var(--shadow);
+      background-clip:padding-box;
+    }
+    .search input::placeholder{ color:#7d8aa4; }
+    .search svg{ position:absolute; left:10px; top:50%; transform:translateY(-50%); opacity:.7; pointer-events:none; color:#5d90da; }
+
+    /* Layout / TOC */
+    #toc-select{ min-width:112px; width:max-content; max-width:34vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; appearance:none; padding-right:28px; }
+    .grid{ display:grid; grid-template-columns:1fr; gap:18px; padding:16px; }
+    @media (min-width:920px){
+      .appbar .row{ grid-template-columns:1fr auto; }
+      .grid{ grid-template-columns:260px 1fr; align-items:start; }
+    }
+    nav.toc{
+      position:sticky; top:68px; align-self:start; background:var(--panel);
+      border:1px solid var(--border); border-radius:var(--radius); padding:12px; box-shadow:var(--shadow);
+      max-height:calc(100vh - 96px); overflow:auto; scrollbar-gutter:stable; scrollbar-width:thin;
+      scrollbar-color:var(--scrollbar-thumb) var(--scrollbar-track);
+    }
+    nav.toc::-webkit-scrollbar{ width:10px; }
+    nav.toc::-webkit-scrollbar-track{ background:var(--scrollbar-track); border-radius:10px; }
+    nav.toc::-webkit-scrollbar-thumb{ background:linear-gradient(180deg, var(--scrollbar-thumb), #b7d2ff); border-radius:10px; border:2px solid var(--scrollbar-track); }
+    nav.toc::-webkit-scrollbar-thumb:hover{ background:var(--scrollbar-thumb-hover); }
+    nav.toc h2{ margin:6px 8px 8px; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; }
+    nav.toc a{ display:block; padding:8px 10px; margin:4px 0; text-decoration:none; color:var(--text); border-radius:10px; border:1px dashed transparent; }
+    nav.toc a:hover{ background:linear-gradient(90deg, rgba(25,118,210,.10), rgba(25,118,210,0) 85%); border-color:var(--border-dashed); }
+    nav.toc .sub{ margin-left:10px; font-size:.94em; color:var(--muted); }
+    nav.toc .sub2{ margin-left:22px; font-size:.90em; color:var(--muted); }
+    #toc-select{ display:none; }
+    @media (max-width:919px){
+      header.appbar .wrap{ padding:6px 12px; }
+      h1.title{ font-size:18px; gap:8px; justify-self:center; text-align:center; }
+      h1.title .author{ font-size:.74em; padding:1px 6px; }
+      nav.toc{ display:none !important; }
+      #toc-select{ display:inline-flex; font-size:14px; max-width:30vw; }
+      .controls{ gap:8px; grid-template-columns:auto minmax(120px,1fr) minmax(96px,max-content); }
+      .search input{ padding:8px 10px 8px 30px; }
+      button#go-back{ padding:6px 10px; font-size:14px; }
+    }
+
+    /* Cards / Content */
+    section.card{
+      background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      padding:16px; box-shadow:var(--shadow);
+    }
+    section.card h2{ margin-top:0; display:flex; align-items:center; gap:10px; }
+    section.card h3{ margin-top:1.1em; }
+    .badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; border:1px solid var(--border); background:#f4f9ff; font-size:.85em; color:var(--brand); font-weight:700; }
+    .tag{ color:var(--muted); font-weight:600; text-transform:uppercase; font-size:.78em; letter-spacing:.12em; }
+    .warn{ color:var(--warn); font-weight:700; }
+    .danger{ color:var(--danger); font-weight:700; }
+    .ok{ color:var(--ok); font-weight:700; }
+    .muted{ color:var(--muted); }
+    .kv{ display:grid; grid-template-columns:1fr; gap:8px; }
+    @media (min-width:720px){ .kv{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    ul.check{ list-style:none; padding:0; margin:.25rem 0 1rem; }
+    ul.check li{ padding:6px 8px; border-left:3px solid transparent; }
+    ul.check li + li{ border-top:1px dashed var(--border); }
+    ul.check li[data-type="flow"]{ border-left-color:var(--brand); background:linear-gradient(90deg, rgba(25,118,210,.08), transparent); }
+    ul.check li[data-type="callout"]{ border-left-color:var(--warn); background:linear-gradient(90deg, rgba(245,158,11,.14), transparent); }
+
+    details{ border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:linear-gradient(180deg, rgba(25,118,210,.04), rgba(255,255,255,0)); }
+    details > summary{ cursor:pointer; font-weight:700; list-style:none; }
+    details[open]{ background:linear-gradient(180deg, rgba(100,181,246,.16), rgba(255,255,255,0)); }
+
+    /* Links / marks (stronger hover) */
+    main a[href]{
+      position:relative; text-decoration:underline; text-decoration-thickness:.06em; text-underline-offset:.18em;
+      text-decoration-color:rgba(25,118,210,.35); border-radius:.35em; padding:0 2px;
+      transition:color .15s ease, text-decoration-color .15s ease, text-decoration-thickness .15s ease, box-shadow .15s ease, transform .06s ease, background-color .15s ease;
+    }
+    main a[href]:hover{ color:#0f5fb3; text-decoration-thickness:.14em; text-decoration-color:rgba(25,118,210,.9); background:linear-gradient(transparent 60%, rgba(25,118,210,.18) 0); box-shadow:0 4px 0 rgba(25,118,210,.35) inset; }
+    main a[href]:active{ transform:translateY(1px); box-shadow:0 2px 0 rgba(25,118,210,.45) inset; }
+    mark.hl{ background:rgba(25,118,210,.22); color:inherit; padding:0 .15em; border-radius:.2em; box-shadow:0 0 0 1px rgba(25,118,210,.18) inset; }
+
+    /* Top button & footer */
+    .topbtn{
+      position:fixed; bottom:18px; right:18px; width:44px; height:44px; border-radius:50%; display:grid; place-items:center; box-shadow:var(--shadow);
+      background:var(--panel); border:1px solid var(--border); cursor:pointer; opacity:.95;
+      transition:transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    .topbtn:hover{ border-color:#cfe0fb; box-shadow:0 10px 24px rgba(25,118,210,.18); }
+    .topbtn:active{ transform:translateY(1px); }
+    footer{ color:var(--muted); text-align:center; padding:24px; }
+
+    /* Print */
+    @media print{
+      header.appbar, nav.toc, .topbtn{ display:none !important; }
+      body{ background:#fff; color:#000; }
+      section.card{ break-inside:avoid; box-shadow:none; border-color:#ddd; }
+      a{ color:#000; text-decoration:none; }
+      th,td{ border-color:#bbb; }
+    }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="wrap">
+      <div class="row">
+        <h1 class="title">
+          CPLA Navigation
+          <a id="brand-link" class="author" href="#" role="link" title="Home · Yohann Aviation Note">Yohann Aviation Note</a>
+        </h1>
+        <div class="controls">
+          <button id="go-back" class="chip" title="Go Back">← Go Back</button>
+          <div class="search" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input id="q" placeholder="Search (e.g. 1‑in‑60, TOPD, QDM, HDOP, LMT→UTC)" aria-label="Search all content" />
+          </div>
+          <select id="toc-select" aria-label="Contents"></select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid wrap">
+    <!-- ====================== FIXED TOC STRUCTURE ====================== -->
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+      <a href="#how-to-use">How to Use</a>
+
+      <a href="#nav1">NAV 1 — Earth for Navigation</a>
+      <a href="#nav1-core" class="sub">Core Ideas</a>
+      <a href="#nav1-conv" class="sub">Conversions</a>
+
+      <a href="#nav2">NAV 2 — Time</a>
+      <a href="#nav2-ess" class="sub">Essential Outcomes</a>
+      <a href="#nav2-tasks" class="sub">Common Tasks & Tips</a>
+
+      <a href="#nav3">NAV 3 — Charts & Publications</a>
+      <a href="#nav3-proj" class="sub">Projections & Scale</a>
+      <a href="#nav3-decode" class="sub">What to Decode</a>
+      <a href="#nav3-skills" class="sub">Practical Skills</a>
+
+      <a href="#nav4">NAV 4 — Computations</a>
+      <a href="#nav4-computer" class="sub">Flight Computer</a>
+      <a href="#nav4-wind" class="sub">Wind & Drift</a>
+      <a href="#nav4-top" class="sub">Climb/Descent & TOP</a>
+      <a href="#nav4-quick" class="sub">Quick Formula Sheet</a>
+
+      <a href="#nav5">NAV 5 — Pilot Navigation</a>
+      <a href="#nav5-fix" class="sub">Fixing & GS Checks</a>
+      <a href="#nav5-1in60" class="sub">1‑in‑60 Corrections</a>
+      <a href="#nav5-lost" class="sub">Lost Procedure</a>
+
+      <a href="#nav6">NAV 6 — Radio Navigation</a>
+      <a href="#nav6-adf" class="sub">ADF/NDB</a>
+      <a href="#nav6-vor" class="sub">VOR/DME</a>
+      <a href="#nav6-fixes" class="sub">Practical Fixes</a>
+
+      <a href="#gnss">GNSS — Principles & Errors</a>
+      <a href="#gnss-proc" class="sub">Operating Procedures</a>
+      <a href="#gnss-err" class="sub">Errors & Augmentation</a>
+
+      <a href="#drills">Mini‑Drills</a>
+      <a href="#quick-sheet" class="sub">Formula & Table Quick Sheet</a>
+    </nav>
+
+    <main>
+      <section class="card" id="how-to-use">
+        <h2>How to Use <span class="badge">Exam Strategy</span></h2>
+        <ul class="check">
+          <li>Skim the <em>Must‑Know</em> lists in each module for high‑frequency exam points.</li>
+          <li>Drill the worked methods: wind triangle, TAS/CAS, <strong>1‑in‑60</strong>, <strong>TOPC/TOPD</strong>, and radio‑nav fixes.</li>
+          <li>Keep the <a href="#quick-sheet">Formula &amp; Table Quick Sheet</a> handy.</li>
+          <li>For radio‑nav/GNSS, memorise error sources, identification procedures, and station/waypoint passage cues.</li>
+          <li>Practice under time pressure — most questions are solvable in &lt; 90 seconds once steps are automatic.</li>
+        </ul>
+      </section>
+
+      <!-- NAV1 -->
+      <section class="card" id="nav1">
+        <h2>NAV 1 — Describing the Earth for Navigation <span class="badge">Basics</span></h2>
+
+        <h3 id="nav1-core">Core Ideas</h3>
+        <ul class="check">
+          <li>Assume a sphere for exam geometry (real Earth is an oblate spheroid).</li>
+          <li><strong>Great circles</strong> (equator/meridians) are shortest surface paths; others are <strong>small circles</strong>.</li>
+          <li>Latitude (N/S) and Longitude (E/W of Greenwich). <strong>1′ latitude = 1 NM.</strong></li>
+          <li>Position formats: <strong>DMS</strong> (dd°mm′ss″), <strong>DM</strong> (dd°mm.mmm′), <strong>DD</strong> (dd.ddddd°); be fluent converting.</li>
+          <li>Direction: Course/track measured to a meridian (0–360° <strong>true</strong>).</li>
+        </ul>
+
+        <h3 id="nav1-conv">Conversions You’ll Actually Use</h3>
+        <ul class="check">
+          <li>Seconds → minutes: <code>ss ÷ 60</code> ⇒ decimal minutes (e.g., 09″ → 0.15′).</li>
+          <li>Minutes → degrees: <code>mm.mmm′ ÷ 60</code> ⇒ degrees (e.g., 26.150′ → 0.435833°).</li>
+          <li class="warn"><strong>Exam trap</strong>: mixing E/W longitudes near 180°; confusing meridians with parallels.</li>
+        </ul>
+      </section>
+
+      <!-- NAV2 -->
+      <section class="card" id="nav2">
+        <h2>NAV 2 — Time <span class="badge">UTC, Daylight, Arc→Time</span></h2>
+
+        <h3 id="nav2-ess">Essential Outcomes</h3>
+        <ul class="check">
+          <li>UTC baseline; local standard time via time zones; daylight saving by state.</li>
+          <li><strong>Arc→Time</strong>: 360°/24 h ⇒ 15°/h ⇒ <strong>1° = 4 min</strong>. Critical for LMT↔UTC by longitude.</li>
+          <li>Civil twilight: BOD/EOD when Sun within 6° of horizon; varies by latitude/season.</li>
+          <li>Equinoxes vs solstices; write time YY MM DD HH MM (UTC unless stated).</li>
+        </ul>
+
+        <h3 id="nav2-tasks">Common Tasks & Tips</h3>
+        <ul class="check">
+          <li>Given longitude, convert LMT↔UTC using arc‑to‑time (<em>east is +, west is −</em>).</li>
+          <li>Use AIP daylight/darkness graphs for BOD/EOD (±5 min) and consider terrain/weather/refraction.</li>
+          <li class="warn">Don’t confuse sunrise/sunset with <strong>BOD/EOD</strong> (civil twilight). Plan to land before end of daylight where required.</li>
+        </ul>
+      </section>
+
+      <!-- NAV3 -->
+      <section class="card" id="nav3">
+        <h2>NAV 3 — Charts & Publications <span class="badge">Projections & Symbols</span></h2>
+
+        <h3 id="nav3-proj">Projections & Scale</h3>
+        <ul class="check">
+          <li><strong>Lambert Conformal Conic</strong> for WAC/ERC: preserves angles; straight lines approximate GCs; nearly constant scale.</li>
+          <li>Scales: <strong>WAC 1:1,000,000</strong>; <strong>VNC 1:500,000</strong>; <strong>VTC 1:250,000</strong>. Choose by detail required.</li>
+        </ul>
+
+        <h3 id="nav3-decode">What to Decode on Visual Charts</h3>
+        <ul class="check">
+          <li>Topography: hypsometric tints, spot heights, obstacles.</li>
+          <li>Airspace: class, vertical limits, CTA steps; PRD; frequency boundaries.</li>
+          <li>Aerodromes: elevation, runways, circuit needs (cross‑check ERSA).</li>
+        </ul>
+
+        <h3 id="nav3-skills">Practical Skills</h3>
+        <ul class="check">
+          <li>Measure rhumb‑line tracks/distances using latitude scale; plot positions by lat/long and bearing/distance.</li>
+          <li>Fold charts for cockpit use; ensure current editions (ERSA/NOTAM/AIP updates).</li>
+          <li class="warn">Expect questions mixing symbols with altimetry or airspace limits — read legends carefully.</li>
+        </ul>
+      </section>
+
+      <!-- NAV4 -->
+      <section class="card" id="nav4">
+        <h2>NAV 4 — Computations <span class="badge">E6B / CR‑3</span></h2>
+
+        <h3 id="nav4-computer">Flight Computer Mastery</h3>
+        <ul class="check">
+          <li>IAS → CAS: correct instrument/position errors (flap/gear can increase deviation).</li>
+          <li>CAS → TAS: correct for pressure height & OAT (density). TAS ↑ with altitude for same IAS/CAS.</li>
+          <li>GS/Time/Distance: set triangle; solve any one from the other two. Round fuel up.</li>
+        </ul>
+
+        <h3 id="nav4-wind">Wind Triangle & Drift</h3>
+        <ul class="check">
+          <li>Given <strong>TR, TAS, W/V</strong> → solve <strong>HDG & GS</strong>.</li>
+          <li>Given <strong>HDG, TAS, W/V</strong> → solve <strong>TR, GS, drift</strong>.</li>
+          <li><strong>1‑in‑60</strong>: 1 NM off after 60 NM ⇒ 1°. Parallel or intercept track quickly.</li>
+        </ul>
+
+        <h3 id="nav4-top">Climb/Descent & Top‑of‑Points</h3>
+        <ul class="check">
+          <li>Rate vs gradient: ROC/ROD (ft/min) vs ft/NM or %; convert with GS.</li>
+          <li><strong>TOPC/TOPD</strong>: Distance = Altitude change ÷ (ft/NM). ft/NM = (ft/min) ÷ (NM/min).</li>
+        </ul>
+
+        <h3 id="nav4-quick">Quick Formula Sheet</h3>
+        <ul class="check">
+          <li><strong>GS</strong> = TAS ± wind component; <strong>Time</strong> = Distance ÷ GS.</li>
+          <li><strong>Track error (°)</strong> ≈ 60 × (off‑track NM ÷ distance flown NM).</li>
+          <li><strong>Closing angle (°)</strong> ≈ 60 × (off‑track NM ÷ distance to go NM).</li>
+          <li><strong>ft/NM</strong> = (60 × ft/min) ÷ kt.</li>
+          <li class="warn">Sanity‑check: headwind ↑ ⇒ GS must ↓. If not, re‑work the math.</li>
+        </ul>
+      </section>
+
+      <!-- NAV5 -->
+      <section class="card" id="nav5">
+        <h2>NAV 5 — Pilot Navigation <span class="badge">DR, Fixes, Lost</span></h2>
+
+        <h3 id="nav5-fix">Map Technique & Fixing</h3>
+        <ul class="check">
+          <li>Track‑up mental model; scan <em>big → small</em> features.</li>
+          <li>Positive fixes = intersection of position lines (features/bearings/timing). Plan pinpoints every 10–20 NM.</li>
+          <li>GS checks early; update ETAs promptly.</li>
+        </ul>
+
+        <h3 id="nav5-1in60">Using 1‑in‑60</h3>
+        <ul class="check">
+          <li>Correct by paralleling or intercepting to a nominated point; compute drift held and TMG.</li>
+        </ul>
+
+        <h3 id="nav5-lost">Lost Procedure (Ground → Map)</h3>
+        <ul class="check">
+          <li>Area of probability: ±15° of track, ±20% distance from last known fix/time.</li>
+          <li>Look outside for large features first; confirm on map with 2+ features; then refine with smaller cues.</li>
+          <li class="warn">Many questions hide proportional shortcuts — estimate first, then confirm on the computer.</li>
+        </ul>
+      </section>
+
+      <!-- NAV6 -->
+      <section class="card" id="nav6">
+        <h2>NAV 6 — Radio Navigation Aids <span class="badge">ADF / VOR / DME</span></h2>
+
+        <h3 id="nav6-adf">ADF/NDB (LF/MF)</h3>
+        <ul class="check">
+          <li><strong>Tune–Identify–Test</strong> (TIT). Monitor Morse ID (ADF has no ‘flag’).</li>
+          <li>Coverage (ERSA): best over water; reduced over mountainous/poor‑conductivity areas.</li>
+          <li>Errors: night effect (skywave), co‑channel, mountain effect, coastal refraction, thunderstorm/static, quadrantal, bank/lag.</li>
+          <li>Homing vs tracking: apply wind correction to maintain a bearing; recognise station passage (needle swings/overshoots).</li>
+        </ul>
+
+        <h3 id="nav6-vor">VOR (VHF, line‑of‑sight) & DME</h3>
+        <ul class="check">
+          <li>Identify via Morse; interpret <strong>TO/FROM</strong> and CDI; small scalloping is normal.</li>
+          <li>Determine radial and track to/from; <strong>1‑in‑60</strong> works well close‑in.</li>
+          <li>DME pairing adds distance for fixes and turn‑point timing.</li>
+        </ul>
+
+        <h3 id="nav6-fixes">Practical Fixes & Corrections</h3>
+        <ul class="check">
+          <li><strong>Single‑aid PL</strong>: ADF RB + HDG = <strong>QDM/QDR</strong>. VOR radial gives QDR; choose inbound/outbound course.</li>
+          <li><strong>Two‑aid fix</strong>: cross an ADF bearing with a VOR radial, or intersect two VOR radials; DME gives range.</li>
+          <li class="warn">ADF can lag ~15° while banked — roll out slightly early to avoid overshoot.</li>
+        </ul>
+      </section>
+
+      <!-- GNSS -->
+      <section class="card" id="gnss">
+        <h2>GNSS — Principles, Procedures, Errors <span class="badge">Integrity & SA</span></h2>
+
+        <h3>System Overview</h3>
+        <ul class="check">
+          <li>Segments: space (satellites), control (monitoring/uploads), user (receiver/aircraft).</li>
+          <li>Signals/frequencies: <strong>L1</strong> (civil), <strong>L2</strong> (military/modern civil), <strong>L5</strong> (aviation safety).</li>
+          <li>Codes & nav message: C/A code for pseudo‑range; trilateration needs ≥4 satellites (x, y, z, clock).</li>
+          <li>Performance pillars: <strong>accuracy</strong>, <strong>integrity</strong>, <strong>availability</strong>, <strong>continuity</strong>. Monitor EPU/HDOP (HFOM/VFOM on integrated displays).</li>
+        </ul>
+
+        <h3 id="gnss-proc">Operating Procedures & Human Factors</h3>
+        <ul class="check">
+          <li><strong>Pre‑flight</strong>: database currency; RAIM/FDE availability as applicable; equipment serviceability; alternates if GNSS unavailable.</li>
+          <li><strong>In‑flight</strong>: manage waypoint sequencing; cross‑check with map/other nav sources to avoid mode errors/loss of SA.</li>
+          <li>Waypoint passage cues: annunciations, CDI behaviour, distance trend through zero — confirm expectation.</li>
+          <li>Updating: understand manual vs automatic; know when to inhibit updating to avoid ‘map‑shift’.</li>
+        </ul>
+
+        <h3 id="gnss-err">Errors, Limitations & Augmentation</h3>
+        <ul class="check">
+          <li>Geometry (DOP), iono/tropo delay, multipath, clock/ephemeris, interference.</li>
+          <li>Augmentation: <strong>SBAS</strong>/<strong>GBAS</strong>; integrity monitoring (<strong>RAIM/FDE</strong>) improves availability/integrity for IFR use.</li>
+          <li>IFR approvals depend on equipment class & documented procedures — know operator/CASA requirements.</li>
+          <li class="warn">Always verify the intended waypoint — near‑name traps are common.</li>
+        </ul>
+      </section>
+
+      <!-- Drills & Sheets -->
+      <section class="card" id="drills">
+        <h2>Mini‑Drills <span class="badge">Speed Practice</span></h2>
+        <ul class="check">
+          <li>Convert <code>31°26′09″S 152°51′48″E</code> to <strong>DM</strong> and <strong>DD</strong>.</li>
+          <li>PA 10,000 ft, OAT +15°C, CAS 120 kt → <strong>TAS?</strong></li>
+          <li>Planned TR 090°, TAS 110 kt, W/V 200/20 kt → <strong>HDG & GS?</strong></li>
+          <li>2 NM right after 30 NM flown; 40 NM to go → <strong>what intercept?</strong></li>
+          <li>Descend 5,000 ft at 500 ft/min with GS 120 kt → <strong>TOPD (NM)?</strong></li>
+          <li>ADF shows RB 045°, HDG 180° → <strong>QDM/QDR? How to home?</strong></li>
+          <li>VOR shows 270 radial, TO flag → <strong>what course to fly to the station?</strong></li>
+          <li>GNSS shows HDOP 7.0, EPU high → <strong>what should you do?</strong></li>
+        </ul>
+      </section>
+
+      <section class="card" id="quick-sheet">
+        <h2>Formula &amp; Table Quick Sheet <span class="badge">1‑Page</span></h2>
+        <ul class="check">
+          <li><strong>Arc→Time</strong>: 15° = 1 h; 1° = 4 min (<em>East +, West −</em>).</li>
+          <li><strong>Latitude distance</strong>: 1′ lat = 1 NM (use latitude scale for distances).</li>
+          <li><strong>TAS</strong> from CAS: use CR computer with Pressure Alt & OAT (density).</li>
+          <li><strong>Time</strong> = Distance / GS; <strong>Distance</strong> = Time × GS; <strong>GS</strong> = TAS ± wind.</li>
+          <li><strong>1‑in‑60</strong>: Error° ≈ 60 × (off‑track / distance flown). Closing° ≈ 60 × (off‑track / distance to go).</li>
+          <li><strong>ft/NM</strong> = (60 × ft/min) ÷ kt; <strong>Required ROC/ROD</strong> = (ft/NM × kt) ÷ 60.</li>
+          <li><strong>ADF</strong>: QDM = HDG + RB (normalise 0–360); QDR = QDM ± 180.</li>
+          <li><strong>VOR</strong>: radial = FROM bearing; inbound course = desired radial + 180; outbound = radial.</li>
+          <li><strong>DME turn anticipation (rough)</strong>: start turn ≈ (TAS/10) + 7 (for rate‑1ish bank). <em>Rule‑of‑thumb.</em></li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+
+  <button class="topbtn" id="topbtn" title="Back to top">↑</button>
+
+  <footer>
+    <p class="muted">© Yohann Aviation Note</p>
+  </footer>
+
+  <script>
+    // Go back
+      document.getElementById('go-back')?.addEventListener('click', () => {
+        // 判断用户语言
+        const lang = navigator.language || navigator.userLanguage || '';
+        const isZh = lang.toLowerCase().startsWith('zh');
+        const target = isZh ? 'theory.html' : 'theory_en.html';
+        try{
+          window.location.href = target;
+        }catch(e){
+          history.back();
+        }
+      });
+
+    // Top button
+    document.getElementById('topbtn').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Build mobile TOC select from headings
+    const tocSelect = document.getElementById('toc-select');
+    const tocLinks = Array.from(document.querySelectorAll('nav.toc a'));
+    tocLinks.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.getAttribute('href');
+      opt.textContent = a.textContent;
+      tocSelect.appendChild(opt);
+    });
+    tocSelect.addEventListener('change', (e) => {
+      const id = e.target.value;
+      if(id){ location.hash = id; }
+    });
+
+    // Simple client-side search (filter cards by text match)
+    const q = document.getElementById('q');
+    const cards = Array.from(document.querySelectorAll('main section.card'));
+    q.addEventListener('input', () => {
+      const val = q.value.trim().toLowerCase();
+      cards.forEach(card => {
+        const hit = card.textContent.toLowerCase().includes(val);
+        card.style.display = hit ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
