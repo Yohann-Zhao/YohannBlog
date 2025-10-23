@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Report an Issue | Yohann Aviation Note</title>
+  <meta name="author" content="Yohann Aviation Note" />
+  <meta name="description" content="Report a mistake or suggest a fix for Yohann Aviation Note. Attach screenshots, add optional contact info, and tell us which page you were on." />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G3TQJTQ67B');
+  </script>
+
+  <style>
+    :root{
+      --bg:#f5f9ff; --bg-1:#eef5ff; --panel:#fff; --card:#fff;
+      --text:#1f2a44; --muted:#5b6b80; --brand:#1976d2; --brand-2:#64b5f6;
+      --warn:#f59e0b; --danger:#ef4444; --ok:#0ea5e9;
+      --border:#e6eef8; --border-dashed:#d7e5fb;
+      --shadow:0 8px 28px rgba(25,118,210,.12), 0 2px 10px rgba(15,23,42,.06);
+      --radius:16px; --fs-base:16px; --maxw:980px; --appbarH:84px;
+    }
+    [id]{ scroll-margin-top: var(--appbarH, 84px); }
+    html{ font-size:var(--fs-base); }
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #eaf3ff 0, rgba(234,243,255,0) 60%),
+        radial-gradient(800px 520px at 95% -10%, #f0f7ff 0, rgba(240,247,255,0) 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-1) 60%, #f7fbff 100%);
+    }
+    header.appbar{
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: saturate(150%) blur(10px);
+      background: rgba(255,255,255,.86);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 18px rgba(30, 64, 175, .08);
+    }
+    .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 10px 16px; }
+    .appbar .row{ display: grid; grid-template-columns: 1fr; gap: 8px; align-items: center; }
+    h1.title{
+      font-size: clamp(18px, 1.1rem + 0.4vw, 22px);
+      margin: 0; letter-spacing: .2px; line-height: 1.1;
+      display: inline-flex; align-items: baseline; gap: 10px; flex-wrap: nowrap;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; justify-self: start;
+    }
+    h1.title .author{
+      font-size: .8em; color: var(--muted); font-weight: 700;
+      border: 1px solid var(--border); padding: 2px 10px; border-radius: 999px;
+      background: #f8fbff; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: box-shadow .15s ease, border-color .15s ease, transform .02s ease;
+    }
+    h1.title .author:hover{ border-color:#cfe0fb; box-shadow:0 6px 16px rgba(25,118,210,.12); }
+    h1.title .author:active{ transform: translateY(1px); }
+
+    .controls{ display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:center; }
+    .chip, button{
+      background: var(--panel); color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 999px; padding: 8px 12px;
+      box-shadow: var(--shadow); font-weight: 600; cursor: pointer;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .02s ease;
+    }
+    .chip:hover, button:hover{ border-color:#cfe0fb; }
+    .chip:active, button:active{ transform: translateY(1px); }
+
+    .grid{ display:grid; grid-template-columns: 1fr; gap:18px; padding:16px; }
+    section.card{
+      background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);
+    }
+    section.card h2{ margin:0 0 6px; display:flex; align-items:center; gap:10px; }
+    p.muted{ color:var(--muted); }
+    .kv{ display:grid; grid-template-columns:1fr; gap:12px; }
+    @media (min-width:720px){ .kv{ grid-template-columns:1fr 1fr; } }
+    label{ font-weight:700; display:block; margin:.6rem 0 .2rem; }
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select{
+      width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border);
+      background:var(--panel); box-shadow:var(--shadow); color:var(--text);
+      outline:none; transition:border-color .15s ease, box-shadow .15s ease;
+    }
+    textarea{ min-height: 120px; resize: vertical; }
+    small.help{ color: var(--muted); font-size:.85em; }
+    .row{ display:grid; grid-template-columns: 1fr; gap:12px; }
+    @media (min-width:720px){ .row{ grid-template-columns: 1fr 1fr; } }
+
+    .drop{
+      border:2px dashed var(--border-dashed); border-radius:14px; padding:14px;
+      background:linear-gradient(180deg, rgba(25,118,210,.04), rgba(255,255,255,0));
+    }
+    .drop.dragover{ border-color: var(--brand-2); background: linear-gradient(180deg, rgba(100,181,246,.18), rgba(255,255,255,0)); }
+    .previews{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
+    .thumb{
+      width:110px; height:110px; border:1px solid var(--border); border-radius:12px;
+      overflow:hidden; position:relative; background:#fff; box-shadow:var(--shadow);
+    }
+    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .thumb .badge{
+      position:absolute; top:6px; left:6px; background:#f4f9ff; border:1px solid var(--border);
+      color:var(--brand); font-weight:700; border-radius:999px; padding:2px 6px; font-size:.72em;
+    }
+    .thumb button.remove{
+      position:absolute; top:6px; right:6px; border:none; background:#fff; border:1px solid var(--border);
+      border-radius:999px; width:24px; height:24px; cursor:pointer;
+    }
+
+    .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .status{ font-weight:700; }
+    .ok{ color:var(--ok); } .warn{ color:var(--warn); } .danger{ color:var(--danger); }
+    footer{ color:var(--muted); text-align:center; padding:24px; }
+    @media print{ header.appbar{ display:none!important; } body{ background:#fff; color:#000; } }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="wrap">
+      <div class="row">
+        <h1 class="title">
+          Report an Issue
+          <a id="brand-link" class="author" href="#" role="link" title="Home · Yohann Aviation Note">Yohann Aviation Note</a>
+        </h1>
+        <div class="controls">
+          <button id="go-back" class="chip" title="Go Back">← Go Back</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap grid">
+    <section class="card">
+      <h2>用户报告错误 / Report an Issue</h2>
+      <p class="muted">发现错误、过时信息，或希望改进某一段落？在这里提交即可。可匿名提交；若愿意留下联系方式，我们方便回访确认修复情况。</p>
+
+      <form id="issue-form" novalidate>
+        <input type="hidden" name="page_title" id="page_title" />
+        <input type="hidden" name="page_url" id="page_url" />
+        <input type="text" name="website" id="website" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" tabindex="-1" aria-hidden="true">
+
+        <div class="row">
+          <div>
+            <label for="category">Category / 类别</label>
+            <select id="category" name="category">
+              <option value="DA40 VFR">DA40 VFR</option>
+              <option value="DA42 MEA IR">DA42 MEA IR</option>
+              <option value="CPLA Theory">CPLA Theory</option>
+              <option value="IREX Theory">IREX Theory</option>
+              <option value="Flight Tools / Other">Flight Tools / 其它</option>
+            </select>
+            <small class="help">从跳转页会自动填写；也可手动修改。</small>
+          </div>
+          <div>
+            <label for="title">Issue Title / 问题标题</label>
+            <input id="title" name="title" type="text" placeholder="e.g., IREX ENR 1.5 reference seems incorrect" required />
+          </div>
+        </div>
+
+        <label for="desc">Describe the problem / 问题描述（必填）</label>
+        <textarea id="desc" name="description" placeholder="What is wrong? What should it be? 请描述问题、期望正确内容、以及定位线索（如章节/标题/关键字）。" required></textarea>
+
+        <div class="row">
+          <div>
+            <label for="steps">Steps to reproduce / 复现步骤（可选）</label>
+            <textarea id="steps" name="steps" placeholder="1) Open ... 2) Click ... 3) See ..."></textarea>
+          </div>
+          <div>
+            <label for="expected">Expected vs actual / 期望与实际（可选）</label>
+            <textarea id="expected" name="expected" placeholder="Expected: ...  Actual: ..."></textarea>
+          </div>
+        </div>
+
+        <label>Attachments / 截图与文件（可选）</label>
+        <div id="drop" class="drop" tabindex="0" role="button" aria-label="Upload area">
+          <input id="files" name="files" type="file" accept=".png,.jpg,.jpeg,.webp,.gif,.heic,.pdf" multiple style="display:none" />
+          <div><strong>Drag & drop</strong> files here, or <u id="pick">browse</u>. 支持粘贴（Ctrl/Cmd+V）。最多 6 个，每个 ≤ 10 MB。</div>
+          <div class="previews" id="previews" aria-live="polite"></div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label><input type="checkbox" id="anon" name="anonymous" checked /> Report anonymously / 匿名提交</label>
+        </div>
+
+        <div id="contact-block" class="kv" style="display:none; margin-top:6px;">
+          <div><label for="name">Name / 姓名（可选）</label><input id="name" name="name" type="text" placeholder="Your name (optional)" /></div>
+          <div><label for="email">Email（可选）</label><input id="email" name="email" type="email" placeholder="name@example.com" /></div>
+          <div><label for="phone">Phone / WeChat（可选）</label><input id="phone" name="phone" type="text" placeholder="+852..., +86..., or WeChat ID" /></div>
+          <div><label for="pref">Preferred contact / 优先联系（可选）</label>
+            <select id="pref" name="preferred">
+              <option value="">No preference</option>
+              <option value="email">Email</option>
+              <option value="phone">Phone</option>
+              <option value="wechat">WeChat</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top:12px">
+          <button id="submit" type="submit">Submit / 提交</button>
+          <span id="status" class="status" aria-live="polite"></span>
+        </div>
+        <small class="help">Privacy / 隐私：仅用于处理本次问题，绝不公开。Anonymous reports welcome.</small>
+      </form>
+    </section>
+  </main>
+
+  <footer><div>© 2025 Yohann Aviation Note.</div></footer>
+
+  <script>
+    // ---------- CONFIGURE HERE ----------
+    const CONFIG = {
+      // If you later add a serverless endpoint (Formspree/Cloudflare Worker/etc.), put it here:
+      endpoint: "",
+      // Fallback email (last resort):
+      email: "yuhan_zhao@nuaa.edu.cn",
+      // Brand link home:
+      home: "index.html",
+      // GitHub Issues fallback (recommended on GitHub Pages):
+      githubIssues: {
+        enabled: true,
+        owner: "Yohann-Zhao",
+        repo: "YohannBlog",
+        label: "report"  // create this label in the repo if you want auto-tagging
+      }
+    };
+    // ------------------------------------
+
+    const $ = (s, p=document) => p.querySelector(s);
+
+    // Appbar actions
+    $("#brand-link")?.addEventListener("click", (e)=>{ e.preventDefault(); if(CONFIG.home){ location.href = CONFIG.home; } });
+    $("#go-back")?.addEventListener("click", ()=>{ if(history.length > 1){ history.back(); } else if(CONFIG.home){ location.href = CONFIG.home; } });
+
+    // Prefill page title & URL (from query/referrer)
+    function getParam(name){ const u=new URL(location.href); return u.searchParams.get(name)||""; }
+    const fromParam = getParam("from");
+    const urlParam  = getParam("url");
+    const inferredRef = document.referrer || "";
+    $("#page_title").value = fromParam || document.title || "";
+    $("#page_url").value   = urlParam   || inferredRef      || location.href;
+
+    // Category guess
+    const catMap = { "DA40":"DA40 VFR", "DA42":"DA42 MEA IR", "CPLA":"CPLA Theory", "ADA":"CPLA Theory", "IREX":"IREX Theory" };
+    for (const k in catMap){ if((fromParam||"").toUpperCase().includes(k)){ $("#category").value = catMap[k]; break; } }
+
+    // Anonymous toggle
+    const anon = $("#anon"); const contact = $("#contact-block");
+    function syncAnon(){ contact.style.display = anon.checked ? "none":"grid"; }
+    anon.addEventListener("change", syncAnon); syncAnon();
+
+    // File interactions
+    const drop=$("#drop"), fileInput=$("#files"), pick=$("#pick"), previews=$("#previews");
+    let filesState=[]; const MAX_FILES=6, MAX_MB=10;
+    const ACCEPT=["image/png","image/jpeg","image/webp","image/gif","application/pdf","image/heic","image/heif"];
+    function humanSize(b){ const u=["B","KB","MB","GB"]; let i=0,n=b; while(n>=1024&&i<u.length-1){n/=1024;i++;} return n.toFixed(n<10&&i>0?1:0)+" "+u[i]; }
+    function toast(msg,cls){ const s=$("#status"); s.textContent=msg; s.className="status "+(cls||""); setTimeout(()=>{ s.textContent=""; s.className="status"; }, 6000); }
+    function addFiles(list){
+      for(const f of list){
+        if(filesState.length>=MAX_FILES){ toast("Max 6 files.","warn"); break; }
+        if(f.size>MAX_MB*1024*1024){ toast("File too large (>10 MB): "+f.name,"warn"); continue; }
+        const typeOK = ACCEPT.includes(f.type) || f.type.startsWith("image/") || f.type==="application/pdf";
+        if(!typeOK){ toast("Unsupported type: "+(f.type||"unknown")+" ("+f.name+")","warn"); continue; }
+        filesState.push(f);
+      }
+      renderPreviews();
+    }
+    function renderPreviews(){
+      previews.innerHTML="";
+      filesState.forEach((f,idx)=>{
+        const el=document.createElement("div"); el.className="thumb";
+        el.innerHTML='<span class="badge">'+(f.name.split(".").pop()||"").toUpperCase()+'</span><button class="remove" title="Remove" aria-label="Remove">×</button>';
+        el.querySelector("button").addEventListener("click",()=>{ filesState.splice(idx,1); renderPreviews(); });
+        if(f.type.startsWith("image/")){
+          const img=new Image(); img.alt=f.name; const r=new FileReader(); r.onload=e=>{ img.src=e.target.result; }; r.readAsDataURL(f); el.appendChild(img);
+        } else {
+          const p=document.createElement("div"); p.style.display="grid"; p.style.placeItems="center"; p.style.height="100%";
+          p.innerHTML="<div style='font-size:12px;padding:8px;text-align:center'>"+f.name+"<br><small>"+humanSize(f.size)+"</small></div>";
+          el.appendChild(p);
+        }
+        previews.appendChild(el);
+      });
+    }
+    drop.addEventListener("dragover", e=>{ e.preventDefault(); drop.classList.add("dragover"); });
+    drop.addEventListener("dragleave", ()=> drop.classList.remove("dragover"));
+    drop.addEventListener("drop", e=>{ e.preventDefault(); drop.classList.remove("dragover"); addFiles(e.dataTransfer.files); });
+    drop.addEventListener("click", ()=> fileInput.click());
+    pick.addEventListener("click", e=>{ e.preventDefault(); fileInput.click(); });
+    fileInput.addEventListener("change", ()=> addFiles(fileInput.files));
+    window.addEventListener("paste", (e)=>{
+      const items=e.clipboardData?.items||[]; const fs=[];
+      for(const it of items){ if(it.kind==="file"){ const f=it.getAsFile(); if(f) fs.push(f); } }
+      if(fs.length){ addFiles(fs); toast("Pasted "+fs.length+" file(s).","ok"); }
+    });
+
+    // Validation
+    function requireFilled(el, name){ if(!el.value.trim()){ el.focus(); toast(name+" is required.","warn"); return false; } return true; }
+
+    // Submit
+    $("#issue-form").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      if($("#website").value){ return; } // honeypot
+
+      if(!requireFilled($("#title"), "Title")) return;
+      if(!requireFilled($("#desc"),  "Description")) return;
+
+      const fd=new FormData();
+      fd.set("page_title", $("#page_title").value);
+      fd.set("page_url",   $("#page_url").value);
+      fd.set("category",   $("#category").value);
+      fd.set("title",      $("#title").value.trim());
+      fd.set("description",$("#desc").value.trim());
+      if($("#steps").value.trim())    fd.set("steps",    $("#steps").value.trim());
+      if($("#expected").value.trim()) fd.set("expected", $("#expected").value.trim());
+      fd.set("anonymous", $("#anon").checked ? "yes":"no");
+      if(!$("#anon").checked){
+        if($("#name").value.trim())  fd.set("name",  $("#name").value.trim());
+        if($("#email").value.trim()) fd.set("email", $("#email").value.trim());
+        if($("#phone").value.trim()) fd.set("phone", $("#phone").value.trim());
+        if($("#pref").value.trim())  fd.set("preferred", $("#pref").value.trim());
+      }
+      filesState.forEach((f)=> fd.append("files", f, f.name));
+
+      // 1) Try serverless endpoint if configured
+      if(CONFIG.endpoint){
+        try{
+          toast("Submitting…","ok");
+          const res = await fetch(CONFIG.endpoint,{ method:"POST", body:fd });
+          if(!res.ok) throw new Error("HTTP "+res.status);
+          e.target.reset(); filesState=[]; renderPreviews(); syncAnon();
+          toast("Thanks! Submitted successfully.","ok");
+          try{ gtag('event','report_submit',{event_category:'issue', event_label: $("#category").value}); }catch(_){}
+          return;
+        }catch(err){
+          console.error(err);
+          toast("Server submit failed. Falling back to GitHub Issues…","warn");
+        }
+      }
+
+      // 2) Fallback: GitHub Issues (recommended on GitHub Pages)
+      if(CONFIG.githubIssues && CONFIG.githubIssues.enabled){
+        const gh = CONFIG.githubIssues;
+        const title = encodeURIComponent("[Issue] " + $("#category").value + " — " + $("#title").value.trim());
+        const lines = [];
+        lines.push("**Page**: " + ($("#page_title").value || "(unknown)"));
+        lines.push("**URL**: " + ($("#page_url").value || location.href));
+        lines.push("");
+        lines.push("**Description**");
+        lines.push($("#desc").value.trim());
+        if($("#steps").value.trim()){ lines.push(""); lines.push("**Steps to reproduce**"); lines.push($("#steps").value.trim()); }
+        if($("#expected").value.trim()){ lines.push(""); lines.push("**Expected vs Actual**"); lines.push($("#expected").value.trim()); }
+        lines.push(""); lines.push("**Anonymous**: " + ($("#anon").checked ? "Yes" : "No"));
+        if(!$("#anon").checked){
+          lines.push("**Name**: " + ($("#name").value||""));
+          lines.push("**Email**: " + ($("#email").value||""));
+          lines.push("**Phone/WeChat**: " + ($("#phone").value||""));
+          lines.push("**Preferred**: " + ($("#pref").value||""));
+        }
+        if(filesState.length){
+          lines.push("");
+          lines.push("> Please manually attach the files below on GitHub:");
+          filesState.forEach(f => lines.push("- " + f.name + " (" + (f.size/1024/1024).toFixed(1) + " MB)"));
+        }
+        const body = encodeURIComponent(lines.join("\n"));
+        const base = "https://github.com/" + gh.owner + "/" + gh.repo + "/issues/new";
+        const labelPart = gh.label ? "&labels=" + encodeURIComponent(gh.label) : "";
+        const url = base + "?title=" + title + "&body=" + body + labelPart;
+        window.open(url, "_blank"); // open in new tab
+        toast("Opening GitHub Issues… Please attach files before submitting.", "ok");
+        return;
+      }
+
+      // 3) Last resort: mailto
+      const subject = encodeURIComponent("[Issue] " + $("#category").value + " — " + $("#title").value.trim());
+      const L=[];
+      L.push("Page: " + ($("#page_title").value || "(unknown)"));
+      L.push("URL: " + ($("#page_url").value || location.href));
+      L.push("");
+      L.push("Title: " + $("#title").value.trim());
+      L.push("Description:"); L.push($("#desc").value.trim());
+      if($("#steps").value.trim()){ L.push(""); L.push("Steps:"); L.push($("#steps").value.trim());}
+      if($("#expected").value.trim()){ L.push(""); L.push("Expected vs Actual:"); L.push($("#expected").value.trim());}
+      L.push(""); L.push("Anonymous: " + ($("#anon").checked ? "Yes":"No"));
+      if(!$("#anon").checked){ L.push("Name: " + ($("#name").value||"")); L.push("Email: " + ($("#email").value||"")); L.push("Phone/WeChat: " + ($("#phone").value||"")); L.push("Preferred: " + ($("#pref").value||"")); }
+      if(filesState.length){ L.push(""); L.push("Files to attach manually ("+filesState.length+"):"); filesState.forEach(f=>L.push("  - "+f.name)); }
+      const body = encodeURIComponent(L.join("\n"));
+      location.href = "mailto:"+encodeURIComponent(CONFIG.email)+"?subject="+subject+"&body="+body;
+      toast("Opening email client… Please attach files before sending.","ok");
+    });
+  </script>
+</body>
+</html>

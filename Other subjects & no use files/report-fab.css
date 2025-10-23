@@ -1,0 +1,39 @@
+/* report-fab.css — floating "Report" button, unified with site theme */
+:root{
+  /* fallbacks if your page doesn't define these */
+  --brand:#1976d2; --brand-2:#64b5f6; --text:#1f2a44; --border:#e6eef8;
+}
+.report-fab{
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 9999;
+  width: 56px; height: 56px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--brand);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow: 0 10px 30px rgba(25,118,210,.32), 0 6px 16px rgba(0,0,0,.12);
+  cursor: pointer; user-select: none;
+  transition: transform .08s ease, box-shadow .15s ease, background .15s ease;
+}
+.report-fab:hover{ box-shadow: 0 14px 36px rgba(25,118,210,.38),0 8px 18px rgba(0,0,0,.14); background: var(--brand-2); }
+.report-fab:active{ transform: translateY(1px) scale(.99); }
+.report-fab:focus{ outline: 2px solid #fff; outline-offset: 2px; }
+.report-fab span{ font-size: 22px; line-height: 1; }
+.report-fab .label{
+  position: absolute; right: 64px; bottom: 50%;
+  transform: translateY(50%);
+  background: #fff; color: var(--text);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 6px 10px; font-weight: 700; font-size: 12px;
+  box-shadow: 0 8px 24px rgba(15,23,42,.12);
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+  white-space: nowrap;
+}
+.report-fab:hover .label{ opacity: 1; }
+@media (prefers-reduced-motion:no-preference){
+  .report-fab{ animation: fab-pop .22s ease-out both; }
+  @keyframes fab-pop{ from{ transform: translate3d(0,8px,0) scale(.96); opacity:.0 } to{ transform:none; opacity:1 } }
+}
+@media print{ .report-fab{ display:none !important; } }
