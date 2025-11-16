@@ -141,13 +141,10 @@
       background: var(--panel); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 12px; box-shadow: var(--shadow);
       max-height: calc(100vh - 96px); overflow: auto;
-
-      /* Scrollbar theming */
-      scrollbar-gutter: stable; /* avoid layout shift when scrollbar shows */
-      scrollbar-width: thin;    /* Firefox */
-      scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Firefox */
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+      scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
     }
-    /* Chrome/Edge/WebKit */
     nav.toc::-webkit-scrollbar{ width: 10px; }
     nav.toc::-webkit-scrollbar-track{
       background: var(--scrollbar-track);
@@ -350,240 +347,243 @@
     <nav class="toc" aria-label="Table of contents">
       
       <h2>Contents</h2>
-      <a href="#document">Document</a>
+      <a href="#how-to-use">How to use this note</a>
       <a href="#ifr-acft" class="sub">IFR ACFT</a>
       <a href="#flight-instrument" class="sub sub2">Flight Instrument</a>
       <a href="#navigation-instrument" class="sub sub2">Navigation Instrument</a>
+      <a href="#radio-communication" class="sub sub2">Radio Communication</a>
       <a href="#automatic-pilot" class="sub sub2">Automatic Pilot</a>
-      <a href="#alerting-and-warning-system" class="sub sub2">Alerting and warning System</a>
-      <a href="#altimeter-serviceability-checks" class="sub sub2">Altimeter serviceability checks</a>
-      <a href="#positive-radio-fix" class="sub">Positive Radio Fix</a>
-      <a href="#pre-flight-consideration" class="sub">Pre Flight consideration</a>
-      <a href="#flight-notification" class="sub sub2">Flight Notification</a>
-      <a href="#forecast" class="sub sub2">Forecast</a>
+      <a href="#alerting-and-warning-system" class="sub sub2">Alerting &amp; Warning</a>
+      <a href="#altimeter-serviceability-checks" class="sub sub2">Altimeter checks</a>
       <a href="#ifr-pilot" class="sub">IFR Pilot</a>
-      <a href="#visual-approach" class="sub">Visual Approach</a>
-      <a href="#iap" class="sub">IAP</a>
-      <a href="#some-references" class="sub sub2">Some references</a>
-      <a href="#circling-area" class="sub sub2">Circling Area</a>
-      <a href="#descend-blw-si-mda-da" class="sub sub2">Descend BLW SI MDA/DA</a>
-      <a href="#alignment-with-rwy-clcircling" class="sub sub2">Alignment with RWY C.L.(circling)</a>
-      <a href="#map" class="sub sub2">MAP:</a>
-      <a href="#alternate" class="sub">Alternate</a>
+      <a href="#ifr-fpl-enr" class="sub">IFR FPL &amp; ENR</a>
+      <a href="#pre-flight-consideration" class="sub sub2">Pre Flight</a>
+      <a href="#flight-notification" class="sub sub2">Flight Notification</a>
+      <a href="#forecast" class="sub sub2">Forecast / LSALT</a>
+      <a href="#positive-radio-fix" class="sub">Positive Radio Fix</a>
+      <a href="#alternate-hold" class="sub">Alternate &amp; Hold</a>
       <a href="#aids" class="sub sub2">Aids</a>
-      <a href="#clouds-amp-vis" class="sub sub2">Clouds &amp;amp; VIS</a>
+      <a href="#clouds-vis" class="sub sub2">Clouds &amp; VIS</a>
       <a href="#wind" class="sub sub2">Wind</a>
       <a href="#prob" class="sub sub2">PROB</a>
       <a href="#ligt" class="sub sub2">LIGT</a>
       <a href="#holding" class="sub sub2">Holding</a>
-      <a href="#taf3-first-3-hours" class="sub sub2">TAF3 first 3 hours</a>
+      <a href="#taf3" class="sub sub2">TAF3 first 3 hours</a>
       <a href="#fuel" class="sub">Fuel</a>
       <a href="#airspace" class="sub">Airspace</a>
-      <a href="#fpl-route-selection" class="sub">FPL Route Selection</a>
+      <a href="#select-route" class="sub">Select Route</a>
+      <a href="#ifr-iap" class="sub">IFR IAP</a>
     
     </nav>
 
     <main>
       
-      <section class="card" id="document">
-        <h2>Document <span class="badge">IREX</span></h2>
-        <p>Foreword（important）</p>
-        <p>For IREX exam, it’s more about the law. As you find and understand the rules, the next thing you need to do is just practice the questions. But unfortunately the IREX textbook talked too much into it.</p>
-        <p>This note is to help you save the time needed to collect all the references on the law &amp; AIP etc., mainly provides you with the references you need for the IREX theory exam. You need to find, highlight and understand the subsequent sections by yourself. After that, just do the practice questions, and go back to the law, AIP! That’s all about the IREX exam.</p>
-        <p><br/></p>
-        <p><br/></p>
-        <h3 id="ifr-acft">IFR ACFT</h3>
-        <h3 id="flight-instrument">Flight Instrument</h3>
-        <p>91 MOS Ch26</p>
-        <p>VFR: IAS, P.H., MH, time.</p>
-        <p>AWK: turn&amp;slip, OAT</p>
-        <p>NVFR: AH, VSI, stabilized heading, minitor PWR source to gyro</p>
-        <p>IFR: alternate static, pitot heat</p>
-        <p>135 MOS Ch 11.07</p>
-        <p>Dual ALT &amp; AH</p>
-        <h3 id="navigation-instrument">Navigation Instrument</h3>
-        <p>91 MOS Ch14 14.02 / ENR 1.1 4.5</p>
-        <p>Navigate by:</p>
-        <p>Area Nav(GNSS)</p>
-        <p>GND Aid: +-9° of next aid rated range, pos fix max 2h</p>
-        <p>Day VMC VFR pos fix 30min</p>
-        <p>135 MOS ch11 11.09</p>
-        <p>NVFR: 1 nav aid</p>
-        <p>IFR: 2 GNSS(no C129) or 1 GNSS+ ADF/VOR</p>
-        <p>Failure of any aid still able to fly according to FPL at any phase</p>
-        <h3 id="automatic-pilot">Automatic Pilot</h3>
-        <p>135 MOS Ch11 11.10</p>
-        <p>Single pilot: NVFR, IFR</p>
-        <p>Mode: ALT, HDG</p>
-        <p>AP inop: Day VMC</p>
-        <h3 id="alerting-and-warning-system">Alerting and warning System</h3>
-        <p>91 MOS Ch26 26.25</p>
-        <h3 id="altimeter-serviceability-checks">Altimeter serviceability checks</h3>
-        <p>91 MOS ch10 10.4</p>
-        <p>IFR: +- 60 ft</p>
-        <p>inop +-75 ft</p>
-        <p>60-75 ft: to first AD check again, still not WI 60 inop</p>
-        <h3 id="positive-radio-fix">Positive Radio Fix</h3>
-        <p>ENR 1.1 4.5</p>
-        <p><br/></p>
-        <h3 id="pre-flight-consideration">Pre Flight consideration</h3>
-        <h3 id="flight-notification">Flight Notification</h3>
-        <p>ENR 1.10</p>
-        <p>IFR must submit</p>
-        <h3 id="forecast">Forecast</h3>
-        <p>ENR 1.10</p>
-        <p>30 min – ETA – 60 min</p>
-        <p>91 MOS ch7 7.02</p>
-        <p>Forecast for DEP, ARR, ALTN</p>
-        <p>LSALT</p>
-        <p>GEN 3.3 4.1 to 4.7</p>
-        <p>91.305 Minimum heights</p>
-        <p><br/></p>
-        <h3 id="ifr-pilot">IFR Pilot</h3>
-        <p>61.885</p>
-        <p>61.860</p>
-        <p>61.865</p>
-        <p>61.870</p>
-        <p>61.880</p>
-        <p>61.890</p>
-        <p>61.910</p>
-        <p><br/></p>
-        <h3 id="visual-approach">Visual Approach</h3>
-        <p>ENR 1.5 1.14</p>
-        <p>Discontinue IAP when:</p>
-        <p>Day WI 30 nm not BLW LSALT/MSA/DME steps, established:</p>
-        <p>Clear of Cloud</p>
-        <p>In sight of ground or water</p>
-        <p>V5km</p>
-        <p>Night not BLW….., Until:</p>
-        <p>IAP Circling Area</p>
-        <p>Non IAP: 3 NM ARP</p>
-        <p>5nm RWY C.L. not BLW PAPI(7nm ILS/GS)</p>
-        <p>10 nm ILS not BLW glide path, <strong>less than half scale CDI&amp;GS??</strong></p>
-        <p>14 nm YSSY RWY 16 L 34L</p>
-        <h3 id="iap">IAP</h3>
-        <h3 id="some-references">Some references</h3>
-        <p>ENR 1.5 1.2.1</p>
-        <p>ENR 1.5 1.6.6</p>
-        <p>ENR 1.5 2.4.4</p>
-        <p>ENR 1.5 2.8</p>
-        <p>ENR 1.5 4.4</p>
-        <p>ENR 1.6.6</p>
-        <p>ENR 1.7</p>
-        <p>etc.</p>
-        <h3 id="circling-area">Circling Area</h3>
-        <p>ENR 1.5 para 1.6.6</p>
-        <p>Circling minima: Min obstacle clearance CAT B 300’</p>
-        <h3 id="descend-blw-si-mda-da">Descend BLW SI MDA/DA</h3>
-        <p>Visual reference</p>
-        <p>C&amp;V minima</p>
-        <p>ACFT normal position</p>
-        <h3 id="alignment-with-rwy-clcircling">Alignment with RWY C.L.(circling)</h3>
-        <p>Circling area</p>
-        <p>Visual reference</p>
-        <p>In sight ground or water</p>
-        <h3 id="map">MAP:</h3>
-        <p>Must MAP<strong>(</strong><strong>5 conditions)</strong>:</p>
-        <p>Aid out of tolerance/suspicious</p>
-        <p>Cant/lost visual</p>
-        <p>SI Landing not possible, unless better WX for circling</p>
-        <p>MAP IAP min 100ft clearance, 2.5% gradient</p>
-        <p>MAP prior to MAPt, fly to MAPT and follow MAP procedure</p>
-        <p>Lost Visual while Circling: climbing turn towards RWY and OH AD</p>
-        <p>RAIM:</p>
-        <p>After IAF: RAIM Loss/Warning</p>
-        <p>MAP, no warning, may continue guide for MAP</p>
-        <h3 id="alternate">Alternate</h3>
-        <h3 id="aids">Aids</h3>
-        <p>91 MOS Ch8</p>
-        <p>8.08 8.05</p>
-        <p>Day IFR IAP or +500’ V8km for VAP</p>
-        <p>Night IFP must IAP</p>
-        <p>NVFR enroute 1 aid, otherwise ALTN WI 1h</p>
-        <table><tr><td><p>Day IFR</p></td><td><p>Fly to AD without IAP/IAP that can’t use</p><p>GAF LSALT for final route +500ft; <strong>V</strong><strong>8km</strong></p><p>(It’s more strict than Day VFR, because Visual Approach Need to descend from LSALT, that’s why it’s IFR procedure, not VFR)</p></td></tr><tr><td><p>Night IFR</p></td><td><p>Fly to AD without IAP/IAP that can’t use</p></td></tr><tr><td><p>Night VFR</p></td><td><p>If ground aids/GNSS can’t be used to nav enroute to it: Nominate alternate within 1 h.</p></td></tr></table>
-        <p>C129 can’t use for alternate</p>
-        <p>135 MOS Ch11 11.09</p>
-        <p>135 IFR must 2 GNSS or GNSS+ADF/VOR; 135 NVFR must 1 Aid</p>
-        <p>Failure of any aid must able to continue, possible to IMC AD</p>
-        <table><tr><td><p>Night VFR</p></td><td><p>Must have GNSS; or ADF/VOR</p></td><td><p>Barometric aiding must be connected if provided</p></td></tr><tr><td><p>IFR</p></td><td><p>2 approved GNSS[not C129]</p><p>1 approved GNSS and ADF/VOR</p><p>[not C129 unless AC,GNSS installed before Feb 6, 2014]</p></td><td></td></tr><tr><td><p><strong>Failure of any aid</strong></p></td><td><p>Failure of any aid:</p><p>can nav remained flight plan</p><p>Can meet ATC, Airspace requirement</p></td><td></td></tr><tr><td><p>Possible to Land in IMC AD</p></td><td><p>Possible to Land in IMC AD:</p><p>Nav to a point that can do Visual APP/IAP landing</p></td><td></td></tr></table>
-        <h3 id="clouds-amp-vis">Clouds &amp; VIS</h3>
-        <p>ENR1.1 10.7.2.1</p>
-        <p><strong>DAY VFR WI 50 nm</strong><strong> no need for ALTN</strong></p>
-        <table><tr><td><p>Cloud</p></td><td><p>More than SCT below ALTN minimum</p></td></tr><tr><td><p>VIS</p></td><td><p>BLW ALTN minimum</p></td></tr><tr><td><p>TS or SEV TURB from TS</p></td><td></td></tr><tr><td><p>Wind</p></td><td></td></tr></table>
-        <p>30 min buffer</p>
-        <p>TAF3 first 3 h no 30 min buffer, no PRO 30,40</p>
-        <p>TEMPO2201/2203, ETA 0320, only need 10 min (cessation)</p>
-        <p>IFR: check approach plate, Cloud and VIS, ENR 1.5 6.1.1 (If no, by DAY LSALT+500ft, 8km ENR 1.1 10.7.2.10)</p>
-        <p><strong>Performance CAT ENR 1.5 1.2.1</strong></p>
-        <p>Check TAF</p>
-        <p>Actual QNH -100ft, <strong>Area forecast QNH +50 ft</strong>; QNH Sources ENR 1.5. 5.3</p>
-        <p>Special Alternate Weather Minima ENR 1.5 6.2.1  91 MOS ch8 8.08</p>
-        <p>2 ILS and 2VOR; 2 dist(either 2 DME/GNSS or DME&amp; GNSS)</p>
-        <p>On IAP **</p>
-        <p>Unless No MET or ATS<br/></p>
-        <h3 id="wind">Wind</h3>
-        <p>Max crosswind for ACFT</p>
-        <h3 id="prob">PROB</h3>
-        <p>ENR 1.1 10.7.2</p>
-        <h3 id="ligt">LIGT</h3>
-        <p>ENR 1.1 10.7.4</p>
-        <table><tr><td><p>Portable LIGT</p></td><td><p>Unless attendance</p></td></tr><tr><td><p>No SDBY PWR</p></td><td><p>Unless attendance</p></td></tr><tr><td><p>PAL and SDBY PWR</p></td><td><p>Unless attendance</p></td></tr><tr><td><p>PAL as Alternate</p></td><td><p><strong>2VHF or </strong></p><p><strong>VHF&amp;HF</strong><strong> + </strong><strong>30min </strong><strong>holding </strong><strong>fuel</strong></p></td></tr></table>
-        <p><strong>P</strong><strong>e</strong><strong>riod </strong><strong>before and after ETA </strong><strong>10.8.1.1</strong></p>
-        <table><tr><td><p><strong>DEP</strong></p></td><td><p><strong>10min - 30min</strong></p></td></tr><tr><td><p><strong>ARR</strong></p></td><td><p><strong>30min - Taxing finish</strong></p></td></tr></table>
-        <p>(WX forecast 30 – 60 min)</p>
-        <h3 id="holding">Holding</h3>
-        <p>ENR 1.1 10.7.2</p>
-        <p>INTER 30 min</p>
-        <p>TEMP 60 min</p>
-        <p>Not accumulative</p>
-        <p>No need after 30 min cessation of period</p>
-        <p>Change: 30 min buffer</p>
-        <p>FM or BECMG: 30 min buffer</p>
-        <h3 id="taf3-first-3-hours">TAF3 first 3 hours</h3>
-        <p>30 min buffer not Apply</p>
-        <p>PROB not apply</p>
-        <p><br/></p>
-        <h3 id="fuel">Fuel</h3>
-        <p>91 MOS ch19 19.02</p>
-        <p>IFR: final reserve fuel <strong>45 min</strong></p>
-        <p>135 MOS ch7 7.02</p>
-        <table><tr><td></td><td><p>Piston(exam OZY)</p></td><td><p>turbine</p></td></tr><tr><td><p>Final Reserve</p></td><td><p><strong>45 min</strong></p></td><td><p>30 min</p></td></tr><tr><td><p>Contigency</p></td><td><p><strong>10% or 5 min(greatest)</strong></p></td><td><p>5% or 5 min(greatest)</p></td></tr></table>
-        <p>Exam only in minutes:</p>
-        <p>Trip fuel(x1.1 if contigency) + final reserve + holding/alternate</p>
-        <h3 id="airspace">Airspace</h3>
-        <p>91 MOS 21.05</p>
-        <p>ENR 1.1 2.9</p>
-        <p>ENR 1.1 2.8</p>
-        <p>ENR 1.4 to 4.2</p>
-        <p>Two basic:</p>
-        <p>CTA</p>
-        <p>OCTA</p>
-        <p>Controlled Airspace：</p>
-        <p>Controlled Traffic Areas:</p>
-        <p>Controlled Traffic Regions: FM SFC, AD</p>
-        <p>Class D: radar not available, procedural methods</p>
-        <p>IFR separated from IFR, SVFR; info. About VFR</p>
-        <p>VFR receive info. About all other traffic</p>
-        <p>Must give standard departure report: Time, TRK, Height</p>
-        <p>Class C: radar avail</p>
-        <p>IFR separated from IFR, SVFR, VFR</p>
-        <p>VFR separated from IFR, info about other VFR.</p>
-        <p>Airborne report to departure controller</p>
-        <h3 id="fpl-route-selection">FPL Route Selection</h3>
-        <p>ERSA GEN-FPR</p>
-        <p>Check for departures</p>
-        <p>ERSA GEN-FPR Flight Planning Option</p>
-        <p>(can find Port Macquarie to Sydney)</p>
-        <p>Check for recommended route</p>
-        <p>ERC &amp; TAC</p>
-        <p>Check Airspaces</p>
-        <p><br/></p>
+      <section class="card" id="how-to-use">
+        <h2>How to use this note <span class="badge">Edited 2025.11.16</span></h2>
+        <p><strong>IREX exam is about 2 things:</strong></p>
+        <ul class="check">
+          <li>IFR Procedures &amp; Charts — practical; learned from the handbook.</li>
+          <li>IFR Law — theoretical; requirements and regulatory references.</li>
+        </ul>
+        <p>This note is intended to help you learn the IFR law part by collecting relevant references (AIP, MOS, ENR). Read and highlight the referenced sections, then practice exam questions.</p>
+        <p>Remember additional theoretical items: radio‑nav errors (VOR, NDB), GNSS topics (RAIM, AIAC), and general regulatory requirements.</p>
       </section>
+
+      <section class="card" id="ifr-acft">
+        <h2 id="ifr-acft">IFR ACFT</h2>
+        <h3 id="flight-instrument">Flight Instrument</h3>
+        <p><strong>References:</strong> 91 MOS Ch26; 135 MOS Ch11.07</p>
+        <p>Summary:</p>
+        <ul>
+          <li>VFR: IAS, P.H., magnetic heading, time.</li>
+          <li>AWK: turn &amp; slip, outside air temperature.</li>
+          <li>NVFR: altimeter, VSI, stable heading; monitor power source to gyros.</li>
+          <li>IFR: alternate static source, pitot heat required where applicable.</li>
+          <li>135 MOS: dual altimeter &amp; attitude indicator for certain ops.</li>
+        </ul>
+
+        <h3 id="navigation-instrument">Navigation Instrument</h3>
+        <p><strong>References:</strong> 91 MOS Ch14 14.02; ENR 1.1 4.5; 135 MOS Ch11 11.09</p>
+        <p>Summary:</p>
+        <ul>
+          <li>Area navigation (GNSS) permitted.</li>
+          <li>Ground aid tracking: ±9° of next aid rated range; position fix validity up to 2 hours as applicable.</li>
+          <li>Day VMC VFR position fix requirement: 30 minutes.</li>
+          <li>NVFR: minimum 1 navigation aid.</li>
+          <li>IFR (135): 2 approved GNSS (not C129) or 1 GNSS + ADF/VOR.</li>
+          <li>Failure of any aid: aircraft should be able to continue according to the flight plan and meet ATC/airspace requirements.</li>
+        </ul>
+
+        <h3 id="radio-communication">Radio Communication</h3>
+        <p>Communication requirements include transponder and VHF. See ERSA EMRG for lost‑comms procedures.</p>
+        <p>Lost radio under IMC: squawk 7600, follow latest/expected clearance per flight plan. Mnemonic guidance: 1 hold, 2 vector, 3 limit (hold 1, if vectored wait 2 min, at limit hold 3 min then continue as expected). Use other means (beacon, phone) where possible.</p>
+
+        <h3 id="automatic-pilot">Automatic Pilot</h3>
+        <p><strong>Reference:</strong> 135 MOS Ch11 11.10</p>
+        <p>Single‑pilot operations allowed NVFR/IFR. Required modes: altitude and heading. If autopilot inoperative, day VMC may be acceptable depending on operation.</p>
+
+        <h3 id="alerting-and-warning-system">Alerting &amp; Warning System</h3>
+        <p><strong>Reference:</strong> 91 MOS Ch26 26.25</p>
+
+        <h3 id="altimeter-serviceability-checks">Altimeter serviceability checks</h3>
+        <p><strong>Reference:</strong> 91 MOS Ch10 10.4</p>
+        <ul>
+          <li>IFR tolerance: ±60 ft.</li>
+          <li>Inoperative altimeter indicated by >±75 ft.</li>
+          <li>If discrepancy 60–75 ft, check again at first AD; if still outside tolerance treat as inoperative.</li>
+        </ul>
+      </section>
+
+      <section class="card" id="ifr-pilot">
+        <h2 id="ifr-pilot">IFR Pilot</h2>
+        <p>Read the following regulatory sections carefully for pilot qualification and responsibilities:</p>
+        <ul>
+          <li>61.885</li>
+          <li>61.860</li>
+          <li>61.865</li>
+          <li>61.870</li>
+          <li>61.880</li>
+          <li>61.890</li>
+          <li>61.910</li>
+        </ul>
+      </section>
+
+      <section class="card" id="ifr-fpl-enr">
+        <h2 id="ifr-fpl-enr">IFR Flight Plan &amp; ENR</h2>
+
+        <h3 id="pre-flight-consideration">Pre Flight consideration</h3>
+        <p>Plan in accordance with ENR and MOS requirements; check LSALT, minimum heights and other ENR references.</p>
+
+        <h3 id="flight-notification">Flight Notification</h3>
+        <p><strong>Reference:</strong> ENR 1.10 — IFR flights must submit flight notification/flight plan.</p>
+
+        <h3 id="forecast">Forecast</h3>
+        <p><strong>Reference:</strong> ENR 1.10</p>
+        <p>Forecast coverage: 30 min before ETA to 60 min after ETA for DEP/ARR/ALTN checks. See GEN and ENR LSALT guidance and 91.305 minimum heights.</p>
+      </section>
+
+      <section class="card" id="positive-radio-fix">
+        <h2 id="positive-radio-fix">Positive Radio Fix</h2>
+        <p><strong>Reference:</strong> ENR 1.1 4.5</p>
+      </section>
+
+      <section class="card" id="alternate-hold">
+        <h2 id="alternate-hold">Alternate &amp; Hold</h2>
+        <p>Mnemonic for alternate factors: "Alternate Could Very Well Proved Life Savers + Hold"</p>
+        <p>(Aids, Cloud, Visibility, Wind, PROB, Lights, Storm) + Holding considerations.</p>
+
+        <h3 id="aids">Aids</h3>
+        <p><strong>Reference:</strong> 91 MOS Ch8 (8.08, 8.05); 135 MOS Ch11 11.09</p>
+        <table>
+          <tr><td><strong>Day IFR</strong></td><td>Fly to AD without available IAP or where IAP cannot be used; use GAF LSALT for final route +500 ft; 8 km visibility rule for visual approach.</td></tr>
+          <tr><td><strong>Night IFR</strong></td><td>Fly to AD without available IAP or where IAP cannot be used (night IFP must have IAP where required).</td></tr>
+          <tr><td><strong>Night VFR</strong></td><td>If ground aids/GNSS cannot be used enroute, nominate an alternate within 1 hour.</td></tr>
+        </table>
+        <p>C129 receivers cannot be used for alternate navigation qualification.</p>
+
+        <p><strong>135 MOS:</strong> Night VFR must have GNSS or ADF/VOR; barometric aiding must be connected if provided. IFR requires two approved GNSS (not C129) or one GNSS + ADF/VOR. Failure of any aid should still allow navigation to meet flight plan and ATC/airspace requirements; possible to land at IMC AD by navigating to a point enabling visual approach/IAP landing.</p>
+      </section>
+
+      <section class="card" id="clouds-vis">
+        <h2 id="clouds-vis">Clouds &amp; Visibility &amp; Storm</h2>
+        <p><strong>Reference:</strong> ENR 1.1 10.7.2.1</p>
+        <p>Except for Day VFR within 50 nm (no alternate required), look for:</p>
+        <table>
+          <tr><td>Cloud</td><td>More than SCT below alternate minima</td></tr>
+          <tr><td>Visibility</td><td>Below alternate minima</td></tr>
+          <tr><td>Thunderstorm / severe turbulence from TS</td><td>&nbsp;</td></tr>
+          <tr><td>Wind</td><td>&nbsp;</td></tr>
+        </table>
+
+        <p><strong>Buffer rules:</strong> 30 minute buffer generally applies. TAF3 first 3 hours: 30 minute buffer and PROB do not apply; TEMPO cessation rules may reduce required time (e.g., 10 min).</p>
+
+        <p>IFR arrival planning: check the approach plate, cloud and visibility per ENR 1.5 6.1.1. If approach plate not usable, day procedures use LSALT + 500 ft and 8 km visibility per ENR 1.1 10.7.2.10.</p>
+
+        <p>Performance category and MDH notes: If shaded on IAP, use Actual QNH -100 ft; area forecast QNH add +50 ft. See ENR 1.5.5.3 for QNH sources and ENR 1.5 6.2.1 and 91 MOS Ch8 for special alternate minima.</p>
+      </section>
+
+      <section class="card" id="wind">
+        <h2 id="wind">Wind</h2>
+        <p>Use aircraft‑specific maximum crosswind component limits for planning and landing decisions.</p>
+      </section>
+
+      <section class="card" id="prob">
+        <h2 id="prob">PROB</h2>
+        <p><strong>Reference:</strong> ENR 1.1 10.7.2</p>
+      </section>
+
+      <section class="card" id="ligt">
+        <h2 id="ligt">LIGT (Lights)</h2>
+        <p><strong>Reference:</strong> ENR 1.1 10.7.4</p>
+        <table>
+          <tr><td>Portable lights</td><td>Permitted unless attendance required</td></tr>
+          <tr><td>No standby power</td><td>Permitted unless attendance required</td></tr>
+          <tr><td>PAL &amp; standby power</td><td>Permitted unless attendance required</td></tr>
+          <tr><td>PAL as alternate</td><td>Requires 2 VHF, or VHF &amp; HF plus 30 min holding fuel</td></tr>
+        </table>
+
+        <p><strong>Period (10.8.1.1):</strong></p>
+        <table>
+          <tr><td>DEP</td><td>10 min before to 30 min after</td></tr>
+          <tr><td>ARR</td><td>30 min before to taxi finished</td></tr>
+        </table>
+      </section>
+
+      <section class="card" id="holding">
+        <h2 id="holding">Holding</h2>
+        <p><strong>Reference:</strong> ENR 1.1 10.7.2</p>
+        <ul>
+          <li>Intermediate (INTER) requirement: 30 min</li>
+          <li>Temporary (TEMP) requirement: 60 min</li>
+          <li>Not cumulative</li>
+          <li>No need after 30 min cessation of the specified period</li>
+          <li>FM / BECMG changes: apply 30 min buffer</li>
+        </ul>
+      </section>
+
+      <section class="card" id="taf3">
+        <h2 id="taf3">TAF3 — first 3 hours</h2>
+        <p>TAF3 first 3 hours: 30 minute buffer does not apply; PROB groups do not apply.</p>
+      </section>
+
+      <section class="card" id="fuel">
+        <h2 id="fuel">Fuel</h2>
+        <p><strong>References:</strong> 91 MOS Ch19 19.02; 135 MOS Ch7 7.02</p>
+        <p>IFR final reserve fuel (general rule): 45 minutes (piston example used in exams).</p>
+        <table>
+          <tr><td></td><td>Piston (exam OZY)</td><td>Turbine</td></tr>
+          <tr><td>Final reserve</td><td>45 min</td><td>30 min</td></tr>
+          <tr><td>Contingency</td><td>10% or 5 min (greater)</td><td>5% or 5 min (greater)</td></tr>
+        </table>
+        <p>Exam calculation (minutes): Trip fuel (x1.1 if contingency used) + final reserve + holding/alternate.</p>
+      </section>
+
+      <section class="card" id="airspace">
+        <h2 id="airspace">Airspace</h2>
+        <p><strong>References:</strong> 91 MOS 21.05; ENR 1.1 2.9; ENR 1.1 2.8; ENR 1.4–1.4.2</p>
+        <p>Two basic types: CTA and OCTA. Controlled airspace includes CTA and CTR. Classes overview:</p>
+        <ul>
+          <li>Class D: radar not available; procedural methods used. IFR separated from IFR &amp; SVFR; VFR receives traffic information.</li>
+          <li>Class C: radar available. IFR separated from IFR, SVFR, VFR; VFR receives separation from IFR and traffic information about other VFR.</li>
+        </ul>
+        <p>Provide standard departure report: time, track, height. See ENR references for detailed airspace structure and ATC requirements.</p>
+      </section>
+
+      <section class="card" id="select-route">
+        <h2 id="select-route">Select Route</h2>
+        <p>Use ERSA GEN‑FPR and Flight Planning Options for route selection. Check recommended routes, departures, ERC &amp; TAC and applicable airspace along the route.</p>
+      </section>
+
+      <section class="card" id="ifr-iap">
+        <h2 id="ifr-iap">IFR IAP</h2>
+        <p>Most important practical section — review IFR handbook and IAP charts thoroughly. Practice interpreting approach plates and circling minima.</p>
+        <p><strong>Key references:</strong> ENR 1.5 1.14 (Visual Approach); ENR 1.5 para 1.6.6 (Circling Area); ENR 1.5 1.2.1; ENR 1.5 2.4.4; ENR 1.5 2.8; ENR 1.5 4.4; ENR 1.6.6; ENR 1.7.</p>
+      </section>
+
       <footer>
-        Last updated: 2025-10-06 • © Yohann Aviation Note
+        Last updated: 2025-11-16 • © Yohann Aviation Note
       </footer>
 
-    
     </main>
   </div>
 
@@ -600,7 +600,6 @@
         text: (sec.innerText || sec.textContent || '').toLowerCase().replace(/\s+/g,' ')
       }));
 
-      // ---- Non-destructive highlight helpers ----
       function unwrapMarks(root) {
         root.querySelectorAll('mark.hl').forEach(m => {
           const t = document.createTextNode(m.textContent);
@@ -645,7 +644,7 @@
             if (frag.childNodes.length > 400) break;
           }
           if (matched) {
-            if (last < text.length) frag.appendChild(document.createTextNode(text.slice[last]));
+            if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
             node.parentNode.replaceChild(frag, node);
           }
         }
@@ -664,7 +663,6 @@
       setAppbarVar();
       window.addEventListener('resize', setAppbarVar);
 
-      // Build collapsible TOC groups
       (function(){
         const navEl = document.querySelector('nav.toc');
         if (!navEl) { window._tocState = { idToGroup:{} }; return; }
@@ -695,7 +693,6 @@
           if (currentDetails && id) idToGroup[id] = currentDetails;
         });
 
-        // Replace loose links with grouped details
         navEl.querySelectorAll('a[href^="#"]').forEach(x => x.remove());
         navEl.appendChild(container);
 
@@ -703,7 +700,6 @@
         groups[0]?.setAttribute('open','');
         groups[1]?.setAttribute('open','');
 
-        // Manual pin logic — keep user-opened groups open
         container.addEventListener('toggle', (e)=>{
           if (e.target.nodeName.toLowerCase() !== 'details') return;
           const sumCaret = e.target.querySelector('summary span:last-child');
@@ -736,7 +732,6 @@
           window.scrollTo({ top: y, behavior: 'smooth' });
         }
 
-        // Intercept clicks in TOC
         navEl.addEventListener('click', (ev) => {
           const a = ev.target.closest('a[href^="#"]');
           if(!a) return;
@@ -747,7 +742,6 @@
           history.replaceState(null, '', '#' + id);
         });
 
-        // Populate mobile TOC select
         const tocSelect = document.getElementById('toc-select');
         if (tocSelect) {
           tocSelect.innerHTML = '';
@@ -777,13 +771,11 @@
           });
         }
 
-        // Align TOC state with hash on load
         if (location.hash && location.hash.length > 1) {
           const id = location.hash.slice(1);
           autoOpenGroupForId(id);
         }
 
-        // Expose mapping
         window._tocState = { idToGroup, groups };
       })();
 
@@ -818,16 +810,7 @@
       document.getElementById('topbtn')?.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
-      // Go Back
-      document.getElementById('go-back')?.addEventListener('click', () => {
-        const userLang = navigator.language || navigator.userLanguage;
-        if (userLang && userLang.startsWith('zh')) {
-          window.location.href = 'theory.html';
-        } else {
-          window.location.href = 'theory_en.html';
-        }
-      });
-      // Brand link: zh → index.html; else → index_en.html
+
       (function(){
         const brand = document.getElementById('brand-link');
         if(!brand) return;
@@ -852,6 +835,6 @@
       })();
     })();
   </script>
-  <!-- Content reorganized from IREX Theory.docx; UI adapted from VFR DA40NG Training Note.html. -->
+  <!-- Content reorganized from Sources.html; UI adapted from original IREX layout. -->
 </body>
 </html>
