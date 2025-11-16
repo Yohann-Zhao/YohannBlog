@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="/yohann.ico">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Flight Planning Tool | Yohann Aviation Note</title>
+  <title>E6B 风三角计算器｜在线计算 TRK、磁航向(MH)、风修正角(WCA)、地速(GS)、迎/尾风与侧风分量 | Yohann飞行笔记</title>
+  <meta name="description" content="在线 E6B 风三角计算器，输入 TRK (M)、TAS、风向（from）与风速，即可自动计算磁航向(MH)、风修正角(WCA)与地速(GS)。适用于飞行学员、飞行计划、VFR/IFR 导航训练。">
+  <script>
+    (function(){
+      try{
+        const stored = localStorage.getItem('theme');
+        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        const theme = stored || (prefersLight ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+      }catch(e){/* ignore */}
+    })();
+  </script>
   <style>
     :root {
       --bg: #0b0d10;
@@ -16,10 +27,9 @@
       --bad: #ff8e8e;
       --ring: #2a84ff55;
     }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f6f7f9; --card:#ffffff; --text:#0c1116; --muted:#62707e; --accent:#0a66ff; --ring:#0a66ff22;
-      }
+    /* explicit light theme override when [data-theme="light"] is set on <html> */
+    [data-theme="light"] {
+      --bg: #f6f7f9; --card:#ffffff; --text:#0c1116; --muted:#62707e; --accent:#0a66ff; --ring:#0a66ff22;
     }
     * { box-sizing: border-box; }
     html, body { height: 100%; }
@@ -27,7 +37,7 @@
       margin: 0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
       background: radial-gradient(1200px 800px at 80% -10%, #0a4fff22, transparent 60%), var(--bg); color: var(--text);
     }
-    .wrap { max-width: 900px; margin: 40px auto; padding: 0 16px; }
+    .wrap { max-width: 900px; margin: 72px auto 0; padding: 0 16px; }
     h1 { font-size: clamp(1.4rem, 1.2rem + 1.2vw, 2rem); margin: 0 0 10px; letter-spacing: .3px; }
     p.lead { margin-top: 0; color: var(--muted); }
     .card { background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.15); }
@@ -36,13 +46,12 @@
     @media (min-width: 720px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 
     label { display: block; font-weight: 600; margin-bottom: 6px; }
-    .hint { font-size: .85rem; color: var(--muted); margin-top: 4px; }
 
     input[type="number"] {
       width: 100%; padding: 14px 12px; border-radius: 12px; border: 1px solid rgba(127,127,127,.25); background: transparent; color: var(--text);
       outline: none; transition: box-shadow .15s, border-color .15s; appearance: textfield;
-      font-size: 1.2rem; /* 增大字体 */
-      font-weight: bold;  /* 加粗字体 */
+      font-size: 1.1rem; /* 增大字体 */
+      font-weight: 700;  /* 加粗字体 */
     }
     input[type="number"]:focus { border-color: var(--accent); box-shadow: 0 0 0 6px var(--ring); }
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -62,105 +71,189 @@
       background: linear-gradient(180deg, rgba(255,255,255,.03), transparent);
     }
     .pill h3 { margin: 0; font-size: .95rem; font-weight: 700; color: var(--muted); letter-spacing: .35px; }
-    .value { font-size: clamp(1.5rem, 1.1rem + 2.2vw, 2.2rem); font-weight: 800; letter-spacing: .5px; }
+    .value { font-size: clamp(1.25rem, 1.0rem + 1.8vw, 1.9rem); font-weight: 500; letter-spacing: .5px; color: var(--text); }
 
     .inline-note { font-size: .9rem; color: var(--muted); margin-top: 10px; }
     .note-warn { color: var(--warn); font-weight: 600; }
 
     details { margin-top: 10px; }
     details > summary { cursor:pointer; color: var(--muted); }
-    .small { font-size: .9rem; color: var(--muted); }
+    .small { font-size: 1 rem; color: var(--muted); }
     .units { font-variant-numeric: tabular-nums; opacity:.9; font-weight:600; }
 
-    .footer { margin-top: 18px; color: var(--muted); font-size: .85rem; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    /* Slightly lighter numeric result color in light theme for better visual balance */
+    [data-theme="light"] .value { color: #2253ad; }
+
+    /* Header button group */
+    .header-controls {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .header-back {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 8px;
+      /* dark-theme default: subtle, matches dark UI */
+      background: rgba(255,255,255,0.03);
+      color: var(--accent);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: none;
+    }
+    /* Light theme: keep the prominent gradient look */
+    [data-theme="light"] .back-btn {
+      background: linear-gradient(180deg, var(--accent), #4c96ff);
+      color: white;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 6px 18px rgba(10,102,255,.15);
+    }
+    .header-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: var(--card);
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .header-btn:hover {
+      opacity: 0.8;
+    }
+    #theme-toggle {
+      width: 36px;
+      padding: 0;
+      border-color: rgba(255, 255, 255, 0.06);
+      font-size: 1rem;
+    }
+    /* Clear / Reset button: subtle in dark theme, prominent in light theme */
+    #reset {
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(54, 215, 255, 0.452);
+      cursor: pointer;
+    }
+    #reset:hover { background: rgba(62, 152, 255, 0.699); }
+    [data-theme="light"] #reset {
+      background: linear-gradient(180deg, var(--accent), #4c96ff);
+      color: white;
+      border: 1px solid rgb(54, 215, 255);
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- 新增语言切换按钮（右上角） -->
-    <div style="position: absolute; right: 32px; top: 32px; z-index: 10;">
-      <a href="flight-planing-tool.html" style="text-decoration:none;">
-        <button type="button" class="secondary" style="background:var(--card);color:var(--accent);border:1px solid var(--accent);margin-right:6px;">
-          中文
-        </button>
-      </a>
-      <a href="flight-planing-tool_en.html" style="text-decoration:none;">
-        <button type="button" class="secondary" style="background:var(--card);color:var(--accent);border:1px solid var(--accent);">
-          English
-        </button>
-      </a>
+    <!-- Header Controls -->
+    <div class="header-controls">
+      <a href="flight-planning-tool.html" class="header-btn">中文</a>
+      <a href="flight-planning-tool_en.html" class="header-btn">English</a>
+      <button id="theme-toggle" class="header-btn" aria-label="切换主题" title="切换主题">🌙</button>
     </div>
-    <div style="margin-bottom:18px;">
-      <a href="flight-training_en.html">
-        <button type="button" class="secondary" style="background:var(--card);color:var(--accent);border:1px solid var(--accent);">
-          ← Go Back
-        </button>
-      </a>
+    <div class="header-back">
+      <a href="flight-training.html" class="back-btn">← 飞行训练主页</a>
     </div>
-    <h1>MH & GS Calculator</h1>
-    <p class="lead">Enter <strong>TRK (M)</strong>, <strong>TAS</strong>, <strong>Wind Dir (M)</strong>, and <strong>Wind Speed</strong> to calculate <strong>MH</strong> and <strong>GS</strong>. <span class="small">Wind direction should be entered as <em>from</em> (the direction the wind is coming from).</span></p>
+    <h1>E6B 风三角计算器</h1>
+    <p class="lead">在线 E6B 风三角计算器，输入 TRK (M)、TAS、风向（from）与风速，即可自动计算磁航向(MH)、风修正角(WCA)与地速(GS)，计算迎/尾风与侧风分量。<span class="small">风向按 <em>from</em>（风从该方向吹来）输入。</span></p>
     <div class="card">
       <div class="grid">
         <div>
-          <label for="trk">TRK (M)  <span class="units">[°]</span></label>
+          <label for="trk">TRK (M) · 航迹（磁） <span class="units">[°]</span></label>
           <input id="trk" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="e.g. 090.0" />
-          <div class="hint">Flight Plan Track (magnetic)</div>
         </div>
         <div>
-          <label for="tas">TAS  <span class="units">[kt]</span></label>
+          <label for="tas">TAS · 真空速 <span class="units">[kt]</span></label>
           <input id="tas" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 120" />
-          <div class="hint">True Airspeed</div>
         </div>
         <div>
-          <label for="wdir">Wind Dir (M) ，<span class="mono">from</span>） <span class="units">[°]</span></label>
+          <label for="wdir">Wind Dir (M) · 风向（磁，<span class="mono">from</span>） <span class="units">[°]</span></label>
           <input id="wdir" type="number" inputmode="decimal" min="0" max="359.9" step="0.1" placeholder="e.g. 045.0" />
-          <div class="hint">Wind Direction (magnetic, <span class="mono">from</span>)</div>
         </div>
         <div>
-          <label for="wspd">Wind Spd <span class="units">[kt]</span></label>
+          <label for="wspd">Wind Spd · 风速 <span class="units">[kt]</span></label>
           <input id="wspd" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 20" />
-          <div class="hint">Wind Speed</div>
         </div>
       </div>
 
       <div class="actions" style="margin-top:14px">
-        <button id="calc"> MH / GS</button>
-        <button id="sample" class="secondary" type="button">Example Values</button>
-        <button id="reset" class="secondary" type="button">Clear</button>
+        <button id="reset">清空</button>
       </div>
 
       <div class="results">
         <div class="pill">
-          <h3>MH</h3>
+          <h3>MH · 磁航向</h3>
           <div class="value" id="mh">—</div>
         </div>
         <div class="pill">
-          <h3>GS</h3>
+          <h3>GS · 地速</h3>
           <div class="value" id="gs">—</div>
         </div>
       </div>
 
       <div class="inline-note" id="note"></div>
 
-      <details>
-        <summary>Extend：details（WCA / Crosswind / Head/Tail）</summary>
+      <details open>
+        <summary>展开：计算细节（WCA / 侧风 / 迎尾风）</summary>
         <div class="grid" style="margin-top:10px">
-          <div class="pill"><h3>WCA · Wind Correction Angle [°]</h3><div class="value" id="wca">—</div></div>
-          <div class="pill"><h3>Crosswind · Crosswind [kt]</h3><div class="value" id="xwind">—</div></div>
-          <div class="pill"><h3>Head/Tail · Head/Tail Wind [kt]</h3><div class="value" id="hwind">—</div></div>
-          <div class="pill"><h3>Wind Relative Track Angle β [°]</h3><div class="value" id="beta">—</div></div>
+          <div class="pill"><h3>Head/Tail · 迎/尾风 [kt]</h3><div class="value" id="hwind">—</div></div>
+          <div class="pill"><h3>Crosswind · 侧风 [kt]</h3><div class="value" id="xwind">—</div></div>
+          <div class="pill"><h3>WCA · 风修正角 [°]</h3><div class="value" id="wca">—</div></div>
+          <div class="pill"><h3>风相对航迹角 β [°]</h3><div class="value" id="beta">—</div></div>
         </div>
       </details>
-
-      <div class="footer">Abbreviations: TRK (M) = Flight Plan Track (Magnetic); TAS = True Airspeed; MH = Magnetic Heading; GS = Ground Speed.</div>
     </div>
+  </div>
 
-    <div style="text-align:center; color:var(--muted); font-size:0.95rem; margin-top:32px;">
-      © 2025 Yohann Aviation Note · Developed & Maintained by Yohann
+  <div style="text-align:center; color:var(--muted); font-size:0.95rem; margin-top:32px;">
+    © 2025 Yohann飞行笔记 开发 · 版权所有
   </div>
 
   <script>
+    // Theme toggle logic for immediate interactivity
+    (function(){
+      const btn = document.getElementById('theme-toggle');
+      if(!btn) return;
+      function current(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+      function update(){
+        const t = current();
+        btn.textContent = t === 'light' ? '☀️' : '🌙';
+        btn.title = t === 'light' ? '切换到暗色模式' : '切换到亮色模式';
+      }
+      btn.addEventListener('click', ()=>{
+        const next = current() === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try{ localStorage.setItem('theme', next); }catch(e){}
+        update();
+      });
+      update();
+    })();
+
     const $ = (sel) => document.querySelector(sel);
     const deg2rad = d => d * Math.PI / 180;
     const rad2deg = r => r * 180 / Math.PI;
@@ -238,17 +331,13 @@
 
     // Wire up UI
     ['#trk','#tas','#wdir','#wspd'].forEach(sel => $(sel).addEventListener('input', compute));
-    $('#calc').addEventListener('click', (e) => { e.preventDefault(); compute(); });
     $('#reset').addEventListener('click', () => {
-      ['#trk','#tas','#wdir','#wspd'].forEach(sel => $(sel).value = '');
-      render({}); $('#note').textContent = '';
-    });
-    $('#sample').addEventListener('click', () => {
-      $('#trk').value = '090';
-      $('#tas').value = '120';
-      $('#wdir').value = '045';
-      $('#wspd').value = '20';
-      compute();
+      $('#trk').value = '';
+      $('#tas').value = '';
+      $('#wdir').value = '';
+      $('#wspd').value = '';
+      render({}); 
+      $('#note').textContent = '';
     });
 
     // Initial render

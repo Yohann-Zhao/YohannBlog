@@ -57,6 +57,7 @@ header {
     text-align: center;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .header-content {
@@ -137,28 +138,71 @@ nav a.active::after {
     width: 100%;
 }
 
+
 .container {
     margin: 0 auto;
     padding: 2rem;
-    background-color: var(--background-blue); /* 设置背景颜色 */
+    background-color: var(--background-blue);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0;
 }
 
-.section {
-    margin: 3rem auto;
-    background: var(--background-color);
-    border-radius: 1rem;
-    width: 60%;
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow-md);
-    transition: var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+/* Text Section 样式：用于首页与长文本内容 */
+.text-section {
+    width: 100%;
+    max-width: 1100px;
+    background: white;
+    padding: 2rem;
+    margin: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    color: var(--text-color);
+    line-height: 1.8;
 }
 
-.section:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+.text-section h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
 }
+.text-section h3 {
+    color: #153e75;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+.text-section h4 {
+    color: #1e4e8a;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+.text-section p {
+    margin-bottom: 0.9rem;
+}
+.text-section ul, .text-section ol {
+    margin: 0 0 0.9rem 1.25rem;
+}
+.text-section li {
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .text-section {
+        padding: 1rem;
+        margin: 1rem;
+        border-radius: 8px;
+    }
+    .text-section h2 {
+        font-size: 1.4rem;
+    }
+}
+
 
 /* 按钮样式 */
 .btn {
@@ -207,6 +251,7 @@ footer a:hover {
     color: #8dc4ff; /* 蓝色文字 */
     text-decoration: underline; /* 添加下划线 */
 }
+/* 金色的线
 footer::before {
     content: '';
     position: absolute;
@@ -216,7 +261,7 @@ footer::before {
     height: 5px;
     background: var(--gradient-accent);
 }
-
+ */
 
 /* 响应式设计 */
 @media (max-width: 767px) {
@@ -262,18 +307,8 @@ footer::before {
         color: #fff;
     }
 
-    .header-content {
-        padding: 0 1rem;
-    }
-
     .container {
         padding: 1rem;
-    }
-
-    .section {
-        padding: 1.5rem;
-        margin: 1rem auto;
-        max-width: none;
     }
 
     .about-container {
@@ -593,4 +628,84 @@ table {
     max-width: 100%;
     height: auto;
     margin-bottom: 1rem;
+}
+
+/* Content Block 卡片样式 */
+.content-block {
+    position: relative;
+    display: inline-block;
+    width: calc(33.333% - 40px);
+    min-width: 250px;
+    height: 250px;
+    margin: 20px;
+    background: var(--gradient-primary);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    vertical-align: top;
+    flex: 0 1 auto;
+}
+
+.content-block a {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.content-block img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.content-block h3 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 20px;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 600;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+    z-index: 2;
+    transition: var(--transition);
+}
+
+.content-block:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+.content-block:hover img {
+    opacity: 1;
+}
+
+/* Content Block 响应式设计 */
+@media (max-width: 1200px) {
+    .content-block {
+        width: calc(50% - 40px);
+    }
+}
+
+@media (max-width: 768px) {
+    .content-block {
+        width: calc(100% - 40px);
+        height: 200px;
+    }
+
+    .content-block h3 {
+        font-size: 1.1rem;
+        padding: 15px;
+    }
 }

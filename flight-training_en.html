@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -14,70 +14,9 @@
 
     gtag('config', 'G-G3TQJTQ67B');
     </script>
+
+    <link rel="icon" type="image/x-icon" href="yohann_favicon.ico">
 </head>
-<style>
-.content-block {
-    position: relative;
-    width: calc(33.333% - 40px);
-    height: 200px;
-    margin: 20px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    overflow: hidden;
-    border-radius: 8px;
-    transition: background 0.3s ease-in-out;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.content-block h3 {
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    margin: 0;
-    color: white;
-    font-size: 1.5em;
-    z-index: 2;
-}
-
-.content-block img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.content-block:hover img {
-    opacity: 1;
-}
-
-.content-sections {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-</style>
-
-<style>
-/*确保footer在页面底部*/
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-main {
-    flex: 1;
-}
-</style>
 
 <body>
     <header>
@@ -100,30 +39,34 @@ main {
         </ul>
     </nav>
 
-    <main>
-        <section class="content-sections">
+    <main class="container">
+        <div class="content-block">
+            <a href="flight-planning-tool_en.html">
+                <img src="AE/asa-e6b-circ.webp" alt="E6B Magnetic Heading and Ground Speed Calculator">
+                <h3>E6B Magnetic Heading and Ground Speed Calculator</h3>
+            </a>
+        </div>
+        
+        <div class="content-block">
+            <a href="integrated-flight-planning-tool_en.html">
+                <img src="AE/flight-planning-tool.webp" alt="Flight Planning Tool">
+                <h3>Flight Planning Tool</h3>
+            </a>
+        </div>
 
-            <div class="content-block">
-                <a href="integrated-flight-planning-tool_en.html">
-                    <img src="AE/flight-planing-tool.webp" alt="Flight Planning Tool">
-                    <h3>Flight Planning Tool</h3>
-                </a>
-            </div>
-
-            <div class="content-block">
-                <a href="VFR DA40NG Training Note.html">
-                    <img src="AE/da40ng.jpg" alt="VFR DA40NG Training Note">
-                    <h3>VFR DA40NG Training Note</h3>
-                </a>
-            </div>
-            
-            <div class="content-block">
-                <a href="MEA IR DA42 Training Note.html">
-                    <img src="AE/da42.webp" alt="MEA IR DA42 Training Note">
-                    <h3>MEA IR DA42 Training Note</h3>
-                </a>
-            </div>
-        </section>
+        <div class="content-block">
+            <a href="VFR DA40NG Training Note.html">
+                <img src="AE/da40ng.jpg" alt="VFR DA40NG Training Note">
+                <h3>VFR DA40NG Training Note</h3>
+            </a>
+        </div>
+        
+        <div class="content-block">
+            <a href="MEA IR DA42 Training Note.html">
+                <img src="AE/da42.webp" alt="MEA IR DA42 Training Note">
+                <h3>MEA IR DA42 Training Note</h3>
+            </a>
+        </div>
     </main>
 
     <footer>

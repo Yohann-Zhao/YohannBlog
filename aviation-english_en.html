@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -15,70 +15,10 @@
 
     gtag('config', 'G-G3TQJTQ67B');
     </script>
+
+    <link rel="icon" type="image/x-icon" href="yohann_favicon.ico">
 </head>
-<style>
-    .content-block {
-        position: relative;
-        width: calc(33.333% - 40px);
-        height: 200px;
-        margin: 20px;
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        overflow: hidden;
-        border-radius: 8px;
-        transition: background 0.3s ease-in-out;
-        display: inline-block;
-        vertical-align: top;
-    }
-    
-    .content-block h3 {
-        position: absolute;
-        top: 10px;
-        left: 20px;
-        margin: 0;
-        color: white;
-        font-size: 1.5em;
-        z-index: 2;
-    }
-    
-    .content-block img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-    }
-    
-    .content-block:hover img {
-        opacity: 1;
-    }
-    
-    .content-sections {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-    </style>
-    
-    <style>
-    /*确保footer在页面底部*/
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-    
-    body {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    main {
-        flex: 1;
-    }
-    </style>
+
 <body>
     <header>
         <div class="language-switcher">
@@ -101,29 +41,13 @@
     </nav>
 
 
-    <main>
-        <section class="content-sections">
-            <!--
-            <div class="content-block">
-                <a href="basic-english-grammar.html">
-                    <img src="AE/basic-english-grammar.jpg" alt="英语语法基础">
-                    <h3>英语语法基础</h3>
-                </a>
-            </div>
-            <div class="content-block">
-                <a href="aviation-english-vocabulary.html">
-                    <img src="AE/aviation-english-vocabulary.jpg" alt="航空英语单词">
-                    <h3>航空英语单词</h3>
-                </a>
-            </div>
-            -->
-            <div class="content-block">
-                <a href="Radio_Call_Practice_en.html">
-                    <img src="AE/ATC.webp" alt="陆空通话">
-                    <h3>Radio Call</h3>
-                </a>
-            </div>
-        </section>
+    <main class="container">
+        <div class="content-block">
+            <a href="Radio_Call_Practice_en.html">
+                <img src="AE/ATC.webp" alt="陆空通话">
+                <h3>Radio Call</h3>
+            </a>
+        </div>
     </main>
 
     <footer>

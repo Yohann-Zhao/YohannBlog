@@ -111,8 +111,8 @@ function startCarousel() {
         detail.querySelector('h2').textContent = item.title;
         detail.querySelector('p').textContent = item.description;
         detail.classList.add('active');
-        // CPL.png 停留14s，其余10s
-        const delay = carouselIndex === 0 ? 14000 : 10000;
+        // CPL.png 停留8s，其余6s
+        const delay = carouselIndex === 0 ? 8000 : 6000;
         carouselIndex = (carouselIndex + 1) % carouselList.length;
         carouselTimer = setTimeout(showNext, delay);
     }
