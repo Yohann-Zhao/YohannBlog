@@ -691,6 +691,10 @@ table {
     opacity: 1;
 }
 
+.content-block img {
+    opacity: 0.2;
+}
+
 /* Content Block 响应式设计 */
 @media (max-width: 1200px) {
     .content-block {
@@ -707,5 +711,13 @@ table {
     .content-block h3 {
         font-size: 1.1rem;
         padding: 15px;
+    }
+}
+
+/* Ensure background images are visible on touch devices / tablets
+   (hover states don't reliably work on those devices) */
+@media (hover: none), (max-width: 1024px) {
+    .content-block img {
+        opacity: 0.45;
     }
 }
