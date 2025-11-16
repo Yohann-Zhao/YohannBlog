@@ -181,7 +181,11 @@
       <a href="flight-training_en.html" class="back-btn">← Flight Training Page</a>
     </div>
     <h1>E6B Wind Triangle Calculator</h1>
-    <p class="lead">Enter TRK (M), TAS, wind direction (from) and wind speed to automatically compute magnetic heading (MH), wind correction angle (WCA), ground speed (GS), headwind/tailwind and crosswind components.</p>
+    <details>
+      <summary style="cursor: pointer; color: var(--muted); font-weight: 600;">Instructions</summary>
+      <p class="lead" style="margin-top: 12px;">E6B Wind Triangle Calculator: Enter the planned track (TRK) in magnetic degrees, true airspeed (TAS), wind direction (from) in magnetic degrees, and wind speed to automatically compute magnetic heading (MH), wind correction angle (WCA), ground speed (GS), headwind/tailwind and crosswind components.</p>
+    </details>
+    <div style="padding: 8px 0;"></div>
     <div class="card">
       <div class="grid">
         <div>
@@ -203,7 +207,7 @@
       </div>
 
       <div class="actions" style="margin-top:14px">
-        <button id="reset">Clear</button>
+        <button id="reset">Clear Inputs</button>
       </div>
 
       <div class="results">

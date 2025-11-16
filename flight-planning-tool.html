@@ -181,7 +181,11 @@
       <a href="flight-training.html" class="back-btn">← 飞行训练主页</a>
     </div>
     <h1>E6B 风三角计算器</h1>
-    <p class="lead">在线 E6B 风三角计算器，输入 TRK (M)、TAS、风向（from）与风速，即可自动计算磁航向(MH)、风修正角(WCA)与地速(GS)，计算迎/尾风与侧风分量。<span class="small">风向按 <em>from</em>（风从该方向吹来）输入。</span></p>
+    <details>
+      <summary style="cursor: pointer; color: var(--muted); font-weight: 600;">使用说明</summary>
+      <p class="lead" style="margin-top: 12px;">E6B 风三角计算器:输入 计划磁航迹 TRK (M)、真空速 TAS、风向（来自的磁方位）与风速率，即可自动计算磁航向(MH)、风修正角(WCA)、地速(GS)，计算迎/尾风与侧风分量。</p>
+    </details>
+    <div style="padding: 8px 0;"></div>
     <div class="card">
       <div class="grid">
         <div>
@@ -203,7 +207,7 @@
       </div>
 
       <div class="actions" style="margin-top:14px">
-        <button id="reset">清空</button>
+        <button id="reset">清空输入</button>
       </div>
 
       <div class="results">
@@ -220,7 +224,7 @@
       <div class="inline-note" id="note"></div>
 
       <details open>
-        <summary>展开：计算细节（WCA / 侧风 / 迎尾风）</summary>
+        <summary>展示计算细节（迎尾风/侧风/风修正角/风相对航迹角）</summary>
         <div class="grid" style="margin-top:10px">
           <div class="pill"><h3>Head/Tail · 迎/尾风 [kt]</h3><div class="value" id="hwind">—</div></div>
           <div class="pill"><h3>Crosswind · 侧风 [kt]</h3><div class="value" id="xwind">—</div></div>
@@ -232,7 +236,7 @@
   </div>
 
   <div style="text-align:center; color:var(--muted); font-size:0.95rem; margin-top:32px;">
-    © 2025 Yohann飞行笔记 开发 · 版权所有
+    © 2025 Yohann飞行笔记 · 版权所有
   </div>
 
   <script>
