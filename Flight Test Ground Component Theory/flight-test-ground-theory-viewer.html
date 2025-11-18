@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flight Test Ground Theory — Viewer</title>
+  <style>
+    :root{--bg:#f6f8fb;--card:#fff;--accent:#0f4761;--muted:#6b7280}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    .layout{display:flex;height:100vh;background:var(--bg)}
+    .toc{width:320px;min-width:220px;background:var(--card);border-right:1px solid #e6e9ef;padding:18px;box-sizing:border-box;overflow:auto}
+    .toc h2{margin:0 0 12px 0;color:var(--accent);font-size:18px}
+    .toc .actions{display:flex;gap:8px;margin-bottom:12px}
+    .btn{background:#eef2f7;border:1px solid #e0e6ee;padding:6px 10px;border-radius:6px;font-size:13px;color:#0b2540;text-decoration:none}
+    .search{width:100%;padding:8px;border:1px solid #e6e9ef;border-radius:6px;margin-bottom:12px}
+    nav ul{list-style:none;padding-left:0;margin:0}
+    nav li{margin:4px 0}
+    nav a{color:#072233;text-decoration:none;display:block;padding:6px;border-radius:6px}
+    nav a:hover{background:#f1f6f9}
+    nav a.level-1{font-weight:600}
+    nav a.level-2{padding-left:14px;color:var(--muted)}
+    nav a.level-3{padding-left:26px;color:var(--muted)}
+    .viewer{flex:1;display:flex;flex-direction:column}
+    .viewer .bar{display:flex;align-items:center;gap:12px;padding:10px 12px;background:linear-gradient(180deg,#ffffff, #fbfdff);border-bottom:1px solid #e6e9ef}
+    .viewer iframe{flex:1;border:0;width:100%}
+    .note{font-size:13px;color:var(--muted)}
+    @media (max-width:800px){.toc{width:260px}}
+    @media (max-width:640px){.toc{display:none}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="toc" id="toc">
+      <h2>Contents</h2>
+      <div class="actions">
+        <a class="btn" id="backBtn">Back to flight-training</a>
+      </div>
+      <nav id="tocNav" aria-label="Table of contents"></nav>
+      <p class="note">Last updated: 2025.11.18</p>
+      </p>
+    </aside>
+    <main class="viewer">
+      <div class="bar">
+        <strong>Flight Test Ground Theory</strong>
+        <span class="note">— Yohann Aviation Note</span>
+      </div>
+      <iframe id="docFrame" src="Flight Test Ground Theory.html" title="Flight Test Ground Theory"></iframe>
+    </main>
+  </div>
+
+  <script>
+    // Precomputed TOC extracted from the source document (fallback).
+    const toc = [
+      {id: '_Toc214362897', title: 'License', level: 1},
+      {id: '_Toc214362898', title: 'About licenses grant, requirements', level: 2},
+      {id: '_Toc214362899', title: 'Carriage of documents, weather etc.', level: 2},
+      {id: '_Toc214362900', title: 'Only for PPL License', level: 2},
+      {id: '_Toc214362901', title: 'Only for CPL License', level: 2},
+      {id: '_Toc214362902', title: 'Ratings and endorsements', level: 1},
+      {id: '_Toc214362903', title: 'ACFTS & OPS', level: 1},
+      {id: '_Toc214362904', title: 'Equipment', level: 2},
+      {id: '_Toc214362905', title: 'Special flights – over water, remote', level: 2},
+      {id: '_Toc214362906', title: 'Human & Cargo', level: 2},
+      {id: '_Toc214362907', title: 'Alcohol', level: 2},
+      {id: '_Toc214362908', title: 'CAO 48.1 Appendix 1 Fatigue Management', level: 2},
+      {id: '_Toc214362909', title: 'Fuelling', level: 2},
+      {id: '_Toc214362910', title: 'Pilot maintenance', level: 2},
+      {id: '_Toc214362911', title: 'Flight Rules', level: 1},
+      {id: '_Toc214362912', title: 'T/O and LNG', level: 2},
+      {id: '_Toc214362913', title: 'VFR rules', level: 2},
+      {id: '_Toc214362914', title: 'About AOC', level: 1},
+      {id: '_Toc214362915', title: 'Requirements for an AOC ( CASR 119.D-J )', level: 2},
+      {id: '_Toc214362916', title: 'Content of exposition CASR 119.205', level: 2},
+      {id: '_Toc214362917', title: 'Other CPL theory Knowledge', level: 1},
+      {id: '_Toc214362918', title: 'From CMET', level: 2},
+      {id: '_Toc214362919', title: 'From CPLA', level: 2}
+    ];
+
+    const nav = document.getElementById('tocNav');
+    const frame = document.getElementById('docFrame');
+    const backBtn = document.getElementById('backBtn');
+
+    function buildTOC(list){
+      nav.innerHTML = '';
+      const ul = document.createElement('ul');
+      list.forEach(item=>{
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.textContent = item.title;
+        a.href = '#'+item.id;
+        a.className = 'level-' + item.level;
+        a.addEventListener('click', function(ev){
+          ev.preventDefault();
+          // Navigate iframe to anchor (use encoded URI for spaces)
+          const src = encodeURI('Flight Test Ground Theory.html') + '#' + item.id;
+          // set src to navigate (works without same-origin access)
+          frame.src = src;
+        });
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      nav.appendChild(ul);
+    }
+
+    // Try to enhance: if iframe is same-origin, read headings live from document
+    frame.addEventListener('load', ()=>{
+      try{
+        const doc = frame.contentDocument || frame.contentWindow.document;
+        if(doc){
+          // prefer TOC inside document if exists (links to anchors)
+          const tocLinks = doc.querySelectorAll('p.MsoToc1 a, p.MsoToc2 a, p.MsoToc3 a');
+          if(tocLinks && tocLinks.length>0){
+            const live = [];
+            // helper: extract only text node content to avoid page-number spans
+            function extractLinkText(link){
+              const parts = Array.from(link.childNodes).filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).filter(Boolean);
+              let txt = parts.join(' ').trim();
+              if(!txt) txt = (link.textContent||'').trim();
+              // remove trailing dot/space and page number like ". 3" or " 3"
+              txt = txt.replace(/[.\s\u2022]*\s*\d+\s*$/, '');
+              return txt;
+            }
+            tocLinks.forEach(link=>{
+              const cls = link.parentElement.className || '';
+              const lev = cls.includes('MsoToc1')?1:cls.includes('MsoToc2')?2:3;
+              const href = (link.getAttribute('href')||'').replace('#','');
+              const title = extractLinkText(link);
+              if(href && title) live.push({id:href,title,level:lev});
+            });
+            if(live.length) buildTOC(live);
+          } else {
+            // fallback: try to read heading tags and anchor names
+            const headings = [];
+            Array.from(doc.querySelectorAll('h1,h2,h3,h4,h5,h6')).forEach(h=>{
+              // find an internal anchor name inside heading
+              const a = h.querySelector('a[name]');
+              const name = a ? a.getAttribute('name') : null;
+              const text = h.textContent.trim();
+              if(name && text) headings.push({id:name,title:text,level:parseInt(h.tagName.substring(1))});
+            });
+            if(headings.length) buildTOC(headings.map(x=>({id:x.id,title:x.title,level:Math.max(1,Math.min(3,x.level))})))
+          }
+        }
+      }catch(e){
+        // cross-origin or file:// restrictions — keep precomputed TOC
+        // console.warn('Could not access iframe document', e);
+      }
+    });
+
+    // initial render with precomputed TOC
+    buildTOC(toc);
+
+    // Back button: choose Chinese or English page based on browser language.
+    backBtn.addEventListener('click', ()=>{
+      const lang = (navigator.language || (navigator.languages && navigator.languages[0]) || 'en').toLowerCase();
+      // If browser language is Chinese (zh-*), go to Chinese page; otherwise use English.
+      const target = lang.startsWith('zh') ? '../flight-training.html' : '../flight-training_en.html';
+      // Navigate the top-level window back to the flight-training page
+      window.location.href = target;
+    });
+  </script>
+</body>
+</html>
