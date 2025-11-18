@@ -376,6 +376,8 @@
             position: relative;
             width: 100%;
             display: flex; /* 布局 */
+            flex-wrap: nowrap; /* 不换行，强制左右并列 */
+            align-items: flex-start;
             padding: 2rem;
             gap: 1rem;
         }
@@ -384,11 +386,13 @@
             position: sticky;
             top: 8rem; /* 保持在nav-breadcrumb-container下方 */
             width: 20%;
+            min-width: 220px; /* 防止侧栏过窄导致换行 */
             background-color: var(--background-color);
             padding: 1.5rem;
             border-radius: 1rem;
             box-shadow: var(--shadow-md);
             max-height: calc(100vh - 4rem); /* 限制最大高度 */
+            flex: 0 0 auto;
         }
 
             .chapter_sidebar h2 {
@@ -423,7 +427,8 @@
 
             .content {
                 position: relative;
-                flex-grow: 1; /* 填充剩余空间 */
+                flex: 1 1 auto; /* 填充剩余空间 */
+                min-width: 320px; /* 防止主内容过窄导致换行 */
                 padding: 2rem; /* 让内部的文字与边缘保持距离 */
                 background: var(--background-color);
                 border-radius: 1rem;
@@ -466,7 +471,7 @@
             position: -webkit-sticky; /* Safari */
             position: sticky;
             top: 0;
-            background-color:; /* 可选：设置背景颜色 */
+            background-color: transparent; /* 可选：设置背景颜色 */
             z-index: 1000; /* 确保它在其他内容之上 */
         }
 
