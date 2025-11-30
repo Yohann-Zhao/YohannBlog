@@ -496,23 +496,21 @@ footer::before {
 }
 
 /*Theory页面*/
-/* 主容器，去掉间隙 */
+/* 主容器，使用 flex gap 布局：左侧固定侧边栏，右侧自适应 */
 .main-container {
     display: flex;
-    justify-content: flex-start; /* 确保侧边栏和卡片左对齐 */
-    align-items: flex-start; /* 确保垂直对齐 */
-    gap: 0; /* 去掉间隙 */
-    padding: 0; /* 可选，移除左右内边距 */
+    align-items: flex-start;
+    gap: 1.5rem; /* 使用 gap 代替 margin-left 进行列间距控制 */
+    padding: 0;
+    max-width: 1200px; /* 可选：限制主容器最大宽度以保持布局稳定 */
+    margin: 0 auto;
 }
 
 /* 侧边栏样式 */
 .sidebar {
-    /* position: -webkit-sticky;  Safari */
-    /* position: sticky; */
-    margin-left: 8%;
-    /* top: 60px; */
-    /* max-height: calc(100vh - 60px); */
-    /* overflow: visible; */
+    /* 左侧固定宽度侧边栏，避免内容变化推挤右侧 */
+    flex: 0 0 300px; /* 固定 300px 宽度（可调整） */
+    margin-left: 0; /* 间距由 .main-container 的 gap 控制 */
 }
 
 /* Theory页面分组标题样式 */
@@ -562,14 +560,11 @@ footer::before {
 /* 右侧详细信息区域样式 */
 .subject-detail {
     position: relative;
-    /* left: 16%; /* 左端对齐主容器的左边 */
-    margin-left: 3%;
-    margin-top: 2rem; /* 新增：向下移动，与左侧CPLA分组顶部对齐 */
-    width: 50%; /* 宽度 */
-    height: 50%;
+    margin-left: 0; /* 间距由 gap 控制 */
+    margin-top: 2rem; /* 向下移动，与左侧分组顶部对齐 */
+    flex: 1 1 0; /* 占用剩余空间并保持稳定 */
+    width: auto; /* 取消百分比宽度，防止随同级元素抖动 */
     padding: 2rem;
-    background-color: none;
-    box-shadow: none; /*var(--shadow-md);*/
     transition: all 0.3s ease;
     display: none;
 }
