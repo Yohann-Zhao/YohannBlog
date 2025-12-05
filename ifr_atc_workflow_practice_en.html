@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFR ATC Workflow Practice| Aviation English | Yohann's Aviation Note</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Practice listening to IFR clearances with realistic ATC voice synthesis. Improve your aviation English and radio communication skills.">
+    <meta name="keywords" content="IFR Clearance, ATC Simulation, Aviation English, Radio Call Practice, Flight Training, Aviation Communication">
+    <meta name="author" content="yuhan_zhao">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G3TQJTQ67B"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G3TQJTQ67B');
+    </script>
+
+    <link rel="icon" type="image/x-icon" href="yohann_favicon.ico">
+</head>
+
+<style>
+    .breadcrumb {
+        padding: 1rem;
+        padding-left: 10%;
+        background: var(--background-color);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .breadcrumb a {
+        text-decoration: none;
+        color: var(--text-color);
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    .breadcrumb a:hover {
+        color: var(--primary-color);
+    }
+
+    .breadcrumb span {
+        color: var(--text-color);
+        font-size: 0.9rem;
+        margin: 0 0.5rem;
+    }
+
+    .nav-breadcrumb-container {
+        position: sticky;
+        top: 0;
+        background-color: var(--background-color);
+        z-index: 1000;
+    }
+
+    :root {
+        --success-color: #27ae60;
+        --danger-color: #e74c3c;
+        --border-color: #bdc3c7;
+    }
+
+    .control-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.2rem;
+        background: var(--light-blue);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        border: 1px solid #d4e3f0;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        padding: 0.7rem;
+        border: 2px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+        outline: none;
+    }
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin: 2rem 0;
+        justify-content: center;
+    }
+
+    button {
+        padding: 0.8rem 1.4rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: var(--secondary-color);
+        color: white;
+    }
+
+    button:hover {
+        background: var(--accent-color);
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background: #95a5a6;
+    }
+
+    #answer {
+        display: none;
+        background: var(--light-blue);
+        padding: 1.2rem;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 1.1rem;
+        border: 2px solid var(--secondary-color);
+        margin-top: 1.5rem;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .shortcut-hints-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .shortcut-hints {
+        font-size: 0.9rem;
+        color: var(--text-color);
+    }
+
+    .shortcut-hints kbd {
+        background: var(--secondary-color);
+        color: white;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        margin: 0 0.2rem;
+    }
+
+    /* Beautified control group styles (reference: Radio_Call_Practice_en.html) */
+    .control-group.beautified {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.2rem;
+        background: var(--light-blue, #f8faff);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        border: 1px solid #d4e3f0;
+        box-shadow: 0 2px 8px rgba(52,152,219,0.07);
+    }
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+    .input-group label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--primary-color, #2980b9);
+    }
+    .input-group input[type="text"],
+    .input-group input[type="number"],
+    .input-group select {
+        padding: 0.7rem;
+        border: 2px solid var(--border-color, #bdc3c7);
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        background: #fff;
+        max-width: 300px;
+    }
+    .input-group input[type="text"]:focus,
+    .input-group input[type="number"]:focus,
+    .input-group select:focus {
+        border-color: var(--secondary-color, #3498db);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+        outline: none;
+    }
+    .speed-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #speedValue {
+        min-width: 40px;
+        text-align: center;
+        font-weight: bold;
+        color: var(--secondary-color, #3498db);
+        background: #f4f8fb;
+        border-radius: 4px;
+        padding: 0.2rem 0.7rem;
+        font-size: 1rem;
+        margin-left: 0.2rem;
+    }
+    /* Instructions panel styles */
+    .instructions-panel {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin: 1.2rem 0 2rem 0;
+        background: #f8f9fa;
+        box-shadow: 0 2px 8px rgba(52,152,219,0.04);
+    }
+    .instructions-panel summary {
+        padding: 12px 16px;
+        background: #f1f8ff;
+        color: #2c3e50;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 8px 8px 0 0;
+        font-size: 1.1em;
+        outline: none;
+    }
+    .instructions-content {
+        padding: 16px 24px 16px 32px;
+        background: #fff;
+        border-radius: 0 0 8px 8px;
+        font-size: 1em;
+    }
+    .instructions-content ul {
+        margin: 0;
+        padding-left: 1.2em;
+    }
+    .instructions-content li {
+        margin-bottom: 0.5em;
+        line-height: 1.6;
+    }
+    @media (max-width: 600px) {
+        .control-group.beautified {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+        .instructions-content {
+            padding: 12px 8px 12px 16px;
+        }
+    }
+</style>
+    <style>
+        /* Status bar styles */
+        #statusBar {
+            width: 90%;
+            max-width: 1000px;
+            margin: 12px auto 0 auto;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            background: #f6f8fa;
+            border: 1px solid #e6eef7;
+            color: #234;
+        }
+        #statusBar .status-message { flex: 1 }
+        #statusBar.success { background: #e9f8ef; border-color: #cfeedd; color: #10633a }
+        #statusBar.error { background: #fff2f2; border-color: #f1c2c2; color: #8a1f1f }
+        #statusBar.info { background: #f6f8fa; border-color: #e6eef7; color: #234 }
+        #statusBar.loading { background: #fffaf0; border-color: #fae5c3; color: #7a4b00 }
+        .status-spinner {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.12);
+            border-top-color: rgba(0,0,0,0.35);
+            animation: spin 0.9s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+
+<body>
+
+    <header>
+        <div class="language-switcher">
+            <a href="ifr_atc_workflow_practice.html">中文</a> | <a href="ifr_atc_workflow_practice_en.html">English</a>
+        </div>
+        <div class="header-content">
+            <h1>IFR ATC Workflow Practice</h1>
+        </div>
+    </header>
+
+    <div class="nav-breadcrumb-container">
+        <nav>
+            <ul>
+                <li><a href="index_en.html">Home</a></li>
+                <li><a href="theory_en.html">Theory Exams</a></li>
+                <li><a href="flight-training_en.html">Flight Training</a></li>
+                <li><a href="aviation-english_en.html" class="active">Aviation English</a></li>
+                <li><a href="about_en.html">About Me</a></li>
+            </ul>
+        </nav>
+
+        <div class="breadcrumb">
+            <a href="aviation-english_en.html">All Topics</a>
+            <span>></span>
+            <a>IFR Flight ATC Workflow Practice</a>
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="text-section">
+            <h2>IFR Clearance Practice - Sydney Delivery</h2>
+            <p>Practice dictation of IFR clearances from Sydney Delivery. Each clearance includes callsign, destination, departure runway, SID, transition, altitude, squawk code, and departure frequency.</p>
+            <p>*Contain fictional data. Not for real-world operational use*</p>
+
+            <!-- User Instructions -->
+            <details class="instructions-panel">
+                <summary>How to Use</summary>
+                <div class="instructions-content">
+                    <ul>
+                        <li><b>Generate & Speak Clearance</b>: Click to generate a random IFR clearance and play it with your chosen accent and speed.</li>
+                        <li><b>Speech Speed</b>: Adjust the slider to change the speech speed. The number updates live.</li>
+                        <li><b>Accent</b>: Select the English accent for the ATC voice.</li>
+                        <li><b>Simulate VHF/ATC Tone</b>: Enable to add radio effects for realism.</li>
+                        <li><b>Replay/Pause/Resume</b>: Replay, pause, or resume playback. (Shortcut: <kbd>Space</kbd>)</li>
+                        <li><b>Stop</b>: Stop playback immediately.</li>
+                        <li><b>Show/Hide Clearance</b>: Reveal or hide the full text of the generated clearance. (Shortcut: <kbd>H</kbd>)</li>
+                        <li><b>Regenerate</b>: Press <kbd>R</kbd> to generate a new clearance.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <!-- Controls -->
+            <div class="control-group beautified">
+                <div class="input-group">
+                    <label for="accentSelect">Accent:</label>
+                    <select id="accentSelect">
+                        <option value="australian">🇦🇺 Australian English</option>
+                        <option value="american">🇺🇸 American English</option>
+                        <option value="british">🇬🇧 British English</option>
+                        <option value="indian">🇮🇳 Indian English</option>
+                        <option value="southeast_asia">🇵🇭 Southeast Asian English</option>
+                        <option value="mixed" selected>🌍 Mixed Accents</option>
+                    </select>
+                </div>
+
+                <!-- Voice Category Selector -->
+                <div class="input-group">
+                    <label for="voiceCategorySelect">Voice Category:</label>
+                    <select id="voiceCategorySelect">
+                        <option value="standard">Standard</option>
+                        <option value="wavenet">Wavenet</option>
+                        <option value="chirp3" selected>Chirp3-HD</option>
+                    </select>
+                </div>
+                
+
+                <div class="input-group">
+                    <label for="speed">Speech Speed (0.3 - 2.0):</label>
+                    <div class="speed-control">
+                        <input type="range" id="speed" min="0.3" max="2.0" step="0.1" value="1.2" oninput="updateSpeed(this.value)">
+                        <span id="speedValue">1.2x</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                        <input type="checkbox" id="atcToneCheckbox" checked> Simulate VHF/ATC Tone
+                    </label>
+                </div>
+            </div>
+
+            <!-- Status bar: shows synthesis progress, errors, and informational messages -->
+            <div id="statusBar" class="info" role="status" aria-live="polite">
+                <div class="status-spinner" style="display:none" id="statusSpinner"></div>
+                <div class="status-message" id="statusMessage">Ready</div>
+                <div class="status-timestamp" id="statusTimestamp" style="font-size:0.85rem;color:rgba(0,0,0,0.45)"></div>
+            </div>
+
+            <div class="button-group">
+                <button onclick="generateAndSpeakClearance()">▶ Generate & Speak Clearance</button>
+                <button id="pauseResumeBtn" onclick="togglePauseResume()" disabled>⏸ Replay/Pause/Resume</button>
+                <button id="stopBtn" onclick="stopPlayback()" disabled>⏹ Stop</button>
+            </div>
+
+            <div class="button-group">
+                <button onclick="toggleAnswer()">
+                    <span id="toggleIcon">🔍</span> 
+                    <span id="toggleText">Show Clearance</span>
+                </button>
+            </div>
+
+            <div class="shortcut-hints-container">
+                <div class="shortcut-hints">
+                    <kbd>Space</kbd>Replay/Pause/Resume | 
+                    <kbd>R</kbd>Regenerate | 
+                    <kbd>H</kbd>Hide Clearance
+                </div>
+            </div>
+
+            <div id="answer"></div>
+
+            <!-- Debug / Voice Info (visible to developer)
+            <div style="display:flex;flex-direction:column;align-items:center;margin-top:0.8rem;">
+                <button id="listVoicesBtn" style="padding:0.5rem 0.8rem;border-radius:6px;border:none;cursor:pointer;">List available voices</button>
+                <div id="voiceInfo" style="margin-top:8px;font-size:0.95rem;color:#333"></div>
+                <pre id="availableVoicesList" style="max-height:160px;overflow:auto;margin-top:8px;padding:8px;width:90%;display:none;background:#fff;border-radius:6px;border:1px solid #e0e0e0;"></pre>
+            </div>
+            -->
+
+            <script>
+                const GOOGLE_TTS_API_KEY = 'AIzaSyB8kUi4-oUJgYZQFidBvtGsjLrS1dxw1W4';
+
+                const ACCENT_VOICES = {
+                    "australian": {
+                        "standard": ["en-AU-Standard-A","en-AU-Standard-B","en-AU-Standard-C","en-AU-Standard-D"],
+                        "wavenet": ["en-AU-Wavenet-A","en-AU-Wavenet-B","en-AU-Wavenet-C","en-AU-Wavenet-D"],
+                        "chirp3": [
+                            "en-AU-Chirp3-HD-Achernar",
+                            "en-AU-Chirp3-HD-Achird",
+                            "en-AU-Chirp3-HD-Algenib",
+                            "en-AU-Chirp3-HD-Algieba",
+                            "en-AU-Chirp3-HD-Alnilam",
+                            "en-AU-Chirp3-HD-Aoede",
+                            "en-AU-Chirp3-HD-Autonoe",
+                            "en-AU-Chirp3-HD-Callirrhoe",
+                            "en-AU-Chirp3-HD-Charon",
+                            "en-AU-Chirp3-HD-Despina",
+                            "en-AU-Chirp3-HD-Enceladus",
+                            "en-AU-Chirp3-HD-Erinome",
+                            "en-AU-Chirp3-HD-Fenrir",
+                            "en-AU-Chirp3-HD-Gacrux",
+                            "en-AU-Chirp3-HD-Iapetus",
+                            "en-AU-Chirp3-HD-Kore",
+                            "en-AU-Chirp3-HD-Laomedeia",
+                            "en-AU-Chirp3-HD-Leda",
+                            "en-AU-Chirp3-HD-Orus",
+                            "en-AU-Chirp3-HD-Puck",
+                            "en-AU-Chirp3-HD-Pulcherrima",
+                            "en-AU-Chirp3-HD-Rasalgethi",
+                            "en-AU-Chirp3-HD-Sadachbia",
+                            "en-AU-Chirp3-HD-Sadaltager",
+                            "en-AU-Chirp3-HD-Schedar",
+                            "en-AU-Chirp3-HD-Sulafat",
+                            "en-AU-Chirp3-HD-Umbriel",
+                            "en-AU-Chirp3-HD-Vindemiatrix",
+                            "en-AU-Chirp3-HD-Zephyr",
+                            "en-AU-Chirp3-HD-Zubenelgenubi"
+                        ]
+                    },
+                    "american": {
+                        "standard": ["en-US-Standard-A","en-US-Standard-B","en-US-Standard-C","en-US-Standard-D"],
+                        "wavenet": ["en-US-Wavenet-F","en-US-Wavenet-G","en-US-Wavenet-H","en-US-Wavenet-I","en-US-Wavenet-J"],
+                        "chirp3": [
+                            "en-US-Chirp3-HD-Achernar",
+                            "en-US-Chirp3-HD-Achird",
+                            "en-US-Chirp3-HD-Algenib",
+                            "en-US-Chirp3-HD-Algieba",
+                            "en-US-Chirp3-HD-Alnilam",
+                            "en-US-Chirp3-HD-Aoede",
+                            "en-US-Chirp3-HD-Autonoe",
+                            "en-US-Chirp3-HD-Callirrhoe",
+                            "en-US-Chirp3-HD-Charon",
+                            "en-US-Chirp3-HD-Despina",
+                            "en-US-Chirp3-HD-Enceladus",
+                            "en-US-Chirp3-HD-Orus",
+                            "en-US-Chirp3-HD-Puck"
+                        ]
+                    },
+                    "british": {
+                        "standard": ["en-GB-Standard-A","en-GB-Standard-B","en-GB-Standard-C","en-GB-Standard-D"],
+                        "wavenet": ["en-GB-Wavenet-A","en-GB-Wavenet-B","en-GB-Wavenet-C","en-GB-Wavenet-D","en-GB-Wavenet-F","en-GB-Wavenet-N","en-GB-Wavenet-O"],
+                        "chirp3": []
+                    },
+                    "indian": {
+                        "standard": ["en-IN-Standard-A","en-IN-Standard-B","en-IN-Standard-C"],
+                        "wavenet": ["en-IN-Wavenet-A","en-IN-Wavenet-B","en-IN-Wavenet-C","en-IN-Wavenet-D"],
+                        "chirp3": [
+                            "en-IN-Chirp3-HD-Achernar",
+                            "en-IN-Chirp3-HD-Achird",
+                            "en-IN-Chirp3-HD-Algenib",
+                            "en-IN-Chirp3-HD-Algieba",
+                            "en-IN-Chirp3-HD-Alnilam",
+                            "en-IN-Chirp3-HD-Aoede",
+                            "en-IN-Chirp3-HD-Autonoe",
+                            "en-IN-Chirp3-HD-Gacrux",
+                            "en-IN-Chirp3-HD-Iapetus",
+                            "en-IN-Chirp3-HD-Kore",
+                            "en-IN-Chirp3-HD-Laomedeia",
+                            "en-IN-Chirp3-HD-Leda",
+                            "en-IN-Chirp3-HD-Orus",
+                            "en-IN-Chirp3-HD-Puck",
+                            "en-IN-Chirp3-HD-Pulcherrima"
+                        ]
+                    },
+                    "southeast_asia": {
+                        "standard": ["en-SG-Standard-A"],
+                        "wavenet": ["en-SG-Wavenet-A"],
+                        "chirp3": []
+                    }
+                };
+
+                /* ------------------------------------------------------------------
+                 * TTS / Voice helpers
+                 * - `fetchAvailableVoices()` caches the result on `window._availableTtsVoices`.
+                 * - `ttsSynthesize(...)` performs a single synthesize call and returns {response, data}.
+                 * - `updateVoiceInfo(...)` updates a small debug area in the page so devs know
+                 *    which voice and pitch setting were used for the last request.
+                 * Notes:
+                 * - Keep these helpers small and side-effect free where possible.
+                 * - If the provider changes (new endpoint or payload), update `ttsSynthesize` only.
+                 * ------------------------------------------------------------------ */
+
+                async function fetchAvailableVoices() {
+                    if (window._availableTtsVoices) return window._availableTtsVoices;
+                    try {
+                        setStatus('Fetching available voices...', 'loading');
+                        const resp = await fetch(`https://texttospeech.googleapis.com/v1/voices?key=${GOOGLE_TTS_API_KEY}`);
+                        const data = await resp.json();
+                        if (!resp.ok) {
+                            console.warn('Could not fetch available voices:', data);
+                            setStatus('Failed to fetch voices: ' + (data && data.error && data.error.message ? data.error.message : resp.statusText), 'error');
+                            window._availableTtsVoices = [];
+                            return window._availableTtsVoices;
+                        }
+                        const names = (data.voices || []).flatMap(v => (v.name ? [v.name] : []));
+                        window._availableTtsVoices = names;
+                        setStatus('Available voices fetched: ' + names.length + ' voices', 'success');
+                        return names;
+                    } catch (e) {
+                        console.warn('Fetching available voices failed:', e);
+                        setStatus('Fetching voices failed: ' + (e && e.message ? e.message : e), 'error');
+                        window._availableTtsVoices = [];
+                        return [];
+                        }
+                    }
+
+                    // Try to read a local voice list file (newline-separated). Cache on window._localVoiceList.
+                    async function fetchLocalVoiceList() {
+                        if (window._localVoiceList) return window._localVoiceList;
+                        try {
+                            const resp = await fetch('local_voice_list.json');
+                            if (!resp.ok) {
+                                console.warn('Could not fetch local_voice_list.json:', resp.statusText);
+                                window._localVoiceList = [];
+                                return window._localVoiceList;
+                            }
+                            const text = await resp.text();
+                            // Support both JSON array or simple newline-separated lines.
+                            let list = [];
+                            try {
+                                const parsed = JSON.parse(text);
+                                if (Array.isArray(parsed)) list = parsed.map(String).map(s => s.trim()).filter(Boolean);
+                            } catch (e) {
+                                // not JSON — treat as newline-separated plain text
+                                list = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+                            }
+                            window._localVoiceList = list;
+                            if (list.length) setStatus('Loaded local voice list: ' + list.length + ' entries', 'success');
+                            return list;
+                        } catch (e) {
+                            console.warn('Loading local voice list failed:', e);
+                            window._localVoiceList = [];
+                            return [];
+                        }
+                    }
+
+                async function ttsSynthesize(selectedVoice, languageCode, text, speed, includePitch) {
+                    const audioConfig = { audioEncoding: 'MP3', speakingRate: speed };
+                    if (includePitch) audioConfig.pitch = Math.random() * 2 - 1;
+
+                    const response = await fetch(
+                        `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_TTS_API_KEY}`,
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                input: { text: text },
+                                voice: { languageCode: languageCode, name: selectedVoice },
+                                audioConfig: audioConfig
+                            })
+                        }
+                    ).catch(err => ({ ok: false, error: err }));
+
+                    const data = await (response && response.json ? response.json().catch(() => ({})) : {});
+                    // annotate result for debugging consumers
+                    if (response && response.ok) setStatus('Synthesis request successful', 'success');
+                    return { response, data };
+                }
+
+                function updateVoiceInfo(voiceName, pitchUsed) {
+                    try {
+                        const el = document.getElementById('voiceInfo');
+                        if (!el) return;
+                        const time = new Date().toLocaleTimeString();
+                        el.textContent = `Last voice: ${voiceName} | pitch used: ${pitchUsed ? 'yes' : 'no'} | ${time}`;
+                    } catch (e) { /* non-fatal */ }
+                }
+
+                // Status bar helper: show information to the user/developer.
+                function setStatus(message, type = 'info') {
+                    try {
+                        const bar = document.getElementById('statusBar');
+                        const msg = document.getElementById('statusMessage');
+                        const ts = document.getElementById('statusTimestamp');
+                        const spinner = document.getElementById('statusSpinner');
+                        if (!bar || !msg) return;
+                        // set class
+                        bar.classList.remove('info','success','error','loading');
+                        bar.classList.add(type || 'info');
+                        msg.textContent = message || '';
+                        ts.textContent = new Date().toLocaleTimeString();
+                        if (spinner) {
+                            spinner.style.display = (type === 'loading') ? 'inline-block' : 'none';
+                        }
+                    } catch (e) {
+                        // don't break app for status UI failures
+                        console.warn('setStatus failed', e);
+                    }
+                }
+
+
+                const aviationMap = {
+                    'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta',
+                    'E': 'Echo', 'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel',
+                    'I': 'India', 'J': 'Juliet', 'K': 'Kilo', 'L': 'Lima',
+                    'M': 'Mike', 'N': 'November', 'O': 'Oscar', 'P': 'Papa',
+                    'Q': 'Quebec', 'R': 'Romeo', 'S': 'Sierra', 'T': 'Tango',
+                    'U': 'Uniform', 'V': 'Victor', 'W': 'Whiskey', 'X': 'Xray',
+                    'Y': 'Yankee', 'Z': 'Zulu'
+                };
+
+                const aviationNumbers = {
+                    '0': 'Zero', '1': 'One', '2': 'Two',
+                    '3': 'Tree', '4': 'Four', '5': 'Five',
+                    '6': 'Six', '7': 'Seven', '8': 'Eight',
+                    '9': 'Niner'
+                };
+
+                const DESTINATIONS = {
+                    "YMML": "Melbourne",
+                    "YBBN": "Brisbane",
+                    "YPAD": "Adelaide",
+                    "YPPH": "Perth",
+                    "YBCS": "Cairns",
+                    "YBTL": "Townsville",
+                    "YSCB": "Canberra",
+                    "YPLC": "Port Lincoln",
+                    "YBAS": "Alice Springs",
+                    "YPPD": "Port Hedland",
+                    "NZAA": "Auckland",
+                    "NZWN": "Wellington",
+                    "NZCH": "Christchurch",
+                    "NZQN": "Queenstown",
+                    "NZRO": "Rotorua",
+                    "WSSS": "Singapore",
+                    "WMKK": "Kuala Lumpur",
+                    "VTBS": "Bangkok Suvarnabhumi",
+                    "VHHH": "Hong Kong",
+                    "RJTT": "Tokyo Haneda",
+                    "RJAA": "Tokyo Narita",
+                    "RKSI": "Seoul Incheon",
+                    "RCTP": "Taipei Taoyuan",
+                    "ZBAA": "Beijing Capital",
+                    "ZSPD": "Shanghai Pudong",
+                    "KLAX": "Los Angeles",
+                    "KSFO": "San Francisco",
+                    "KSEA": "Seattle",
+                    "KJFK": "New York Kennedy",
+                    "KEWR": "Newark",
+                    "KORD": "Chicago O'Hare",
+                    "KDFW": "Dallas Fort Worth",
+                    "KDEN": "Denver",
+                    "EGLL": "London Heathrow",
+                    "EGKK": "London Gatwick",
+                    "LFPG": "Paris Charles de Gaulle",
+                    "EDDF": "Frankfurt",
+                    "EHAM": "Amsterdam Schiphol",
+                    "LEMD": "Madrid",
+                    "LIBD": "Bari",
+                    "LSZH": "Zurich",
+                    "LIMC": "Milan Malpensa",
+                    "LOWW": "Vienna",
+                };
+
+                const RUNWAYS = {
+                    "16L": "One Six Left",
+                    "16R": "One Six Right",
+                    "34L": "Three Four Left",
+                    "34R": "Three Four Right",
+                    "25": "Two Five",
+                    "07": "Zero Seven"
+                };
+
+                const SIDS = {
+                    "SYDNEY THREE": {
+                        "pronunciation": "Sydney Tree",
+                        "transitions": ["Radar"]
+                    },
+                    "RICHMOND": {
+                        "pronunciation": "Richmond",
+                        "transitions": ["RICHMOND", "Radar"]
+                    },
+                    "KADOM ONE": {
+                        "pronunciation": "Kadom One",
+                        "transitions": ["Kadom"]
+                    },
+                    "WOL TWO": {
+                        "pronunciation": "Wollongong Two",
+                        "transitions": ["Wollongong"]
+                    },
+                    "ABBEY THREE": {
+                        "pronunciation": "Abbey Three",
+                        "transitions": ["Wollongong" ]
+                    },
+                    "KEVIN SEVEN": {
+                        "pronunciation": "Kevin Seven",
+                        "transitions": ["Radar", "Cawly","dipso","evonn","nobar","olsem","optic" ]
+                    },
+                    "MARUB": {
+                        "pronunciation": "Marub",
+                        "transitions": ["Wollongong", "Radar"]
+                    },
+                };
+
+                const INITIAL_ALTS = [5000, 6000, 7000, 8000, 9000];
+                const DEP_FREQUENCIES = [123.0, 129.7, 118.9, 121.9, 125.5, 127.6];
+
+                const CARRIERS = {
+                    "QFA": "QANTAS",
+                    "AAL": "AMERICAN",
+                    "BAW": "SPEEDBIRD",
+                    "DAL": "DELTA",
+                    "UAL": "UNITED",
+                    "AFR": "AIR FRANS",
+                    "DLH": "LUFTHANSA",
+                    "KLM": "KLM",
+                    "SVA": "SAUDIA",
+                    "SWR": "SWISS",
+                    "EZY": "EASY",
+                    "RYR": "RYANAIR",
+                    "ACA": "AIR CANADA",
+                    "JAL": "JAPAN AIR",
+                    "ANA": "ALL NIPPON",
+                    "SIA": "SINGAPORE",
+                    "MAS": "MALAYSIAN",
+                    "CCA": "AIR CHINA",
+                    "CES": "CHINA EASTERN",
+                    "CSN": "CHINA SOUTHERN",
+                    "CPA": "CATHAY",
+                    "HVN": "VIETNAM AIRLINES",
+                    "JST": "JETSTAR",
+                    "VOZ": "VELOCITY",
+                    "RXA": "REX",
+                    "QLK": "Q-LINK"
+                };
+
+                let currentAudio = null;
+                let currentClearance = {};
+
+                function getRandomItem(arr) {
+                    return arr[Math.floor(Math.random() * arr.length)];
+                }
+
+                function getRandomInRange(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+                function generateSquawkCode() {
+                    let code = '';
+                    for (let i = 0; i < 4; i++) {
+                        code += getRandomInRange(0, 7);
+                    }
+                    return code;
+                }
+
+                function generateCallsign() {
+                    const carriers = Object.keys(CARRIERS);
+                    const icao = getRandomItem(carriers);
+                    const flightNum = getRandomInRange(100, 9999).toString();
+                    return icao + flightNum;
+                }
+
+                function generateClearance() {
+                    const callsignCode = generateCallsign();
+                    const carriers = Object.keys(CARRIERS);
+                    const icao = callsignCode.substring(0, 3);
+                    const carrierName = CARRIERS[icao] || icao;
+                    const flightNum = callsignCode.substring(3);
+
+                    // 生成运输航空呼号的语音版本 (参照 Radio_Call_Practice_en.html 的 playTransportAirline 方法)
+                    let callsignSpoken = carrierName;
+                    const len = flightNum.length;
+                    
+                    if (len === 3) {
+                        // 3位数字逐位读
+                        const digitSpoken = flightNum.split('').map(d => convertSingleNumber(d)).join(' ');
+                        callsignSpoken += ` ${digitSpoken}`;
+                    } else {
+                        // 4位数字分组读（两两分组）
+                        const res = processFormat1(parseInt(flightNum));
+                        callsignSpoken += ` ${res[0]}`;
+                    }
+
+                    const destKeys = Object.keys(DESTINATIONS);
+                    const destIcao = getRandomItem(destKeys);
+                    const destName = DESTINATIONS[destIcao];
+
+                    const sidKeys = Object.keys(SIDS);
+                    const sidCode = getRandomItem(sidKeys);
+                    const sidData = SIDS[sidCode];
+                    const transition = getRandomItem(sidData.transitions);
+
+                    const alt = getRandomItem(INITIAL_ALTS);
+                    const squawk = generateSquawkCode();
+                    const freq = getRandomItem(DEP_FREQUENCIES);
+                    
+                    // 生成随机跑道
+                    const runwayKeys = Object.keys(RUNWAYS);
+                    const runway = getRandomItem(runwayKeys);
+                    const runwaySpoken = RUNWAYS[runway];
+
+                    currentClearance = {
+                        callsign: callsignCode,
+                        callsignSpoken: callsignSpoken,
+                        carrierName: carrierName,
+                        destination: destName,
+                        destIcao: destIcao,
+                        sid: sidCode,
+                        sidPronunciation: sidData.pronunciation,
+                        transition: transition,
+                        alt: alt,
+                        squawk: squawk,
+                        frequency: freq,
+                        runway: runway,
+                        runwaySpoken: runwaySpoken,
+                        runways: runway
+                    };
+
+                    return currentClearance;
+                }
+
+                function formatFrequency(freq) {
+                    const parts = freq.toString().split('.');
+                    const whole = parts[0];
+                    const decimal = parts[1] || '0';
+
+                    const wholeSpoken = whole.split('').map(d => aviationNumbers[d] || d).join(' ');
+                    const decimalSpoken = decimal.split('').map(d => aviationNumbers[d] || d).join(' ');
+
+                    return `${wholeSpoken} decimal ${decimalSpoken}`;
+                }
+
+                function formatSquawk(sq) {
+                    if (!sq) return '';
+                    return sq.toString().split('').map(d => aviationNumbers[d] || d).join(' ');
+                }
+
+                function convertNumberToWords(numStr) {
+                    const ones = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'niner'];
+                    return numStr.split('').map(d => ones[parseInt(d)] || 'zero').join(' ');
+                }
+
+                function getClearanceText() {
+                    const c = currentClearance;
+                    const squawkSpoken = formatSquawk(c.squawk);
+                    const freqSpoken = formatFrequency(c.frequency);
+                    return `${c.callsign}, Sydney Delivery, cleared to ${c.destination} via ${c.sid}, flight planned route, ${c.runways}, ${c.sid} departure ${c.transition}, transition, climb via SID ${c.alt} feet, squawk ${c.squawk}, departure frequency ${c.frequency}, readback.`;
+                }
+
+                function updateAnswer() {
+                    const clearanceText = getClearanceText();
+                    const answerDiv = document.getElementById('answer');
+                    answerDiv.textContent = clearanceText;
+                }
+
+                function toggleAnswer() {
+                    const answerDiv = document.getElementById('answer');
+                    const toggleIcon = document.getElementById('toggleIcon');
+                    const toggleText = document.getElementById('toggleText');
+
+                    if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
+                        answerDiv.style.display = 'block';
+                        toggleIcon.textContent = '👁';
+                        toggleText.textContent = 'Hide Clearance';
+                    } else {
+                        answerDiv.style.display = 'none';
+                        toggleIcon.textContent = '🔍';
+                        toggleText.textContent = 'Show Clearance';
+                    }
+                }
+
+                function generateSpeechText() {
+                    const c = currentClearance;
+                    const freqSpoken = formatFrequency(c.frequency);
+                    const squawkSpoken = formatSquawk(c.squawk);
+
+                    return `${c.callsignSpoken}, Sydney Delivery, cleared to ${c.destination} via ${c.sidPronunciation}, flight planned route, runway ${c.runwaySpoken}, ${c.sidPronunciation} departure, ${c.transition} transition, climb via sid ${c.alt} feet, squawk ${squawkSpoken}, departure frequency ${freqSpoken}, readback.`;
+                }
+
+                async function speakText(text) {
+                    const speed = parseFloat(document.getElementById('speed').value);
+                    const selectedAccent = document.getElementById('accentSelect').value || 'australian';
+                    const selectedCategory = document.getElementById('voiceCategorySelect') ? document.getElementById('voiceCategorySelect').value : 'standard';
+
+                    // Build candidate voices based on accent + category. Support 'mixed' to combine all accents.
+                    let voices = [];
+                    if (selectedAccent === 'mixed') {
+                        for (const accKey in ACCENT_VOICES) {
+                            const list = ACCENT_VOICES[accKey] && ACCENT_VOICES[accKey][selectedCategory];
+                            if (Array.isArray(list) && list.length) voices = voices.concat(list);
+                        }
+                    } else {
+                        const accObj = ACCENT_VOICES[selectedAccent] || {};
+                        voices = accObj[selectedCategory] || [];
+                    }
+
+                    // Fallback strategy: if requested category is empty, try other categories for the same accent(s)
+                    if (!voices || voices.length === 0) {
+                        const fallbackOrder = ['standard', 'wavenet', 'chirp3'];
+                        for (const cat of fallbackOrder) {
+                            if (cat === selectedCategory) continue;
+                            if (selectedAccent === 'mixed') {
+                                for (const accKey in ACCENT_VOICES) {
+                                    const list = ACCENT_VOICES[accKey] && ACCENT_VOICES[accKey][cat];
+                                    if (Array.isArray(list) && list.length) voices = voices.concat(list);
+                                }
+                            } else {
+                                const accObj = ACCENT_VOICES[selectedAccent] || {};
+                                const list = accObj[cat] || [];
+                                if (Array.isArray(list) && list.length) voices = list;
+                            }
+                            if (voices && voices.length) break;
+                        }
+                    }
+
+                    // Final fallback: gather any voice available across all accents/categories
+                    if (!voices || voices.length === 0) {
+                        for (const accKey in ACCENT_VOICES) {
+                            for (const cat in ACCENT_VOICES[accKey]) {
+                                const list = ACCENT_VOICES[accKey][cat] || [];
+                                if (Array.isArray(list) && list.length) voices = voices.concat(list);
+                            }
+                        }
+                    }
+
+                    // Prefer voices present in the local voice list file. If none match or loading fails,
+                    // fall back to querying available voices online (Google TTS). Cache local list in window._localVoiceList.
+                    const localList = await fetchLocalVoiceList();
+                    let filteredVoices = [];
+                    let usedLocalSelection = false;
+
+                    if (localList && localList.length) {
+                        filteredVoices = (voices || []).filter(v => localList.includes(v));
+                        if (filteredVoices && filteredVoices.length) {
+                            usedLocalSelection = true;
+                            setStatus('Selecting from local voice list (' + filteredVoices.length + ' candidates)', 'info');
+                        }
+                    }
+
+                    // If local selection yielded nothing, query online available voices and filter.
+                    if (!filteredVoices || filteredVoices.length === 0) {
+                        const available = await fetchAvailableVoices();
+                        filteredVoices = (voices || []).filter(v => available.length === 0 || available.includes(v));
+                    }
+
+                    // Final fallback: use any candidate voice from `voices` or a default.
+                    if (!filteredVoices || filteredVoices.length === 0) {
+                        filteredVoices = (voices && voices.length) ? voices.slice() : [];
+                    }
+
+                    let selectedVoice = (filteredVoices && filteredVoices.length) ? filteredVoices[Math.floor(Math.random() * filteredVoices.length)] : 'en-US-Standard-A';
+                    let languageCode = selectedVoice.split('-').slice(0, 2).join('-');
+
+                    setStatus('Selected voice: ' + selectedVoice + (usedLocalSelection ? ' (local preferred)' : ''), 'info');
+
+                    try {
+                        // Some voice types (reported: Chirp3) may not support the `pitch` parameter.
+                        // We attempt to include pitch based on a simple name heuristic, and retry without pitch
+                        // if the API errors mention pitch. The actual synthesize work is delegated to
+                        // `ttsSynthesize(...)` so the network logic stays in one place.
+                        const supportsPitchGuess = !/Chirp3|Chirp/i.test(selectedVoice);
+
+                        setStatus('Synthesizing speech...', 'loading');
+                        let result = await ttsSynthesize(selectedVoice, languageCode, text, speed, supportsPitchGuess);
+                        let pitchUsed = supportsPitchGuess;
+
+                        if (!result.response.ok) {
+                            const errMsg = (result.data && result.data.error && result.data.error.message) ? result.data.error.message : JSON.stringify(result.data || {});
+                            console.warn('TTS API error (first attempt):', errMsg);
+                            if (/pitch/i.test(errMsg) && supportsPitchGuess) {
+                                // retry once without pitch
+                                setStatus('Retrying synthesis without pitch...', 'info');
+                                result = await ttsSynthesize(selectedVoice, languageCode, text, speed, false);
+                                pitchUsed = false;
+                            }
+                        }
+
+                        // If the request failed and we originally picked a local voice, try an online fallback.
+                        if (!result.response.ok && usedLocalSelection) {
+                            try {
+                                setStatus('Local voice failed — falling back to online voices...', 'info');
+                                const available = await fetchAvailableVoices();
+                                const onlineCandidates = (voices || []).filter(v => available.length === 0 || available.includes(v));
+                                if (onlineCandidates && onlineCandidates.length) {
+                                    const altVoice = onlineCandidates[Math.floor(Math.random() * onlineCandidates.length)];
+                                    const altLang = altVoice.split('-').slice(0,2).join('-');
+                                    const altSupportsPitch = !/Chirp3|Chirp/i.test(altVoice);
+                                    const altResult = await ttsSynthesize(altVoice, altLang, text, speed, altSupportsPitch);
+                                    if (altResult.response && altResult.response.ok && altResult.data && altResult.data.audioContent) {
+                                        result = altResult;
+                                        selectedVoice = altVoice;
+                                        languageCode = altLang;
+                                        pitchUsed = altSupportsPitch;
+                                    }
+                                }
+                            } catch (e) {
+                                console.warn('Fallback to online voices failed:', e);
+                            }
+                        }
+
+                        if (!result.response.ok) {
+                            console.error('TTS API error response:', result.data);
+                            const msg = result.data && result.data.error && result.data.error.message ? result.data.error.message : 'Unknown TTS error';
+                            setStatus('TTS synthesis failed: ' + msg, 'error');
+                            alert('TTS synthesis failed: ' + msg);
+                            updateVoiceInfo(selectedVoice, pitchUsed);
+                            return;
+                        }
+
+                        const audioContent = result.data && result.data.audioContent;
+                        if (!audioContent) {
+                            console.error('TTS response did not include audioContent:', result.data);
+                            alert('TTS synthesis returned no audio. See console for details.');
+                            updateVoiceInfo(selectedVoice, pitchUsed);
+                            return;
+                        }
+                        const blob = base64ToBlob(audioContent, 'audio/mp3');
+
+                        const atcEnabled = document.getElementById('atcToneCheckbox') && document.getElementById('atcToneCheckbox').checked;
+                        let playBlob = blob;
+                        if (atcEnabled) {
+                            try {
+                                playBlob = await renderBlobWithATCEffect(blob);
+                            } catch (err) {
+                                console.warn('ATC processing failed, playing original audio. Error:', err);
+                                playBlob = blob;
+                            }
+                        }
+
+                        const url = URL.createObjectURL(playBlob);
+
+                        if (currentAudio) {
+                            currentAudio.pause();
+                            try { URL.revokeObjectURL(currentAudio.src); } catch (e) {}
+                        }
+
+                        currentAudio = new Audio(url);
+                        currentAudio.addEventListener('play', updateButtonState);
+                        currentAudio.addEventListener('pause', updateButtonState);
+                        currentAudio.addEventListener('ended', updateButtonState);
+                        currentAudio.play();
+                        // Update debug UI with which voice and whether pitch was used
+                        try { updateVoiceInfo(selectedVoice, typeof pitchUsed !== 'undefined' ? pitchUsed : !/Chirp3|Chirp/i.test(selectedVoice)); } catch (e) {}
+                        setStatus('Playback started (voice: ' + selectedVoice + ')', 'success');
+                    } catch (error) {
+                        console.error('TTS synthesis failed:', error);
+                        setStatus('TTS synthesis failed — check API key and network.', 'error');
+                        alert('TTS synthesis failed — check API key and network.');
+                    }
+                }
+
+                function base64ToBlob(base64Data, contentType = '', sliceSize = 512) {
+                    const byteCharacters = atob(base64Data);
+                    const byteArrays = [];
+                    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                        const slice = byteCharacters.slice(offset, offset + sliceSize);
+                        const byteNumbers = new Array(slice.length);
+                        for (let i = 0; i < slice.length; i++) {
+                            byteNumbers[i] = slice.charCodeAt(i);
+                        }
+                        byteArrays.push(new Uint8Array(byteNumbers));
+                    }
+                    return new Blob(byteArrays, { type: contentType });
+                }
+
+                async function renderBlobWithATCEffect(mp3blob) {
+                    const arrayBuffer = await mp3blob.arrayBuffer();
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const decoded = await audioCtx.decodeAudioData(arrayBuffer);
+
+                    const offlineCtx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(decoded.numberOfChannels, decoded.length, decoded.sampleRate);
+
+                    const src = offlineCtx.createBufferSource();
+                    src.buffer = decoded;
+
+                    const bandpass = offlineCtx.createBiquadFilter();
+                    bandpass.type = 'bandpass';
+                    bandpass.frequency.value = 1000;
+                    bandpass.Q.value = 0.8;
+
+                    const lowpass = offlineCtx.createBiquadFilter();
+                    lowpass.type = 'lowpass';
+                    lowpass.frequency.value = 3000;
+                    lowpass.Q.value = 0.7;
+
+                    const highpass = offlineCtx.createBiquadFilter();
+                    highpass.type = 'highpass';
+                    highpass.frequency.value = 300;
+                    highpass.Q.value = 0.7;
+
+                    const waveShaper = offlineCtx.createWaveShaper();
+                    waveShaper.curve = makeDistortionCurve(1.5);
+                    waveShaper.oversample = '2x';
+
+                    const compressor = offlineCtx.createDynamicsCompressor();
+                    compressor.threshold.value = -30;
+                    compressor.knee.value = 20;
+                    compressor.ratio.value = 4;
+                    compressor.attack.value = 0.005;
+                    compressor.release.value = 0.2;
+
+                    const masterGain = offlineCtx.createGain();
+                    masterGain.gain.value = 0.95;
+
+                    const amLFO = offlineCtx.createOscillator();
+                    const amGain = offlineCtx.createGain();
+                    amLFO.type = 'sine';
+                    amLFO.frequency.value = 3.5 + Math.random() * 2.5;
+                    amGain.gain.value = 0.06;
+                    amLFO.connect(amGain);
+                    amGain.connect(masterGain.gain);
+
+                    const pitchLFO = offlineCtx.createOscillator();
+                    const pitchGain = offlineCtx.createGain();
+                    pitchLFO.type = 'sine';
+                    pitchLFO.frequency.value = 5 + Math.random() * 4;
+                    pitchGain.gain.value = 0.012;
+                    pitchLFO.connect(pitchGain);
+                    pitchGain.connect(src.playbackRate);
+
+                    const noiseBuffer = offlineCtx.createBuffer(1, decoded.length, decoded.sampleRate);
+                    const noiseData = noiseBuffer.getChannelData(0);
+                    for (let i = 0; i < noiseData.length; i++) {
+                        noiseData[i] = (Math.random() * 2 - 1) * 0.02;
+                    }
+                    const noiseSrc = offlineCtx.createBufferSource();
+                    noiseSrc.buffer = noiseBuffer;
+                    noiseSrc.loop = false;
+                    const noiseGain = offlineCtx.createGain();
+                    noiseGain.gain.value = 0.02;
+
+                    const durationSec = decoded.duration || (decoded.length / decoded.sampleRate);
+                    const bursts = Math.max(1, Math.floor(durationSec / 3));
+                    for (let b = 0; b < bursts; b++) {
+                        const start = Math.random() * durationSec;
+                        const burstLen = 0.08 + Math.random() * 0.18;
+                        noiseGain.gain.setValueAtTime(0.02, start);
+                        noiseGain.gain.linearRampToValueAtTime(0.16 + Math.random() * 0.12, start + 0.005);
+                        noiseGain.gain.linearRampToValueAtTime(0.02, start + burstLen);
+                    }
+
+                    const highToneOsc = offlineCtx.createOscillator();
+                    highToneOsc.type = 'sine';
+                    highToneOsc.frequency.value = 200;
+                    const highToneGain = offlineCtx.createGain();
+                    highToneGain.gain.value = 0.01;
+
+                    src.connect(waveShaper);
+                    waveShaper.connect(bandpass);
+                    bandpass.connect(highpass);
+                    highpass.connect(lowpass);
+                    lowpass.connect(compressor);
+                    compressor.connect(masterGain);
+                    masterGain.connect(offlineCtx.destination);
+
+                    noiseSrc.connect(noiseGain);
+                    noiseGain.connect(compressor);
+
+                    highToneOsc.connect(highToneGain);
+                    highToneGain.connect(compressor);
+
+                    src.start(0);
+                    noiseSrc.start(0);
+                    amLFO.start(0);
+                    pitchLFO.start(0);
+                    highToneOsc.start(0);
+
+                    const rendered = await offlineCtx.startRendering();
+
+                    function getPeak(buf) {
+                        let peak = 0;
+                        for (let ch = 0; ch < buf.numberOfChannels; ch++) {
+                            const data = buf.getChannelData(ch);
+                            for (let i = 0; i < data.length; i++) {
+                                const v = Math.abs(data[i]);
+                                if (v > peak) peak = v;
+                            }
+                        }
+                        return peak;
+                    }
+
+                    const origPeak = Math.max(getPeak(decoded), 1e-9);
+                    const renderedPeak = Math.max(getPeak(rendered), 1e-9);
+                    let neededGain = origPeak / renderedPeak;
+
+                    if (neededGain > 0 && Math.abs(neededGain - 1) > 1e-3) {
+                        let maxAfter = 0;
+                        for (let ch = 0; ch < rendered.numberOfChannels; ch++) {
+                            const data = rendered.getChannelData(ch);
+                            for (let i = 0; i < data.length; i++) {
+                                data[i] = data[i] * neededGain;
+                                const v = Math.abs(data[i]);
+                                if (v > maxAfter) maxAfter = v;
+                            }
+                        }
+                        if (maxAfter > 1) {
+                            const reduce = 1 / maxAfter;
+                            for (let ch = 0; ch < rendered.numberOfChannels; ch++) {
+                                const data = rendered.getChannelData(ch);
+                                for (let i = 0; i < data.length; i++) {
+                                    data[i] = data[i] * reduce;
+                                }
+                            }
+                        }
+                    }
+
+                    const wavBlob = audioBufferToWavBlob(rendered);
+                    audioCtx.close();
+                    return wavBlob;
+                }
+
+                function makeDistortionCurve(amount) {
+                    const k = typeof amount === 'number' ? amount : 50;
+                    const nSamples = 44100;
+                    const curve = new Float32Array(nSamples);
+                    const deg = Math.PI / 180;
+                    for (let i = 0; i < nSamples; ++i) {
+                        const x = i * 2 / nSamples - 1;
+                        curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
+                    }
+                    return curve;
+                }
+
+                function audioBufferToWavBlob(buffer) {
+                    const numOfChan = buffer.numberOfChannels;
+                    const length = buffer.length * numOfChan * 2 + 44;
+                    const bufferArray = new ArrayBuffer(length);
+                    const view = new DataView(bufferArray);
+
+                    function writeString(view, offset, string) {
+                        for (let i = 0; i < string.length; i++) {
+                            view.setUint8(offset + i, string.charCodeAt(i));
+                        }
+                    }
+
+                    let offset = 0;
+                    writeString(view, offset, 'RIFF'); offset += 4;
+                    view.setUint32(offset, 36 + buffer.length * numOfChan * 2, true); offset += 4;
+                    writeString(view, offset, 'WAVE'); offset += 4;
+                    writeString(view, offset, 'fmt '); offset += 4;
+                    view.setUint32(offset, 16, true); offset += 4;
+                    view.setUint16(offset, 1, true); offset += 2;
+                    view.setUint16(offset, numOfChan, true); offset += 2;
+                    view.setUint32(offset, buffer.sampleRate, true); offset += 4;
+                    view.setUint32(offset, buffer.sampleRate * numOfChan * 2, true); offset += 4;
+                    view.setUint16(offset, numOfChan * 2, true); offset += 2;
+                    view.setUint16(offset, 16, true); offset += 2;
+                    writeString(view, offset, 'data'); offset += 4;
+                    view.setUint32(offset, buffer.length * numOfChan * 2, true); offset += 4;
+
+                    for (let i = 0; i < buffer.length; i++) {
+                        for (let channel = 0; channel < numOfChan; channel++) {
+                            const sample = buffer.getChannelData(channel)[i];
+                            const s = Math.max(-1, Math.min(1, sample));
+                            view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+                            offset += 2;
+                        }
+                    }
+
+                    return new Blob([view], { type: 'audio/wav' });
+                }
+
+                function updateButtonState() {
+                    const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+                    const stopBtn = document.getElementById('stopBtn');
+                    const isPlaying = currentAudio && !currentAudio.paused;
+                    
+                    pauseResumeBtn.disabled = !currentAudio;
+                    stopBtn.disabled = !currentAudio;
+                }
+
+                function togglePauseResume() {
+                    if (!currentAudio) return;
+                    if (currentAudio.paused) {
+                        currentAudio.play();
+                    } else {
+                        currentAudio.pause();
+                    }
+                }
+
+                function stopPlayback() {
+                    if (currentAudio) {
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                        currentAudio = null;
+                    }
+                    updateButtonState();
+                }
+
+                function generateAndSpeakClearance() {
+                    generateClearance();
+                    updateAnswer();
+                    const speechText = generateSpeechText();
+                    speakText(speechText);
+                }
+
+                function processFormat1(number) {
+                    const numStr = number.toString().padStart(4, '0');
+                    const part1 = numStr.substring(0, 2);
+                    const part2 = numStr.substring(2);
+
+                    const speech1 = convertNumberGroup(part1);
+                    const speech2 = convertNumberGroup(part2);
+
+                    return [`${speech1} ${speech2}`, numStr];
+                }
+
+                function convertNumberGroup(twoDigitStr) {
+                    const firstDigit = twoDigitStr[0];
+                    const secondDigit = twoDigitStr[1];
+
+                    if (firstDigit === '0') {
+                        if (secondDigit === '0') return 'Zero Zero';
+                        return `Zero ${aviationNumbers[secondDigit]}`;
+                    }
+
+                    if (firstDigit === '1') {
+                        const num = parseInt(twoDigitStr, 10);
+                        const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+                        return teens[num - 10];
+                    }
+
+                    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+                    const tenPart = tens[parseInt(firstDigit)];
+
+                    if (secondDigit === '0') {
+                        return tenPart;
+                    } else {
+                        return `${tenPart} ${aviationNumbers[secondDigit]}`;
+                    }
+                }
+
+                function convertSingleNumber(numChar) {
+                    return aviationNumbers[numChar];
+                }
+
+                function updateSpeed(v) {
+                    document.getElementById('speedValue').textContent = parseFloat(v).toFixed(1) + 'x';
+                }
+
+                document.addEventListener('keydown', function(event) {
+                    if (event.code === 'Space') {
+                        event.preventDefault();
+                        togglePauseResume();
+                    } else if (event.code === 'KeyR') {
+                        generateAndSpeakClearance();
+                    } else if (event.code === 'KeyH') {
+                        toggleAnswer();
+                    }
+                });
+
+                // Initialize with first clearance
+                window.addEventListener('load', function() {
+                    generateClearance();
+                    updateAnswer();
+                    // wire debug button
+                    const listBtn = document.getElementById('listVoicesBtn');
+                    if (listBtn) {
+                        listBtn.addEventListener('click', async function() {
+                            const listEl = document.getElementById('availableVoicesList');
+                            if (!listEl) return;
+                            listEl.style.display = 'block';
+                            listEl.textContent = 'Loading...';
+                            const names = await fetchAvailableVoices();
+                            if (!names || names.length === 0) listEl.textContent = '(no voices returned or fetch failed)';
+                            else listEl.textContent = names.join('\n');
+                        });
+                    }
+                });
+            </script>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 Yohann's Aviation Note. All rights reserved.</p>
+            <p>
+                This project is open source under the <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPLv3 license</a>,
+                for non-commercial use only.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
