@@ -654,49 +654,161 @@
                 };
 
                 const DESTINATIONS = {
+                    // Australia & New Zealand
+                    "YSSY": "Sydney",
                     "YMML": "Melbourne",
                     "YBBN": "Brisbane",
                     "YPAD": "Adelaide",
                     "YPPH": "Perth",
                     "YBCS": "Cairns",
-                    "YBTL": "Townsville",
-                    "YSCB": "Canberra",
-                    "YPLC": "Port Lincoln",
-                    "YBAS": "Alice Springs",
-                    "YPPD": "Port Hedland",
                     "NZAA": "Auckland",
                     "NZWN": "Wellington",
                     "NZCH": "Christchurch",
-                    "NZQN": "Queenstown",
-                    "NZRO": "Rotorua",
-                    "WSSS": "Singapore",
-                    "WMKK": "Kuala Lumpur",
-                    "VTBS": "Bangkok Suvarnabhumi",
+                    "NFFN": "Nadi",
+
+                    // East Asia – China, Japan, Korea
                     "VHHH": "Hong Kong",
                     "RJTT": "Tokyo Haneda",
                     "RJAA": "Tokyo Narita",
+                    "RJOH": "Osaka Itami",
+                    "RJGG": "Nagoya Chubu",
+                    "RORK": "Osaka Kansai",
                     "RKSI": "Seoul Incheon",
+                    "RKSS": "Seoul Gimpo",
                     "RCTP": "Taipei Taoyuan",
+
+                    // Major China Hubs
                     "ZBAA": "Beijing Capital",
+                    "ZBAD": "Beijing Daxing",
                     "ZSPD": "Shanghai Pudong",
+                    "ZSSS": "Shanghai Hongqiao",
+                    "ZGGG": "Guangzhou Baiyun",
+                    "ZUCK": "Chongqing",
+                    "ZUUU": "Chengdu Shuangliu",
+                    "ZPPP": "Kunming",
+                    "ZGSZ": "Shenzhen",
+                    "ZLXY": "Xi'an",
+                    "ZJHK": "Haikou",
+
+                    // South Asia
+                    "VIDP": "Delhi",
+                    "VABB": "Mumbai",
+                    "VOBL": "Bangalore",
+                    "VOMM": "Chennai",
+                    "VCBI": "Colombo",
+                    "VGHS": "Dhaka",
+                    "VNKT": "Kathmandu",
+
+                    // Southeast Asia
+                    "WSSS": "Singapore Changi",
+                    "WMKK": "Kuala Lumpur",
+                    "VTBS": "Bangkok Suvarnabhumi",
+                    "VTSP": "Phuket",
+                    "VVTS": "Ho Chi Minh City",
+                    "VVDN": "Da Nang",
+                    "WIII": "Jakarta Soekarno-Hatta",
+                    "RPLL": "Manila",
+                    "VDPP": "Phnom Penh",
+                    "VYYY": "Yangon",
+
+                    // Middle East
+                    "OMDB": "Dubai",
+                    "OMAA": "Abu Dhabi",
+                    "OTHH": "Doha Hamad",
+                    "OEJN": "Jeddah",
+                    "OERK": "Riyadh",
+                    "OKBK": "Kuwait",
+                    "OBBI": "Bahrain",
+                    "OJAI": "Amman",
+                    "OIII": "Tehran Imam Khomeini",
+                    "OSDI": "Damascus",
+                    "ORBI": "Baghdad",
+
+                    // Europe – Major Hubs
+                    "EGLL": "London Heathrow",
+                    "EGKK": "London Gatwick",
+                    "EGGW": "London Luton",
+                    "LFPG": "Paris Charles de Gaulle",
+                    "LFPO": "Paris Orly",
+                    "EDDF": "Frankfurt",
+                    "EDDM": "Munich",
+                    "EHAM": "Amsterdam Schiphol",
+                    "LEMD": "Madrid",
+                    "LEBL": "Barcelona",
+                    "LIRF": "Rome Fiumicino",
+                    "LIMC": "Milan Malpensa",
+                    "LSZH": "Zurich",
+                    "LOWW": "Vienna",
+                    "EKCH": "Copenhagen",
+                    "ESSA": "Stockholm Arlanda",
+                    "ENGM": "Oslo Gardermoen",
+                    "EFHK": "Helsinki",
+                    "EBBR": "Brussels",
+                    "EIDW": "Dublin",
+                    "EPWA": "Warsaw",
+                    "LTFM": "Istanbul",
+                    "LBSF": "Sofia",
+                    "LUKK": "Chisinau",
+                    "LKPR": "Prague",
+                    "LROP": "Bucharest",
+                    "UUEE": "Moscow Sheremetyevo",
+                    "UUDD": "Moscow Domodedovo",
+
+                    // Special positions / Polar / Atlantic Crossroads
+                    "BIKF": "Reykjavik Keflavik",
+                    "BGTL": "Thule Air Base (Greenland hub)",
+                    "PANC": "Anchorage",
+                    "PAFA": "Fairbanks",
+
+                    // Africa
+                    "FAOR": "Johannesburg OR Tambo",
+                    "FACT": "Cape Town",
+                    "HKJK": "Nairobi",
+                    "DNMM": "Lagos",
+                    "HECA": "Cairo",
+                    "GOBD": "Dakar",
+                    "HAAB": "Addis Ababa",
+                    "FNLU": "Luanda",
+                    "FSIA": "Seychelles",
+                    "HSSS": "Khartoum",
+                    "HBBA": "Bujumbura",
+
+                    // North America – USA & Canada
                     "KLAX": "Los Angeles",
                     "KSFO": "San Francisco",
                     "KSEA": "Seattle",
-                    "KJFK": "New York Kennedy",
+                    "KJFK": "New York JFK",
                     "KEWR": "Newark",
+                    "KLGA": "New York LaGuardia",
                     "KORD": "Chicago O'Hare",
                     "KDFW": "Dallas Fort Worth",
                     "KDEN": "Denver",
-                    "EGLL": "London Heathrow",
-                    "EGKK": "London Gatwick",
-                    "LFPG": "Paris Charles de Gaulle",
-                    "EDDF": "Frankfurt",
-                    "EHAM": "Amsterdam Schiphol",
-                    "LEMD": "Madrid",
-                    "LIBD": "Bari",
-                    "LSZH": "Zurich",
-                    "LIMC": "Milan Malpensa",
-                    "LOWW": "Vienna",
+                    "KATL": "Atlanta",
+                    "KMIA": "Miami",
+                    "KBOS": "Boston",
+                    "KPHX": "Phoenix",
+                    "KIAH": "Houston Bush",
+                    "KDTW": "Detroit",
+                    "KMSP": "Minneapolis",
+                    "KIAD": "Washington Dulles",
+                    "KDCA": "Washington Reagan",
+                    "CYVR": "Vancouver",
+                    "CYYZ": "Toronto Pearson",
+                    "CYUL": "Montreal Trudeau",
+                    "CYYC": "Calgary",
+                    "MMMX": "Mexico City",
+                    "MMUN": "Cancun",
+
+                    // South America
+                    "SBGR": "Sao Paulo Guarulhos",
+                    "SBGL": "Rio de Janeiro Galeao",
+                    "SCEL": "Santiago",
+                    "SKBO": "Bogota",
+                    "SPJC": "Lima",
+                    "SEQM": "Quito",
+                    "SUMU": "Montevideo",
+                    "SLLP": "La Paz",
+                    "SAEZ": "Buenos Aires Ezeiza"
                 };
 
                 const RUNWAYS = {
@@ -881,7 +993,7 @@
                     const c = currentClearance;
                     const squawkSpoken = formatSquawk(c.squawk);
                     const freqSpoken = formatFrequency(c.frequency);
-                    return `${c.callsign}, Sydney Delivery, cleared to ${c.destination} via ${c.sid}, flight planned route, ${c.runways}, ${c.sid} departure ${c.transition}, transition, climb via SID ${c.alt} feet, squawk ${c.squawk}, departure frequency ${c.frequency}, readback.`;
+                    return `${c.callsign}, Sydney Delivery, cleared to ${c.destination} via ${c.sid}, flight planned route, ${c.runways}, ${c.sid} departure ${c.transition} transition, climb via SID ${c.alt} feet, squawk ${c.squawk}, departure frequency ${c.frequency}, readback.`;
                 }
 
                 function updateAnswer() {
