@@ -148,7 +148,7 @@ footer {
         margin-bottom: 10px;
     }
 
-    /* iframe 手势友好 */
+    /* iframe 手势友好
     .pdf-viewer iframe {
         touch-action: manipulation;
     }
