@@ -56,6 +56,21 @@ main {
     padding: 30px;
 }
 
+/* ===== 分类容器 ===== */
+.note-category {
+    margin-bottom: 40px;
+}
+
+.category-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #152e55;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #152e55;
+    letter-spacing: 0.5px;
+}
+
 /* ===== 卡片列表 ===== */
 .note-list {
     display: grid;
