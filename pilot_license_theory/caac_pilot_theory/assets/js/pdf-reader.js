@@ -59,7 +59,7 @@
 
     async init() {
       if (!this.pdfUrl || !this.pagesHost || !this.scrollContainer) {
-        this.showError("Reader initialization failed.");
+        this.showError("阅读器初始化失败。");
         return;
       }
 
@@ -68,7 +68,7 @@
       this.bindScrollWarmup();
 
       try {
-        this.showStatus("Loading PDF...");
+        this.showStatus("PDF 加载中...");
         const task = window.pdfjsLib.getDocument(this.getDocumentOptions());
         this.pdfDoc = await task.promise;
         this.totalPages = this.pdfDoc.numPages;
@@ -85,7 +85,7 @@
         this.updateZoomLabel();
       } catch (error) {
         console.error("PDF loading failed:", error);
-        this.showError("Failed to load PDF.");
+        this.showError("PDF 加载失败。");
       }
     }
 
@@ -157,7 +157,7 @@
     }
 
     async renderLeadingPage() {
-      this.showStatus("Rendering preview...");
+      this.showStatus("正在渲染预览...");
       if (this.pageStates.length > 0) {
         await this.renderPage(this.pageStates[0]);
       }
@@ -346,7 +346,7 @@
           state.renderedQuality = quality;
         } catch (error) {
           console.error(`Render failed for page ${state.pageNum}:`, error);
-          this.showError("Failed to render PDF page.");
+          this.showError("PDF 页面渲染失败。");
         } finally {
           state.rendering = false;
         }
@@ -358,7 +358,7 @@
     updatePageIndicator(pageNum) {
       this.currentPage = pageNum;
       if (this.pageIndicator) {
-        this.pageIndicator.textContent = `Page ${this.currentPage} / ${this.totalPages}`;
+        this.pageIndicator.textContent = `第 ${this.currentPage} 页 / 共 ${this.totalPages} 页`;
       }
     }
 
