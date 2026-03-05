@@ -4,10 +4,12 @@
   const PDF_WORKER_SRC = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   const MOBILE_BREAKPOINT = "(max-width: 1024px)";
   const SCALE_EPSILON = 0.015;
-  const MOBILE_MAX_DPR = 1.5;
-  const MOBILE_MAX_CANVAS_PIXELS = 3000000;
-  const MOBILE_MIN_QUALITY = 0.62;
-  const MOBILE_MAX_QUALITY = 0.85;
+  const MOBILE_MAX_DPR = 1.35;
+  const DESKTOP_MAX_DPR = 1.75;
+  const MAX_CANVAS_PIXELS = 2800000;
+  const MOBILE_MIN_QUALITY = 0.55;
+  const MOBILE_MAX_QUALITY = 0.78;
+  const DESKTOP_PREVIEW_QUALITY = 0.7;
 
   if (!window.pdfjsLib) {
     return;
@@ -16,6 +18,12 @@
   window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER_SRC;
 
   const isMobileViewport = () => window.matchMedia(MOBILE_BREAKPOINT).matches;
+  const requestIdle =
+    window.requestIdleCallback ||
+    ((cb) =>
+      window.setTimeout(() => {
+        cb({ didTimeout: false, timeRemaining: () => 0 });
+      }, 40));
 
   class PdfReader {
     constructor(root) {
@@ -38,31 +46,20 @@
       this.maxScale = 3;
       this.currentPage = 1;
       this.totalPages = 0;
+      this.basePageWidth = 0;
       this.lazyObserver = null;
       this.visibleObserver = null;
       this.resizeTimer = null;
-      this.basePageWidth = 0;
-      this.firstVisibleRendered = false;
       this.scrollTicking = false;
+      this.firstPreviewDone = false;
+      this.idleUpgradeScheduled = false;
+      this.backgroundRenderIndex = 0;
       this.isMobile = isMobileViewport();
-      this.renderQuality = this.getPreferredQuality();
+      this.targetQuality = this.getTargetQuality();
+      this.previewQuality = this.getPreviewQuality();
     }
 
-    getDocumentOptions() {
-      const options = {
-        url: this.pdfUrl,
-        withCredentials: false,
-      };
-
-      if (this.isMobile) {
-        options.disableAutoFetch = true;
-        options.rangeChunkSize = 262144;
-      }
-
-      return options;
-    }
-
-    getPreferredQuality() {
+    getTargetQuality() {
       if (!this.isMobile) {
         return 1;
       }
@@ -72,9 +69,25 @@
         return MOBILE_MIN_QUALITY;
       }
       if (memory <= 4) {
-        return 0.72;
+        return 0.68;
       }
       return MOBILE_MAX_QUALITY;
+    }
+
+    getPreviewQuality() {
+      if (this.isMobile) {
+        return Math.max(0.5, this.targetQuality * 0.8);
+      }
+      return DESKTOP_PREVIEW_QUALITY;
+    }
+
+    getDocumentOptions() {
+      return {
+        url: this.pdfUrl,
+        withCredentials: false,
+        disableAutoFetch: true,
+        rangeChunkSize: this.isMobile ? 196608 : 393216,
+      };
     }
 
     async init() {
@@ -98,14 +111,11 @@
 
         await this.buildPageShells();
         this.setupPageTracking();
+        this.setupLazyRender();
 
-        if (this.isMobile) {
-          this.setupLazyRender();
-          await this.renderLeadingPages();
-        } else {
-          await this.renderAllPages();
-          this.hideStatus();
-        }
+        await this.renderLeadingPagesFast();
+        this.scheduleIdleUpgrade();
+        this.scheduleBackgroundRender();
 
         this.updatePageIndicator(1);
         this.updateZoomLabel();
@@ -126,18 +136,10 @@
         const nextIsMobile = isMobileViewport();
         if (nextIsMobile !== this.isMobile) {
           this.isMobile = nextIsMobile;
-          this.renderQuality = this.getPreferredQuality();
+          this.targetQuality = this.getTargetQuality();
+          this.previewQuality = this.getPreviewQuality();
           this.resetObservers();
-          this.firstVisibleRendered = false;
-          if (this.isMobile) {
-            this.setupLazyRender();
-            this.renderLeadingPages();
-          } else {
-            this.renderAllPages().catch((error) => {
-              console.error("PDF rerender failed:", error);
-              this.showError("Failed to render PDF.");
-            });
-          }
+          this.setupLazyRender();
         }
 
         clearTimeout(this.resizeTimer);
@@ -151,13 +153,14 @@
       this.scrollContainer?.addEventListener(
         "scroll",
         () => {
-          if (!this.isMobile || this.scrollTicking) {
+          if (this.scrollTicking) {
             return;
           }
           this.scrollTicking = true;
           window.requestAnimationFrame(() => {
             this.scrollTicking = false;
-            this.renderNearbyPages();
+            this.renderNearbyPages(this.previewQuality);
+            this.scheduleIdleUpgrade();
           });
         },
         { passive: true }
@@ -185,6 +188,7 @@
           wrapper,
           canvas,
           renderedScale: 0,
+          renderedQuality: 0,
           rendering: false,
         });
       }
@@ -192,26 +196,17 @@
       await this.fitWidth(true);
     }
 
-    async renderLeadingPages() {
-      this.showStatus("Rendering first pages...");
+    async renderLeadingPagesFast() {
+      this.showStatus("Rendering preview...");
       const leading = this.pageStates.slice(0, Math.min(2, this.pageStates.length));
       for (const state of leading) {
-        await this.renderPage(state);
+        await this.renderPage(state, this.previewQuality);
       }
-      this.firstVisibleRendered = true;
-      this.hideStatus();
-    }
-
-    async renderAllPages() {
-      this.showStatus("Rendering pages...");
-      for (const state of this.pageStates) {
-        await this.renderPage(state);
-      }
+      this.firstPreviewDone = true;
       this.hideStatus();
     }
 
     setupLazyRender() {
-      this.showStatus("Rendering visible pages...");
       this.lazyObserver = new IntersectionObserver(
         (entries) => {
           entries
@@ -219,17 +214,18 @@
             .forEach((entry) => {
               const pageNum = Number(entry.target.dataset.page);
               const state = this.pageStates[pageNum - 1];
-              this.renderPage(state).then(() => {
-                if (!this.firstVisibleRendered) {
-                  this.firstVisibleRendered = true;
+              this.renderPage(state, this.previewQuality).then(() => {
+                if (!this.firstPreviewDone) {
+                  this.firstPreviewDone = true;
                   this.hideStatus();
                 }
+                this.scheduleIdleUpgrade();
               });
             });
         },
         {
           root: this.scrollContainer,
-          rootMargin: "60% 0px",
+          rootMargin: "45% 0px",
           threshold: 0.01,
         }
       );
@@ -302,7 +298,7 @@
         this.scale = targetScale;
         this.updateZoomLabel();
         await this.rerenderAtScale();
-        if (!silent && this.isMobile) {
+        if (!silent) {
           this.hideStatus();
         }
       } catch (error) {
@@ -317,13 +313,12 @@
 
       for (const state of this.pageStates) {
         state.renderedScale = 0;
+        state.renderedQuality = 0;
       }
 
-      if (this.isMobile) {
-        await this.renderNearbyPages();
-      } else {
-        await this.renderAllPages();
-      }
+      await this.renderNearbyPages(this.previewQuality);
+      this.scheduleIdleUpgrade();
+      this.scheduleBackgroundRender();
     }
 
     isElementNearViewport(element) {
@@ -332,34 +327,78 @@
       return rect.bottom >= hostRect.top - hostRect.height && rect.top <= hostRect.bottom + hostRect.height;
     }
 
-    async renderNearbyPages() {
-      const candidates = this.pageStates.filter((state) => this.isElementNearViewport(state.wrapper));
+    getVisibleStates() {
+      return this.pageStates.filter((state) => this.isElementNearViewport(state.wrapper));
+    }
+
+    async renderNearbyPages(quality) {
+      const candidates = this.getVisibleStates();
       for (const state of candidates) {
-        await this.renderPage(state);
+        await this.renderPage(state, quality);
       }
+    }
+
+    scheduleIdleUpgrade() {
+      if (this.idleUpgradeScheduled) {
+        return;
+      }
+      this.idleUpgradeScheduled = true;
+      requestIdle(() => {
+        this.idleUpgradeScheduled = false;
+        this.upgradeVisiblePages();
+      });
+    }
+
+    async upgradeVisiblePages() {
+      const candidates = this.getVisibleStates();
+      for (const state of candidates) {
+        await this.renderPage(state, this.targetQuality);
+      }
+    }
+
+    scheduleBackgroundRender() {
+      if (this.isMobile) {
+        return;
+      }
+
+      requestIdle(async () => {
+        const batchEnd = Math.min(this.backgroundRenderIndex + 3, this.pageStates.length);
+        for (; this.backgroundRenderIndex < batchEnd; this.backgroundRenderIndex += 1) {
+          await this.renderPage(this.pageStates[this.backgroundRenderIndex], this.targetQuality);
+        }
+
+        if (this.backgroundRenderIndex < this.pageStates.length) {
+          this.scheduleBackgroundRender();
+        }
+      });
     }
 
     getOutputScale(viewport) {
       let dpr = window.devicePixelRatio || 1;
-
-      if (this.isMobile) {
-        dpr = Math.min(dpr, MOBILE_MAX_DPR);
-      }
+      dpr = Math.min(dpr, this.isMobile ? MOBILE_MAX_DPR : DESKTOP_MAX_DPR);
 
       const expectedPixels = viewport.width * viewport.height * dpr * dpr;
-      if (this.isMobile && expectedPixels > MOBILE_MAX_CANVAS_PIXELS) {
-        const reduceRatio = Math.sqrt(MOBILE_MAX_CANVAS_PIXELS / (viewport.width * viewport.height));
-        dpr = Math.max(1, Math.min(dpr, reduceRatio));
+      if (expectedPixels > MAX_CANVAS_PIXELS) {
+        const ratio = Math.sqrt(MAX_CANVAS_PIXELS / (viewport.width * viewport.height));
+        dpr = Math.max(1, Math.min(dpr, ratio));
       }
 
       return dpr;
     }
 
-    async renderPage(state) {
+    isRenderSatisfied(state, scale, quality) {
+      return Math.abs(state.renderedScale - scale) < SCALE_EPSILON && state.renderedQuality + 0.01 >= quality;
+    }
+
+    async renderPage(state, quality) {
       if (!state || state.rendering) {
         return;
       }
-      if (Math.abs(state.renderedScale - this.scale) < SCALE_EPSILON) {
+
+      const targetScale = this.scale;
+      const targetQuality = quality;
+
+      if (this.isRenderSatisfied(state, targetScale, targetQuality)) {
         return;
       }
 
@@ -368,8 +407,8 @@
       this.renderQueue = this.renderQueue.then(async () => {
         try {
           const page = await this.pdfDoc.getPage(state.pageNum);
-          const displayViewport = page.getViewport({ scale: this.scale });
-          const renderViewport = page.getViewport({ scale: this.scale * this.renderQuality });
+          const displayViewport = page.getViewport({ scale: targetScale });
+          const renderViewport = page.getViewport({ scale: targetScale * targetQuality });
           const canvas = state.canvas;
           const context = canvas.getContext("2d", { alpha: false });
           const outputScale = this.getOutputScale(renderViewport);
@@ -380,9 +419,10 @@
           canvas.style.height = `${displayViewport.height}px`;
 
           context.setTransform(outputScale, 0, 0, outputScale, 0, 0);
-
           await page.render({ canvasContext: context, viewport: renderViewport }).promise;
-          state.renderedScale = this.scale;
+
+          state.renderedScale = targetScale;
+          state.renderedQuality = targetQuality;
         } catch (error) {
           console.error(`Render failed for page ${state.pageNum}:`, error);
           this.showError("Failed to render PDF page.");
