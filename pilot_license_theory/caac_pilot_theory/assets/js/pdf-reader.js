@@ -6,6 +6,8 @@
   const SCALE_EPSILON = 0.015;
   const MOBILE_MAX_DPR = 1.5;
   const MOBILE_MAX_CANVAS_PIXELS = 3000000;
+  const MOBILE_MIN_QUALITY = 0.62;
+  const MOBILE_MAX_QUALITY = 0.85;
 
   if (!window.pdfjsLib) {
     return;
@@ -43,6 +45,7 @@
       this.firstVisibleRendered = false;
       this.scrollTicking = false;
       this.isMobile = isMobileViewport();
+      this.renderQuality = this.getPreferredQuality();
     }
 
     getDocumentOptions() {
@@ -57,6 +60,21 @@
       }
 
       return options;
+    }
+
+    getPreferredQuality() {
+      if (!this.isMobile) {
+        return 1;
+      }
+
+      const memory = navigator.deviceMemory || 4;
+      if (memory <= 2) {
+        return MOBILE_MIN_QUALITY;
+      }
+      if (memory <= 4) {
+        return 0.72;
+      }
+      return MOBILE_MAX_QUALITY;
     }
 
     async init() {
@@ -108,6 +126,7 @@
         const nextIsMobile = isMobileViewport();
         if (nextIsMobile !== this.isMobile) {
           this.isMobile = nextIsMobile;
+          this.renderQuality = this.getPreferredQuality();
           this.resetObservers();
           this.firstVisibleRendered = false;
           if (this.isMobile) {
@@ -296,6 +315,10 @@
         return;
       }
 
+      for (const state of this.pageStates) {
+        state.renderedScale = 0;
+      }
+
       if (this.isMobile) {
         await this.renderNearbyPages();
       } else {
@@ -345,19 +368,20 @@
       this.renderQueue = this.renderQueue.then(async () => {
         try {
           const page = await this.pdfDoc.getPage(state.pageNum);
-          const viewport = page.getViewport({ scale: this.scale });
+          const displayViewport = page.getViewport({ scale: this.scale });
+          const renderViewport = page.getViewport({ scale: this.scale * this.renderQuality });
           const canvas = state.canvas;
           const context = canvas.getContext("2d", { alpha: false });
-          const outputScale = this.getOutputScale(viewport);
+          const outputScale = this.getOutputScale(renderViewport);
 
-          canvas.width = Math.floor(viewport.width * outputScale);
-          canvas.height = Math.floor(viewport.height * outputScale);
-          canvas.style.width = `${viewport.width}px`;
-          canvas.style.height = `${viewport.height}px`;
+          canvas.width = Math.floor(renderViewport.width * outputScale);
+          canvas.height = Math.floor(renderViewport.height * outputScale);
+          canvas.style.width = `${displayViewport.width}px`;
+          canvas.style.height = `${displayViewport.height}px`;
 
           context.setTransform(outputScale, 0, 0, outputScale, 0, 0);
 
-          await page.render({ canvasContext: context, viewport }).promise;
+          await page.render({ canvasContext: context, viewport: renderViewport }).promise;
           state.renderedScale = this.scale;
         } catch (error) {
           console.error(`Render failed for page ${state.pageNum}:`, error);
