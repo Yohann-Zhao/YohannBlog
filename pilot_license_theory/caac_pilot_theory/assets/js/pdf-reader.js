@@ -4,12 +4,10 @@
   const PDF_WORKER_SRC = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   const MOBILE_BREAKPOINT = "(max-width: 1024px)";
   const SCALE_EPSILON = 0.015;
-  const MOBILE_MAX_DPR = 1.35;
-  const DESKTOP_MAX_DPR = 1.75;
-  const MAX_CANVAS_PIXELS = 2800000;
-  const MOBILE_MIN_QUALITY = 0.55;
-  const MOBILE_MAX_QUALITY = 0.78;
-  const DESKTOP_PREVIEW_QUALITY = 0.7;
+  const FIXED_PREVIEW_QUALITY = 0.35;
+  const MOBILE_MAX_DPR = 1;
+  const DESKTOP_MAX_DPR = 1.2;
+  const MAX_CANVAS_PIXELS = 1200000;
 
   if (!window.pdfjsLib) {
     return;
@@ -18,12 +16,6 @@
   window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER_SRC;
 
   const isMobileViewport = () => window.matchMedia(MOBILE_BREAKPOINT).matches;
-  const requestIdle =
-    window.requestIdleCallback ||
-    ((cb) =>
-      window.setTimeout(() => {
-        cb({ didTimeout: false, timeRemaining: () => 0 });
-      }, 40));
 
   class PdfReader {
     constructor(root) {
@@ -43,7 +35,7 @@
       this.renderQueue = Promise.resolve();
       this.scale = 1;
       this.minScale = 0.6;
-      this.maxScale = 3;
+      this.maxScale = 2.2;
       this.currentPage = 1;
       this.totalPages = 0;
       this.basePageWidth = 0;
@@ -51,34 +43,7 @@
       this.visibleObserver = null;
       this.resizeTimer = null;
       this.scrollTicking = false;
-      this.firstPreviewDone = false;
-      this.idleUpgradeScheduled = false;
-      this.backgroundRenderIndex = 0;
       this.isMobile = isMobileViewport();
-      this.targetQuality = this.getTargetQuality();
-      this.previewQuality = this.getPreviewQuality();
-    }
-
-    getTargetQuality() {
-      if (!this.isMobile) {
-        return 1;
-      }
-
-      const memory = navigator.deviceMemory || 4;
-      if (memory <= 2) {
-        return MOBILE_MIN_QUALITY;
-      }
-      if (memory <= 4) {
-        return 0.68;
-      }
-      return MOBILE_MAX_QUALITY;
-    }
-
-    getPreviewQuality() {
-      if (this.isMobile) {
-        return Math.max(0.5, this.targetQuality * 0.8);
-      }
-      return DESKTOP_PREVIEW_QUALITY;
     }
 
     getDocumentOptions() {
@@ -86,7 +51,7 @@
         url: this.pdfUrl,
         withCredentials: false,
         disableAutoFetch: true,
-        rangeChunkSize: this.isMobile ? 196608 : 393216,
+        rangeChunkSize: this.isMobile ? 131072 : 196608,
       };
     }
 
@@ -112,10 +77,7 @@
         await this.buildPageShells();
         this.setupPageTracking();
         this.setupLazyRender();
-
-        await this.renderLeadingPagesFast();
-        this.scheduleIdleUpgrade();
-        this.scheduleBackgroundRender();
+        await this.renderLeadingPage();
 
         this.updatePageIndicator(1);
         this.updateZoomLabel();
@@ -136,10 +98,6 @@
         const nextIsMobile = isMobileViewport();
         if (nextIsMobile !== this.isMobile) {
           this.isMobile = nextIsMobile;
-          this.targetQuality = this.getTargetQuality();
-          this.previewQuality = this.getPreviewQuality();
-          this.resetObservers();
-          this.setupLazyRender();
         }
 
         clearTimeout(this.resizeTimer);
@@ -159,8 +117,7 @@
           this.scrollTicking = true;
           window.requestAnimationFrame(() => {
             this.scrollTicking = false;
-            this.renderNearbyPages(this.previewQuality);
-            this.scheduleIdleUpgrade();
+            this.renderNearbyPages();
           });
         },
         { passive: true }
@@ -188,7 +145,6 @@
           wrapper,
           canvas,
           renderedScale: 0,
-          renderedQuality: 0,
           rendering: false,
         });
       }
@@ -196,13 +152,11 @@
       await this.fitWidth(true);
     }
 
-    async renderLeadingPagesFast() {
+    async renderLeadingPage() {
       this.showStatus("Rendering preview...");
-      const leading = this.pageStates.slice(0, Math.min(2, this.pageStates.length));
-      for (const state of leading) {
-        await this.renderPage(state, this.previewQuality);
+      if (this.pageStates.length > 0) {
+        await this.renderPage(this.pageStates[0]);
       }
-      this.firstPreviewDone = true;
       this.hideStatus();
     }
 
@@ -214,18 +168,12 @@
             .forEach((entry) => {
               const pageNum = Number(entry.target.dataset.page);
               const state = this.pageStates[pageNum - 1];
-              this.renderPage(state, this.previewQuality).then(() => {
-                if (!this.firstPreviewDone) {
-                  this.firstPreviewDone = true;
-                  this.hideStatus();
-                }
-                this.scheduleIdleUpgrade();
-              });
+              this.renderPage(state).then(() => this.hideStatus());
             });
         },
         {
           root: this.scrollContainer,
-          rootMargin: "45% 0px",
+          rootMargin: "30% 0px",
           threshold: 0.01,
         }
       );
@@ -259,18 +207,6 @@
       this.pageStates.forEach((state) => this.visibleObserver.observe(state.wrapper));
     }
 
-    resetObservers() {
-      if (this.lazyObserver) {
-        this.lazyObserver.disconnect();
-        this.lazyObserver = null;
-      }
-      if (this.visibleObserver) {
-        this.visibleObserver.disconnect();
-        this.visibleObserver = null;
-      }
-      this.setupPageTracking();
-    }
-
     changeZoom(delta) {
       const next = Math.min(this.maxScale, Math.max(this.minScale, this.scale + delta));
       if (Math.abs(next - this.scale) < SCALE_EPSILON) {
@@ -288,7 +224,7 @@
           this.basePageWidth = firstPage.getViewport({ scale: 1 }).width;
         }
 
-        const availableWidth = Math.max(320, this.scrollContainer.clientWidth - 24);
+        const availableWidth = Math.max(300, this.scrollContainer.clientWidth - 20);
         const targetScale = Math.min(this.maxScale, Math.max(this.minScale, availableWidth / this.basePageWidth));
 
         if (Math.abs(targetScale - this.scale) < SCALE_EPSILON && !silent) {
@@ -298,9 +234,6 @@
         this.scale = targetScale;
         this.updateZoomLabel();
         await this.rerenderAtScale();
-        if (!silent) {
-          this.hideStatus();
-        }
       } catch (error) {
         console.error("Fit width failed:", error);
       }
@@ -313,12 +246,9 @@
 
       for (const state of this.pageStates) {
         state.renderedScale = 0;
-        state.renderedQuality = 0;
       }
 
-      await this.renderNearbyPages(this.previewQuality);
-      this.scheduleIdleUpgrade();
-      this.scheduleBackgroundRender();
+      await this.renderNearbyPages();
     }
 
     isElementNearViewport(element) {
@@ -327,50 +257,11 @@
       return rect.bottom >= hostRect.top - hostRect.height && rect.top <= hostRect.bottom + hostRect.height;
     }
 
-    getVisibleStates() {
-      return this.pageStates.filter((state) => this.isElementNearViewport(state.wrapper));
-    }
-
-    async renderNearbyPages(quality) {
-      const candidates = this.getVisibleStates();
+    async renderNearbyPages() {
+      const candidates = this.pageStates.filter((state) => this.isElementNearViewport(state.wrapper));
       for (const state of candidates) {
-        await this.renderPage(state, quality);
+        await this.renderPage(state);
       }
-    }
-
-    scheduleIdleUpgrade() {
-      if (this.idleUpgradeScheduled) {
-        return;
-      }
-      this.idleUpgradeScheduled = true;
-      requestIdle(() => {
-        this.idleUpgradeScheduled = false;
-        this.upgradeVisiblePages();
-      });
-    }
-
-    async upgradeVisiblePages() {
-      const candidates = this.getVisibleStates();
-      for (const state of candidates) {
-        await this.renderPage(state, this.targetQuality);
-      }
-    }
-
-    scheduleBackgroundRender() {
-      if (this.isMobile) {
-        return;
-      }
-
-      requestIdle(async () => {
-        const batchEnd = Math.min(this.backgroundRenderIndex + 3, this.pageStates.length);
-        for (; this.backgroundRenderIndex < batchEnd; this.backgroundRenderIndex += 1) {
-          await this.renderPage(this.pageStates[this.backgroundRenderIndex], this.targetQuality);
-        }
-
-        if (this.backgroundRenderIndex < this.pageStates.length) {
-          this.scheduleBackgroundRender();
-        }
-      });
     }
 
     getOutputScale(viewport) {
@@ -386,19 +277,13 @@
       return dpr;
     }
 
-    isRenderSatisfied(state, scale, quality) {
-      return Math.abs(state.renderedScale - scale) < SCALE_EPSILON && state.renderedQuality + 0.01 >= quality;
-    }
-
-    async renderPage(state, quality) {
+    async renderPage(state) {
       if (!state || state.rendering) {
         return;
       }
 
       const targetScale = this.scale;
-      const targetQuality = quality;
-
-      if (this.isRenderSatisfied(state, targetScale, targetQuality)) {
+      if (Math.abs(state.renderedScale - targetScale) < SCALE_EPSILON) {
         return;
       }
 
@@ -408,7 +293,7 @@
         try {
           const page = await this.pdfDoc.getPage(state.pageNum);
           const displayViewport = page.getViewport({ scale: targetScale });
-          const renderViewport = page.getViewport({ scale: targetScale * targetQuality });
+          const renderViewport = page.getViewport({ scale: targetScale * FIXED_PREVIEW_QUALITY });
           const canvas = state.canvas;
           const context = canvas.getContext("2d", { alpha: false });
           const outputScale = this.getOutputScale(renderViewport);
@@ -422,7 +307,6 @@
           await page.render({ canvasContext: context, viewport: renderViewport }).promise;
 
           state.renderedScale = targetScale;
-          state.renderedQuality = targetQuality;
         } catch (error) {
           console.error(`Render failed for page ${state.pageNum}:`, error);
           this.showError("Failed to render PDF page.");
