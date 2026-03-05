@@ -1,184 +1,232 @@
-/* ===== 全局基础设置 ===== */
+/* ===== Global ===== */
+:root {
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #1f2937;
+    --muted: #64748b;
+    --brand: #152e55;
+    --brand-soft: #cbd5f5;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --radius: 12px;
+    --shadow: 0 8px 22px rgba(0,0,0,0.09);
+}
+* {
+    box-sizing: border-box;
+}
+html,
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                 "PingFang SC", "Microsoft YaHei", sans-serif;
-    background-color: #f5f7fa;
-    color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
 }
-
-/* ===== 页头 ===== */
+/* ===== Header ===== */
 header {
-    /*background-color: #0f172a;*/
-    background-color: #152e55;
+    background-color: var(--brand);
     color: #fff;
     padding: 20px 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 16px;
     flex-wrap: wrap;
 }
-
 header h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: clamp(20px, 2.4vw, 28px);
 }
-
 header p {
-    margin-top: 6px;
-    color: #cbd5f5;
+    margin: 0;
+    color: var(--brand-soft);
 }
-
-/* 返回主目录（导航）样式 */
 nav {
-    margin-left: 12px;
+    margin-left: 0;
 }
-
 nav a {
-    color: #cbd5f5;
+    color: var(--brand-soft);
     text-decoration: none;
-    padding: 6px 10px;
-    border-radius: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
     display: inline-block;
-    background: rgba(255,255,255,0.02);
+    background: rgba(255,255,255,0.08);
     transition: background 0.15s, color 0.15s, transform 0.15s;
+    min-height: 40px;
 }
-
 nav a:hover {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.14);
     color: #ffffff;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
-
-/* ===== 主体 ===== */
+/* ===== Main ===== */
 main {
-    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
 }
-
-/* ===== 分类容器 ===== */
 .note-category {
     margin-bottom: 40px;
 }
-
 .category-title {
     font-size: 24px;
     font-weight: 700;
-    color: #152e55;
-    margin-bottom: 20px;
+    color: var(--brand);
+    margin: 0 0 16px;
     padding-bottom: 10px;
-    border-bottom: 3px solid #152e55;
-    letter-spacing: 0.5px;
+    border-bottom: 3px solid var(--brand);
+    letter-spacing: 0.3px;
 }
-
-/* ===== 卡片列表 ===== */
 .note-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
+    gap: 18px;
 }
-
 .note-card {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 18px;
     text-decoration: none;
     color: inherit;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow);
     transition: transform 0.2s, box-shadow 0.2s;
 }
-
 .note-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 13px 30px rgba(0,0,0,0.13);
 }
-
 .note-card h2 {
-    margin-top: 0;
+    margin: 0 0 8px;
     font-size: 18px;
 }
-
-/* ===== PDF 阅读区 ===== */
-.pdf-viewer {
-    height: 85vh;
-    margin-bottom: 20px;
+.note-card p {
+    margin: 0;
+    color: #374151;
 }
-
+.note-card p + p {
+    margin-top: 8px;
+}
+/* ===== PDF area ===== */
+.pdf-viewer {
+    height: clamp(560px, 78dvh, 960px);
+    margin-bottom: 14px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: var(--shadow);
+}
 .pdf-viewer iframe {
     width: 100%;
     height: 100%;
     border: none;
     background: #fff;
 }
-
-/* ===== 下载按钮 ===== */
-.download a {
+.download a,
+.open-pdf {
     display: inline-block;
-    padding: 10px 18px;
-    background: #2563eb;
+    padding: 11px 18px;
+    background: var(--accent);
     color: #fff;
-    border-radius: 6px;
+    border-radius: 8px;
     text-decoration: none;
+    min-height: 42px;
 }
-
-.download a:hover {
-    background: #1d4ed8;
+.download a:hover,
+.open-pdf:hover {
+    background: var(--accent-hover);
 }
-
-/* ===== 页脚 ===== */
+.pdf-fallback {
+    margin: 0 0 20px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #e8eefc;
+    color: #0f172a;
+}
+.pdf-fallback p {
+    margin: 0 0 10px;
+    color: #1e293b;
+}
+/* ===== Footer ===== */
 footer {
     text-align: center;
-    padding: 15px;
+    padding: 14px 16px 20px;
     font-size: 13px;
-    color: #666;
+    color: var(--muted);
 }
-
-
-/* =========================
-   移动端优化（≤ 768px）
-   ========================= */
-@media (max-width: 768px) {
-
-    /* 减少页头占用空间 */
+/* ===== Tablet ===== */
+@media (max-width: 1024px) {
     header {
-        padding: 14px 16px;
+        padding: 16px 20px;
     }
-
+    main {
+        padding: 18px;
+    }
+    .note-list {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 14px;
+    }
+    .pdf-viewer {
+        height: clamp(520px, 74dvh, 860px);
+    }
+}
+/* ===== Phone ===== */
+@media (max-width: 768px) {
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        padding: 12px;
+        gap: 10px;
+    }
     header h1 {
-        font-size: 18px;
+        font-size: 17px;
+        width: 100%;
     }
-
     header p {
         font-size: 12px;
+        width: 100%;
     }
-
-    /* 主体减少左右留白 */
-    main {
-        padding: 12px;
+    nav,
+    .download {
+        width: 100%;
     }
-
-    /* PDF 区域几乎全屏 */
-    .pdf-viewer {
-        height: calc(100vh - 120px);
-        margin-bottom: 10px;
-    }
-
-    /* iframe 手势友好 */
-    .pdf-viewer iframe {
-        touch-action: manipulation;
-    }
-
-    /* 下载按钮放大，方便点 */
-    .download a {
+    nav a,
+    .download a,
+    .open-pdf {
         width: 100%;
         text-align: center;
-        font-size: 16px;
-        padding: 14px 0;
+        font-size: 15px;
+        padding: 12px 10px;
     }
-
-    /* 页脚字体缩小 */
+    main {
+        padding: 10px;
+    }
+    .category-title {
+        font-size: 20px;
+    }
+    .note-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .pdf-viewer {
+        height: calc(100dvh - 210px);
+        min-height: 360px;
+        max-height: none;
+        margin-bottom: 10px;
+    }
+    .pdf-viewer iframe {
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x pan-y;
+    }
+    .pdf-fallback {
+        padding: 10px;
+    }
     footer {
         font-size: 12px;
-        padding: 10px;
+        padding: 10px 10px 14px;
     }
 }

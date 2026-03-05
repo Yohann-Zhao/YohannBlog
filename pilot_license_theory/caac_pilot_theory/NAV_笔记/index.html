@@ -8,7 +8,7 @@
     <link rel="icon" type="image/x-icon" href="/yohann_favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="note-detail">
 
 <header>
     <!-- 返回主目录 -->
@@ -34,12 +34,19 @@
             iframe 用于直接在浏览器内阅读 PDF
             width/height 使用 100% + CSS 控制
         -->
-        <iframe
+                        <iframe
             src="国内理论考试NAV笔记-2026年2月10日.pdf"
-            title="NAV_笔记 PDF 阅读">
+            title="PDF viewer"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            allowfullscreen>
         </iframe>
     </section>
 
+    <section class="pdf-fallback">
+        <p>If the PDF does not load, open it in a new tab (recommended on iPhone/iPad).</p>
+        <a class="open-pdf" href="国内理论考试NAV笔记-2026年2月10日.pdf" target="_blank" rel="noopener">Open PDF in new tab</a>
+    </section>
 </main>
 
 <footer>
