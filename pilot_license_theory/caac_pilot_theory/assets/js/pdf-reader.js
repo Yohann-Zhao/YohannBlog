@@ -4,10 +4,11 @@
   const PDF_WORKER_SRC = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   const MOBILE_BREAKPOINT = "(max-width: 1024px)";
   const SCALE_EPSILON = 0.015;
-  const FIXED_PREVIEW_QUALITY = 0.35;
-  const MOBILE_MAX_DPR = 1;
-  const DESKTOP_MAX_DPR = 1.2;
-  const MAX_CANVAS_PIXELS = 1200000;
+  const PREVIEW_QUALITY = 0.46;
+  const TARGET_QUALITY = 0.8;
+  const MOBILE_MAX_DPR = 1.25;
+  const DESKTOP_MAX_DPR = 1.65;
+  const MAX_CANVAS_PIXELS = 2400000;
 
   if (!window.pdfjsLib) {
     return;
@@ -43,6 +44,7 @@
       this.visibleObserver = null;
       this.resizeTimer = null;
       this.scrollTicking = false;
+      this.idleUpgradeScheduled = false;
       this.isMobile = isMobileViewport();
     }
 
@@ -51,7 +53,7 @@
         url: this.pdfUrl,
         withCredentials: false,
         disableAutoFetch: true,
-        rangeChunkSize: this.isMobile ? 131072 : 196608,
+        rangeChunkSize: this.isMobile ? 196608 : 393216,
       };
     }
 
@@ -118,6 +120,7 @@
           window.requestAnimationFrame(() => {
             this.scrollTicking = false;
             this.renderNearbyPages();
+            this.scheduleIdleUpgrade();
           });
         },
         { passive: true }
@@ -145,6 +148,7 @@
           wrapper,
           canvas,
           renderedScale: 0,
+          renderedQuality: 0,
           rendering: false,
         });
       }
@@ -157,6 +161,7 @@
       if (this.pageStates.length > 0) {
         await this.renderPage(this.pageStates[0]);
       }
+      this.scheduleIdleUpgrade();
       this.hideStatus();
     }
 
@@ -168,7 +173,10 @@
             .forEach((entry) => {
               const pageNum = Number(entry.target.dataset.page);
               const state = this.pageStates[pageNum - 1];
-              this.renderPage(state).then(() => this.hideStatus());
+              this.renderPage(state).then(() => {
+                this.hideStatus();
+                this.scheduleIdleUpgrade();
+              });
             });
         },
         {
@@ -246,9 +254,11 @@
 
       for (const state of this.pageStates) {
         state.renderedScale = 0;
+        state.renderedQuality = 0;
       }
 
       await this.renderNearbyPages();
+      this.scheduleIdleUpgrade();
     }
 
     isElementNearViewport(element) {
@@ -261,6 +271,32 @@
       const candidates = this.pageStates.filter((state) => this.isElementNearViewport(state.wrapper));
       for (const state of candidates) {
         await this.renderPage(state);
+      }
+    }
+
+    scheduleIdleUpgrade() {
+      if (this.idleUpgradeScheduled) {
+        return;
+      }
+
+      this.idleUpgradeScheduled = true;
+      const idleCallback =
+        window.requestIdleCallback ||
+        ((cb) =>
+          window.setTimeout(() => {
+            cb({ didTimeout: false, timeRemaining: () => 0 });
+          }, 60));
+
+      idleCallback(() => {
+        this.idleUpgradeScheduled = false;
+        this.upgradeVisiblePages();
+      });
+    }
+
+    async upgradeVisiblePages() {
+      const candidates = this.pageStates.filter((state) => this.isElementNearViewport(state.wrapper));
+      for (const state of candidates) {
+        await this.renderPage(state, TARGET_QUALITY);
       }
     }
 
@@ -277,13 +313,13 @@
       return dpr;
     }
 
-    async renderPage(state) {
+    async renderPage(state, quality = PREVIEW_QUALITY) {
       if (!state || state.rendering) {
         return;
       }
 
       const targetScale = this.scale;
-      if (Math.abs(state.renderedScale - targetScale) < SCALE_EPSILON) {
+      if (Math.abs(state.renderedScale - targetScale) < SCALE_EPSILON && state.renderedQuality >= quality - 0.01) {
         return;
       }
 
@@ -293,7 +329,7 @@
         try {
           const page = await this.pdfDoc.getPage(state.pageNum);
           const displayViewport = page.getViewport({ scale: targetScale });
-          const renderViewport = page.getViewport({ scale: targetScale * FIXED_PREVIEW_QUALITY });
+          const renderViewport = page.getViewport({ scale: targetScale * quality });
           const canvas = state.canvas;
           const context = canvas.getContext("2d", { alpha: false });
           const outputScale = this.getOutputScale(renderViewport);
@@ -307,6 +343,7 @@
           await page.render({ canvasContext: context, viewport: renderViewport }).promise;
 
           state.renderedScale = targetScale;
+          state.renderedQuality = quality;
         } catch (error) {
           console.error(`Render failed for page ${state.pageNum}:`, error);
           this.showError("Failed to render PDF page.");
