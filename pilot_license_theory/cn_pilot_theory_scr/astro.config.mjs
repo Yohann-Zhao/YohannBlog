@@ -4,6 +4,8 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://aviationnote.com',
+	base: '/pilot_license_theory/cn_pilot_theory/',
 	integrations: [
 		starlight({
 			title: 'My Docs',
